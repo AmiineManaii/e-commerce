@@ -1,1 +1,51 @@
-    
+<section class="featured-games my-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-4">Jeux populaires</h2>
+
+    @if (loading) {
+      <div class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    } @else if (error) {
+      <div class="alert alert-danger text-center" role="alert">
+        {{ error }}
+      </div>
+    } @else if (games.length === 0) {
+      <div class="alert alert-info text-center" role="alert">
+        Aucun jeu populaire disponible pour le moment.
+      </div>
+    } @else {
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @for (game of games; track game.id) {
+          @if (game) {
+            <div class="col">
+              <div class="card h-100 shadow-sm game-card">
+                <img [src]="'.'+game.cover_image" class="card-img-top" [alt]="game.title">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">{{ game.title }}</h5>
+                  <p class="card-text text-muted">{{ game.genre }} - {{ game.platform }}</p>
+                  
+                  <!-- Rating (stars) -->
+                  <div class="mb-2">
+                      @for (star of [1,2,3,4,5]; track star; let idx = $index) {
+                          <i class="fa-star"
+                              [ngClass]="idx < getRoundedRating(game.rating) ? 'fas text-warning' : 'far text-secondary'"></i>
+                      }
+                      <span class="small text-muted">{{ game.rating }}</span>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center mt-auto">
+                    <span class="price text-primary fw-bold">{{ game.price}}DT</span>
+                    <button class="btn btn-sm btn-outline-primary">Voir Détails</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</section>

@@ -1,20 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { GameService } from '../../services/game.service';
 import { Game } from '../../Models/game.model';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-featured-games',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './featured-games.html',
   styleUrl: './featured-games.scss'
 })
-export class FeaturedGames implements OnInit {
+export class FeaturedGamesComponent implements OnInit {
   games: Game[] = [];
   loading: boolean = true;
-  error: string = '';
+  error: string | null = null;
 
-  constructor(private gameService: GameService) { }
+  // Expose Math to the template
+  Math = Math;
+
+  constructor(private gameService: GameService) {}
+
+  getRoundedRating(rating: number | undefined): number {
+    return Math.round(rating ?? 0);
+  }
 
   ngOnInit(): void {
     this.loadFeaturedGames();
@@ -22,22 +31,19 @@ export class FeaturedGames implements OnInit {
 
   loadFeaturedGames(): void {
     this.loading = true;
+    this.error = null;
     this.gameService.getPopularGames().subscribe({
       next: (games) => {
         this.games = games;
         this.loading = false;
       },
-      error: (error) => {
-        this.error = 'Erreur lors du chargement des jeux';
+      error: (err) => {
+        this.error = 'Failed to load games. Please try again later.';
         this.loading = false;
-        console.error('Erreur:', error);
-      }
+        console.error('Error loading featured games:', err);
+      },
     });
   }
-
- 
-  addToCart(game: Game): void {
-    console.log('Ajouter au panier:', game.title);
-    
-  }
 }
+  
+
