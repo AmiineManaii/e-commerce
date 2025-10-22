@@ -1,0 +1,48 @@
+.featured-games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.game-card {
+  background: var(--secondary);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 1rem;
+}
+
+.game-card .cover {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.game-card h3 {
+  margin: 0.5rem 0 0.25rem;
+}
+
+.game-card .meta {
+  opacity: 0.85;
+  margin: 0 0 0.25rem;
+}
+
+.game-card .price {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.game-card .add {
+  background: var(--accent);
+  color: var(--text);
+  border: none;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.game-card .add:hover {
+  filter: brightness(1.08);
+}

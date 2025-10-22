@@ -1,1 +1,77 @@
-/* You can add global styles to this file, and also import other style files */
+
+$primary-color: #1a1a2e; // Couleur principale sombre
+$secondary-color: #16213e; // Couleur secondaire
+$accent-color: #e94560; // Couleur d'accent (rouge néon)
+$text-color: #ffffff; // Couleur du texte
+$font-family: 'Orbitron', sans-serif;
+:root {
+  --primary: #1a1a2e;
+  --secondary: #16213e;
+  --accent: #e94560;
+  --text: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: $font-family;
+  background-color: $primary-color;
+  color: $text-color;
+}
+
+header {
+  background-color: $secondary-color;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header a {
+  color: $accent-color;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-weight: bold;
+}
+
+header a:hover {
+  color: lighter($accent-color, 20%);
+}
+
+.banner {
+  background: url('/assets/banner.jpg') no-repeat center center;
+  background-size: cover;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $text-color;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.featured-games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.featured-games .game-card {
+  background-color: $secondary-color;
+  border: 1px solid $accent-color;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.featured-games .game-card:hover {
+  transform: scale(1.05);
+}
+
+footer {
+  background-color: $secondary-color;
+  padding: 1rem;
+  text-align: center;
+  color: $text-color;
+}

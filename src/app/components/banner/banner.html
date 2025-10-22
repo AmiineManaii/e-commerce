@@ -1,0 +1,32 @@
+<section class="banner">
+  <h1 class="section-title">Jeux en promotions</h1>
+  
+
+    <div class="carousel mx-auto">
+      @if (promoGames.length > 1) {
+        <button class="nav prev" (click)="prevSlide()">❮</button>
+      }
+
+
+      <div class="slides">
+        @for (game of promoGames; track game.id; let i = $index) {
+          <div class="slide" [class.active]="i === currentSlide">
+            <img [src]="'.'+game.cover_image" [alt]="game.title" />
+             
+            <div class="slide-content">
+              <h2>{{ game.title }}</h2>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (promoGames.length > 1) {
+        <button class="nav next" (click)="nextSlide()">❯</button>
+      }
+    </div>
+
+
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+</section>

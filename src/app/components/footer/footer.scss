@@ -1,0 +1,32 @@
+.site-footer {
+  background: var(--secondary);
+  padding: 2rem;
+  border-top: 1px solid var(--accent);
+}
+
+.site-footer .cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.site-footer h4 {
+  margin: 0 0 0.5rem;
+}
+
+.site-footer a {
+  display: block;
+  color: var(--accent);
+  text-decoration: none;
+  margin-bottom: 0.25rem;
+}
+
+.site-footer a:hover {
+  color: #ff6b81;
+}
+
+.site-footer .copy {
+  margin-top: 1rem;
+  opacity: 0.8;
+  text-align: center;
+}
