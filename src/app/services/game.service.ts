@@ -66,10 +66,10 @@ export class GameService {
   }
  
   getPopularGames(): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?popular=true&_sort=rating&_order=asc`);
+    return this.http.get<Game[]>(`${this.apiUrl}?popular=true&_sort=-rating`);
   }
 
   getPromoGames(): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?promo=true&_sort=rating&_order=desc`);
+    return this.http.get<Game[]>(`${this.apiUrl}?promo=true&_sort=-rating`);
   }
 }
