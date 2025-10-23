@@ -1,8 +1,34 @@
-<header class="site-header">
-  <div class="logo">GameMart</div>
-  <nav class="nav">
-    <a href="#">Home</a>
-    <a href="#">Categories</a>
-    <a href="#">Cart</a>
-  </nav>
+<header class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <h4 class="navbar-brand gradient-text">GameMart</h4>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Products</a>
+        </li>
+      </ul>
+      <div class="d-flex align-items-center">
+        <div class="input-group me-3">
+          <input type="text" class="form-control" placeholder="Rechercher..." aria-label="Rechercher" #searchBox>
+            <button class="btn btn-outline-secondary" type="button" (click)="onSearch(searchBox.value)"><i class="fas fa-search"></i></button>
+        </div>
+        <a class="nav-link" href="#"><i class="fas fa-user-circle fa-lg"></i></a>
+        <a class="nav-link position-relative" href="#">
+          <i class="fas fa-shopping-cart fa-lg"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            0 <span class="visually-hidden">articles dans le panier</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
 </header>

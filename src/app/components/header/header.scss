@@ -1,25 +1,30 @@
-.site-header {
-  background-color: var(--secondary);
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--accent);
-}
-
-.logo {
-  color: var(--text);
-  font-weight: 700;
+.gradient-text {
+  font-weight: bold;
+  font-size: 1.8rem;
+  background: linear-gradient(90deg, #00c6ff, #0070f3, #ff00ff, #ff8c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 300%;
+  animation: gradientAnimation 6s ease infinite;
   letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
 }
 
-.nav a {
-  color: var(--accent);
-  text-decoration: none;
-  margin: 0 0.75rem;
-  font-weight: 600;
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.nav a:hover {
-  color: #ff6b81; // lighter accent
+/* Effet au survol */
+.gradient-text:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
 }
