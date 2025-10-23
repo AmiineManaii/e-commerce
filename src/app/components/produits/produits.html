@@ -1,0 +1,55 @@
+<app-header></app-header>
+
+
+<div class="produits-container">
+
+    @if (displayedProduits.length > 0) {
+
+    <div class="produits-grid">
+
+        @for (produit of displayedProduits; track produit.id) {
+
+        <div class="produit-card">
+
+            <img [src]="produit.cover_image" [alt]="produit.title" class="produit-image">
+
+            <div class="produit-info">
+
+                <h3 class="produit-title">{{ produit.title }}</h3>
+                <div class="rating-text">
+                    {{ produit.rating != null ? (produit.rating | number:'1.1-1') : '—' }}
+                </div>
+                <p class="produit-price">{{ produit.price }} DT</p>
+                <button class="btn-add-to-cart" (click)="addToCart(produit)">
+                    Ajouter au panier
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+
+
+    <div class="pagination-controls">
+        <button (click)="previousPage()" [disabled]="currentPage === 1" class="pagination-button">Précédent</button>
+
+        @for (page of [].constructor(totalPages); track $index) {
+        <button (click)="goToPage($index + 1)" [class.active]="currentPage === $index + 1" class="pagination-button">
+            {{ $index + 1 }}
+        </button>
+        }
+
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-button">Suivant</button>
+    </div>
+
+    
+    } @else if (error) {
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    } @else {
+    <div class="alert alert-info" role="alert">
+        Aucun produit trouvé.
+    </div>
+    }
+</div>
+<app-footer></app-footer>

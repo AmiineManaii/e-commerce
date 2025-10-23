@@ -16,34 +16,28 @@ export class FeaturedGamesComponent implements OnInit {
   loading: boolean = true;
   error: string | null = null;
 
-  // Expose Math to the template
-  Math = Math;
 
   constructor(private gameService: GameService) {}
 
-  getRoundedRating(rating: number | undefined): number {
-    return Math.round(rating ?? 0);
-  }
+  
 
   ngOnInit(): void {
     this.loadFeaturedGames();
   }
 
   loadFeaturedGames(): void {
-    this.loading = true;
-    this.error = null;
     this.gameService.getPopularGames().subscribe({
       next: (games) => {
         this.games = games;
-        this.loading = false;
       },
       error: (err) => {
         this.error = 'Failed to load games. Please try again later.';
-        this.loading = false;
+
         console.error('Error loading featured games:', err);
       },
     });
   }
+  
 }
   
 

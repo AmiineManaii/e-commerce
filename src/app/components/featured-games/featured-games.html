@@ -2,13 +2,7 @@
   <div class="container">
     <h2 class="section-title text-center mb-4">Jeux populaires</h2>
 
-    @if (loading) {
-      <div class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    } @else if (error) {
+   @if (error) {
       <div class="alert alert-danger text-center" role="alert">
         {{ error }}
       </div>
@@ -31,7 +25,7 @@
                   <div class="mb-2">
                       @for (star of [1,2,3,4,5]; track star; let idx = $index) {
                           <i class="fa-star"
-                              [ngClass]="idx < getRoundedRating(game.rating) ? 'fas text-warning' : 'far text-secondary'"></i>
+                              [ngClass]="idx < game.rating ? 'fas text-warning' : 'far text-secondary'"></i>
                       }
                       <span class="small text-muted">{{ game.rating }}</span>
                   </div>

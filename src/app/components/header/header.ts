@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-header',
@@ -8,8 +10,14 @@ import { Component } from '@angular/core';
   styleUrl: './header.scss'
 })
 export class Header {
+  constructor(private router: Router) { }
+
   onSearch(searchTerm: string) {
-    console.log('Recherche pour :', searchTerm);
-    // Ici, vous pouvez ajouter la logique pour effectuer la recherche, par exemple naviguer vers une page de résultats ou filtrer une liste.
+    if (searchTerm.trim() !== "") {
+      this.router.navigate(['/search'], { queryParams: { q: searchTerm } });
+    }
+    else{
+      alert("Entrer un mot cle pour effectuer la recherche")
+    }
   }
 }
