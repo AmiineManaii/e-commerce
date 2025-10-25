@@ -4,23 +4,27 @@ import { Game } from '../../Models/game.model';
 import { CommonModule } from '@angular/common';
 import { Header } from "../header/header";
 import { Footer } from "../footer/footer";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-produits',
   standalone: true,
-  imports: [CommonModule, Header, Footer],
+  imports: [CommonModule, Header, Footer, FormsModule],
   templateUrl: './produits.html',
   styleUrl: './produits.scss'
 })
 export class Produits implements OnInit {
-  allProduits: Game[] = []; // All products fetched from the service
-  displayedProduits: Game[] = []; // Products currently displayed on the page
+  allProduits: Game[] = []; 
+  displayedProduits: Game[] = []; 
   error: string = "";
-
   currentPage: number = 1;
   itemsPerPage: number = 30;
   totalItems: number = 0;
   totalPages: number = 0;
+  categories: string[] = [];
+  selectedCategory: string = '';
+  selectedPriceRange: number = 1000;
+  selectedRating: number = 0;
 Math: any;
 Number: any;
 
@@ -34,9 +38,8 @@ Number: any;
     this.gameService.getAllGames().subscribe({
       next: (produits) => {
         this.allProduits = produits;
-        this.totalItems = this.allProduits.length;
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-        this.paginateProduits();
+        this.categories = this.getUniqueCategories(produits);
+        this.applyFilters();
       },
       error: (err) => {
         this.error = 'Failed to load products. Please try again later.';
@@ -45,35 +48,59 @@ Number: any;
     });
   }
 
-  paginateProduits(): void {
+  getUniqueCategories(produits: Game[]): string[] {
+    const categories = produits.map(produit => produit.genre);
+    return [...new Set(categories)];
+  }
+
+  applyFilters(): void {
+    let filteredProduits = this.allProduits;
+
+    if (this.selectedCategory) {
+      filteredProduits = filteredProduits.filter(produit => produit.genre === this.selectedCategory);
+    }
+
+    filteredProduits = filteredProduits.filter(produit => produit.price <= this.selectedPriceRange);
+
+    if (this.selectedRating > 0) {
+      filteredProduits = filteredProduits.filter(produit => produit.rating && produit.rating >= this.selectedRating);
+    }
+
+    this.totalItems = filteredProduits.length;
+    this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+    this.currentPage = 1; // Reset to first page after filtering
+    this.paginateProduits(filteredProduits);
+  }
+
+  paginateProduits(produitsToPaginate: Game[] = this.allProduits): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    this.displayedProduits = this.allProduits.slice(startIndex, endIndex);
+    this.displayedProduits = produitsToPaginate.slice(startIndex, endIndex);
 
-    // Ensure a minimum of 20 products are displayed if available
-    if (this.displayedProduits.length < 20 && this.allProduits.length >= 20) {
-      this.displayedProduits = this.allProduits.slice(0, 20);
+    
+    if (this.displayedProduits.length < 20 && produitsToPaginate.length >= 20) {
+      this.displayedProduits = produitsToPaginate.slice(0, 20);
     }
   }
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.paginateProduits();
+      this.applyFilters(); // Apply filters again to re-paginate with new page
     }
   }
 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.paginateProduits();
+      this.applyFilters(); // Apply filters again to re-paginate with new page
     }
   }
 
   previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.paginateProduits();
+      this.applyFilters(); // Apply filters again to re-paginate with new page
     }
   }
   addToCart(produit: Game): void {
