@@ -110,11 +110,76 @@ $transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     font-size: 0.9rem;
     color: $text-main;
     margin-top: 0.3rem;
-    align-self: flex-end; 
+    align-self: flex-end; /* Align price display to the right */
   }
 }
 
+.sort-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  padding: 0 1rem;
 
+  .sort-option {
+    background: $glass-bg;
+    border: 1px solid $glass-border;
+    color: $text-main;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: $transition;
+
+    &:hover {
+      border-color: $neon-blue;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      background: linear-gradient(45deg, $neon-blue, $neon-cyan);
+      color: #000;
+      font-weight: 600;
+      border-color: $neon-blue;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+    }
+  }
+}
+
+.product-count {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $neon-cyan;
+  margin-top: -1.5rem; /* Adjust as needed to position it correctly */
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px rgba(0, 255, 229, 0.4);
+}
+
+.btn-reset-filters {
+  background: none;
+  border: none;
+  color: $neon-cyan;
+  font-size: 1.8rem; /* Make the refresh icon larger */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0; /* Adjust margin */
+  padding: 0.5rem; /* Add padding for better click area */
+  align-self: center; /* Align with other filter elements */
+
+  &:hover {
+    transform: rotate(90deg) scale(1.1); /* Rotate and slightly enlarge on hover */
+    color: $neon-blue;
+  }
+
+  &:active {
+    transform: rotate(180deg) scale(0.9);
+  }
+}
+
+// === GRILLE ===
 .produits-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

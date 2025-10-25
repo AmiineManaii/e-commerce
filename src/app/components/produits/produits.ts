@@ -23,10 +23,11 @@ export class Produits implements OnInit {
   totalPages: number = 0;
   categories: string[] = [];
   selectedCategory: string = '';
-  selectedPriceRange: number = 1000;
+  selectedPriceRange: number = 300;
   selectedRating: number = 0;
-Math: any;
-Number: any;
+  selectedSortOption: string = 'none';
+  Math: any;
+  Number: any;
 
   constructor(private gameService: GameService) { }
 
@@ -66,10 +67,37 @@ Number: any;
       filteredProduits = filteredProduits.filter(produit => produit.rating && produit.rating >= this.selectedRating);
     }
 
+    switch (this.selectedSortOption) {
+      case 'priceAsc':
+        filteredProduits.sort((a, b) => a.price - b.price);
+        break;
+      case 'priceDesc':
+        filteredProduits.sort((a, b) => b.price - a.price);
+        break;
+      case 'popularity':
+        filteredProduits.sort((a, b) => b.rating - a.rating); // Assuming rating represents popularity
+        break;
+      case 'newArrivals':
+        filteredProduits.sort((a, b) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime());
+        break;
+      case 'none':
+      default:
+        // No sorting or default sorting
+        break;
+    }
+
     this.totalItems = filteredProduits.length;
     this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
     this.currentPage = 1; // Reset to first page after filtering
     this.paginateProduits(filteredProduits);
+  }
+
+  resetFilters(): void {
+    this.selectedCategory = '';
+    this.selectedPriceRange = 300;
+    this.selectedRating = 0;
+    this.selectedSortOption = 'none';
+    this.applyFilters();
   }
 
   paginateProduits(produitsToPaginate: Game[] = this.allProduits): void {
