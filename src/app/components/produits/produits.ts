@@ -18,7 +18,7 @@ export class Produits implements OnInit {
   displayedProduits: Game[] = []; 
   error: string = "";
   currentPage: number = 1;
-  itemsPerPage: number = 30;
+  itemsPerPage: number = 28;
   totalItems: number = 0;
   totalPages: number = 0;
   categories: string[] = [];
@@ -82,13 +82,12 @@ export class Produits implements OnInit {
         break;
       case 'none':
       default:
-        // No sorting or default sorting
+       
         break;
     }
 
     this.totalItems = filteredProduits.length;
     this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-    this.currentPage = 1; // Reset to first page after filtering
     this.paginateProduits(filteredProduits);
   }
 
@@ -97,6 +96,7 @@ export class Produits implements OnInit {
     this.selectedPriceRange = 300;
     this.selectedRating = 0;
     this.selectedSortOption = 'none';
+    this.currentPage = 1; 
     this.applyFilters();
   }
 
@@ -104,11 +104,6 @@ export class Produits implements OnInit {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.displayedProduits = produitsToPaginate.slice(startIndex, endIndex);
-
-    
-    if (this.displayedProduits.length < 20 && produitsToPaginate.length >= 20) {
-      this.displayedProduits = produitsToPaginate.slice(0, 20);
-    }
   }
 
   goToPage(page: number): void {
