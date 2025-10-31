@@ -1,5 +1,22 @@
-<app-header></app-header>
-<app-banner></app-banner>
-<app-category-list></app-category-list>
-<app-featured-games></app-featured-games>
-<app-footer></app-footer>
+<div class="home-page">
+  <app-header></app-header>
+  
+  <main class="main-content">
+    <!-- Hero Section - Banner -->
+    <section class="hero-section">
+      <app-banner></app-banner>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section fade-in">
+      <app-category-list></app-category-list>
+    </section>
+
+    <!-- Featured Games Section -->
+    <section class="featured-section fade-in">
+      <app-featured-games></app-featured-games>
+    </section>
+  </main>
+
+  <app-footer></app-footer>
+</div>

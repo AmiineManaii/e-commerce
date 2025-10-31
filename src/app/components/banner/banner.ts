@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Game } from '../../Models/game.model';
 import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'app-banner',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './banner.html',
   styleUrl: './banner.scss'
 })

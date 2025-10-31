@@ -1,32 +1,86 @@
 <section class="banner">
-  <h1 class="section-title">Jeux en promotions</h1>
-  
-
-    <div class="carousel mx-auto">
+  <div class="banner-container">
+    <h1 class="section-title">Jeux en promotions</h1>
+    
+    <div class="carousel">
       @if (promoGames.length > 1) {
-        <button class="nav prev" (click)="prevSlide()">❮</button>
+        <button class="nav prev" (click)="prevSlide()" aria-label="Slide précédent">
+          <i class="fas fa-chevron-left"></i>
+        </button>
       }
-
 
       <div class="slides">
         @for (game of promoGames; track game.id; let i = $index) {
           <div class="slide" [class.active]="i === currentSlide">
-            <img [src]="'.'+game.cover_image" [alt]="game.title" />
-             
-            <div class="slide-content">
-              <h2>{{ game.title }}</h2>
+            <div class="slide-image-wrapper">
+              <img [src]="'.'+game.cover_image" [alt]="game.title" class="slide-image" />
+              <div class="image-overlay"></div>
+            </div>
+            <div class="slide-content-wrapper">
+              <div class="slide-content">
+                <div class="content-header">
+                  <h2 class="game-title">{{ game.title }}</h2>
+                  <div class="game-meta">
+                    <span class="platform-badge">
+                      <i class="fas fa-gamepad"></i>
+                      {{ game.platform }}
+                    </span>
+                    <span class="genre-badge">
+                      <i class="fas fa-tag"></i>
+                      {{ game.genre }}
+                    </span>
+                  </div>
+                </div>
+                <div class="content-body">
+                  <p class="game-description">{{ game.description }}</p>
+                  <div class="game-details">
+                    <div class="rating-section">
+                      @for (star of [1,2,3,4,5]; track star; let idx = $index) {
+                        <i class="fa-star" [ngClass]="idx < game.rating ? 'fas text-warning' : 'far'"></i>
+                      }
+                      <span class="rating-value">{{ game.rating }}</span>
+                    </div>
+                    <div class="price-section">
+                      <span class="price-label">Prix spécial</span>
+                      <span class="price-value">{{ game.price }} DT</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="content-footer">
+                  <button class="btn-primary">
+                    <i class="fas fa-shopping-cart"></i>
+                    Ajouter au panier
+                  </button>
+                  <button class="btn-secondary">
+                    <i class="fas fa-info-circle"></i>
+                    Voir détails
+                  </button>
+                </div>
+              </div>
+              @if (promoGames.length > 1) {
+                <div class="slide-indicators">
+                  @for (item of promoGames; track item.id; let idx = $index) {
+                    <span class="indicator" [class.active]="idx === currentSlide"></span>
+                  }
+                </div>
+              }
             </div>
           </div>
         }
       </div>
 
       @if (promoGames.length > 1) {
-        <button class="nav next" (click)="nextSlide()">❯</button>
+        <button class="nav next" (click)="nextSlide()" aria-label="Slide suivant">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       }
     </div>
 
-
-  @if (error) {
-    <div class="error">{{ error }}</div>
-  }
+    @if (error) {
+      <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+    }
+  </div>
 </section>

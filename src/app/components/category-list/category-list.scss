@@ -1,8 +1,12 @@
+.container {
+  padding: 0 1rem;
+  max-width: 100%;
+}
 
 .category-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
   background: linear-gradient(90deg, #00c6ff, #0070f3, #ff00ff, #ff8c00);
   -webkit-background-clip: text;
   background-clip: text;
@@ -11,89 +15,258 @@
   animation: gradientAnimation 6s ease infinite;
   letter-spacing: 1px;
   text-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
-  padding-left: 10px;
-}
+  padding-left: 1rem;
+  position: relative;
+  display: inline-block;
 
-@keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 1rem;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #00c6ff, transparent);
+    border-radius: 2px;
+  }
+
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 }
 
 .category-list-container {
   display: flex;
   overflow-x: auto;
-  padding: 10px 0;
-  gap: 15px;
+  padding: 1rem 0 1.5rem;
+  gap: 1.25rem;
   scroll-behavior: smooth;
-  padding-bottom: 15px;
+  scroll-padding: 1rem;
+  position: relative;
 
-  &::-webkit-scrollbar { display: none; }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 
+  &::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 198, 255, 0.1);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: rgba(0, 198, 255, 0.5);
+    }
+  }
+
+  // Hide scrollbar for Firefox and IE
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 198, 255, 0.3) rgba(255, 255, 255, 0.05);
+
+  // Scroll hint indicator
   &::after {
     content: '→';
     font-size: 1.5rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(0, 198, 255, 0.4);
     position: sticky;
-    right: 10px;
+    right: 0;
     align-self: center;
     pointer-events: none;
-    animation: pulse 2s infinite;
+    animation: pulse 2s ease-in-out infinite;
+    margin-left: auto;
+    background: linear-gradient(90deg, transparent, rgba(26, 26, 46, 0.8));
+    padding-left: 2rem;
+    display: flex;
+    align-items: center;
+  }
+
+  @keyframes pulse {
+    0%, 100% { 
+      opacity: 0.4;
+      transform: translateX(0);
+    }
+    50% { 
+      opacity: 0.7;
+      transform: translateX(-5px);
+    }
   }
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.6; }
-}
-
-
 .category-card {
-  margin-left: 10px;
-  margin-top: 5px;
+  margin-left: 0.5rem;
   flex: 0 0 auto;
-  width: 120px;
-  height: 150px;
-  border-radius: 12px;
+  width: 140px;
+  height: 170px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(255, 255, 255, 0.05);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(42, 42, 42, 0.9), rgba(26, 26, 46, 0.95));
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  backdrop-filter: blur(10px);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 198, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+    pointer-events: none;
+  }
 
   &:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 12px 24px rgba(0, 198, 255, 0.2);
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: 0 16px 32px rgba(0, 198, 255, 0.3),
+                0 0 0 2px rgba(0, 198, 255, 0.4),
+                0 0 40px rgba(0, 198, 255, 0.2);
     border-color: #00c6ff;
+
+    &::before {
+      opacity: 1;
+    }
+
+    .category-image {
+      filter: brightness(1.15) saturate(1.2);
+      transform: scale(1.1);
+    }
+
+    .category-name {
+      background: rgba(0, 198, 255, 0.15);
+      color: #00c6ff;
+    }
+  }
+
+  &:active {
+    transform: translateY(-8px) scale(1.02);
   }
 }
 
 .category-image {
   width: 100%;
-  height: 100px;
+  height: 110px;
   object-fit: cover;
+  transition: all 0.4s ease;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: filter 0.3s ease;
-
-  .category-card:hover & {
-    filter: brightness(1.1);
-  }
+  position: relative;
+  z-index: 0;
 }
 
 .category-name {
-  padding: 10px 8px;
-  font-size: 0.9rem;
+  padding: 0.875rem 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #fff;
   text-align: center;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 2;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .category-title {
+    font-size: 1.75rem;
+    padding-left: 0.75rem;
+    margin-bottom: 1.25rem;
+
+    &::after {
+      left: 0.75rem;
+      width: 50px;
+    }
+  }
+
+  .category-list-container {
+    gap: 1rem;
+    padding: 0.75rem 0 1.25rem;
+
+    &::after {
+      font-size: 1.25rem;
+      padding-left: 1.5rem;
+    }
+  }
+
+  .category-card {
+    width: 130px;
+    height: 160px;
+
+    &:hover {
+      transform: translateY(-8px) scale(1.03);
+    }
+  }
+
+  .category-image {
+    height: 100px;
+  }
+
+  .category-name {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .category-title {
+    font-size: 1.5rem;
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+
+    &::after {
+      left: 0.5rem;
+      width: 40px;
+      height: 2px;
+    }
+  }
+
+  .category-list-container {
+    gap: 0.75rem;
+    padding: 0.5rem 0 1rem;
+
+    &::after {
+      font-size: 1rem;
+      padding-left: 1rem;
+    }
+  }
+
+  .category-card {
+    width: 120px;
+    height: 150px;
+    border-radius: 12px;
+  }
+
+  .category-image {
+    height: 90px;
+  }
+
+  .category-name {
+    padding: 0.625rem 0.5rem;
+    font-size: 0.75rem;
+  }
 }
