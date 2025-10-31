@@ -2,61 +2,119 @@
 
 
 <div class="produits-container">
-    <div class="filters-container">
-        <div class="filter-group">
-            <label for="category-filter">Catégorie:</label>
-            <select id="category-filter" [(ngModel)]="selectedCategory" (change)="applyFilters()" #categoryModel="ngModel">
-                <option value="">Toutes</option>
-                @for (category of categories; track category) {
-                <option [value]="category">{{ category }}</option>
-            }
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <label for="price-range-filter">Prix:</label>
-            <input type="range" id="price-range-filter" min="0" max="300" step="1" [(ngModel)]="selectedPriceRange" (change)="applyFilters()" #priceRangeModel="ngModel">
-            <span class="price-display">{{ selectedPriceRange }} DT</span>
-        </div>
-
-        <div class="filter-group">
-            <label for="rating-filter">Note minimale:</label>
-            <input type="range" id="rating-filter" min="0" max="5" step="0.1" [(ngModel)]="selectedRating" (change)="applyFilters()" #ratingModel="ngModel">
-            <span class="price-display">{{ selectedRating }} étoiles</span>
-        </div>
-        <button class="btn-reset-filters" (click)="resetFilters()" title="Réinitialiser les filtres">⟳</button>
+    <div class="page-header">
+        <h1 class="page-title">Tous les Produits</h1>
+        <p class="page-subtitle">Découvrez notre sélection complète de jeux vidéo</p>
     </div>
 
-    <div class="sort-options">
-        <div class="sort-option" [class.active]="selectedSortOption === 'none'" (click)="selectedSortOption = 'none'; applyFilters()">Aucun</div>
-        <div class="sort-option" [class.active]="selectedSortOption === 'priceAsc'" (click)="selectedSortOption = 'priceAsc'; applyFilters()">Prix croissant</div>
-        <div class="sort-option" [class.active]="selectedSortOption === 'priceDesc'" (click)="selectedSortOption = 'priceDesc'; applyFilters()">Prix décroissant</div>
-        <div class="sort-option" [class.active]="selectedSortOption === 'popularity'" (click)="selectedSortOption = 'popularity'; applyFilters()">Popularité</div>
-        <div class="sort-option" [class.active]="selectedSortOption === 'newArrivals'" (click)="selectedSortOption = 'newArrivals'; applyFilters()">Nouveautés</div>
+    <div class="filters-section">
+        <div class="filters-container">
+            <div class="filter-group">
+                <label for="category-filter">
+                    <i class="fas fa-filter"></i>
+                    Catégorie
+                </label>
+                <select id="category-filter" [(ngModel)]="selectedCategory" (change)="applyFilters()" #categoryModel="ngModel">
+                    <option value="">Toutes les catégories</option>
+                    @for (category of categories; track category) {
+                    <option [value]="category">{{ category }}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="price-range-filter">
+                    <i class="fas fa-dollar-sign"></i>
+                    Prix max: {{ selectedPriceRange }} DT
+                </label>
+                <input type="range" id="price-range-filter" min="0" max="300" step="1" [(ngModel)]="selectedPriceRange" (change)="applyFilters()" #priceRangeModel="ngModel">
+            </div>
+
+            <div class="filter-group">
+                <label for="rating-filter">
+                    <i class="fas fa-star"></i>
+                    Note minimale: {{ selectedRating.toFixed(1) }}
+                </label>
+                <input type="range" id="rating-filter" min="0" max="5" step="0.1" [(ngModel)]="selectedRating" (change)="applyFilters()" #ratingModel="ngModel">
+            </div>
+            
+            <button class="btn-reset-filters" (click)="resetFilters()" title="Réinitialiser les filtres">
+                <i class="fas fa-redo"></i>
+                Réinitialiser
+            </button>
+        </div>
+
+        <div class="sort-section">
+            <span class="sort-label">
+                <i class="fas fa-sort"></i>
+                Trier par:
+            </span>
+            <div class="sort-options">
+                <div class="sort-option" [class.active]="selectedSortOption === 'none'" (click)="selectedSortOption = 'none'; applyFilters()">
+                    <i class="fas fa-list"></i>
+                    Par défaut
+                </div>
+                <div class="sort-option" [class.active]="selectedSortOption === 'priceAsc'" (click)="selectedSortOption = 'priceAsc'; applyFilters()">
+                    <i class="fas fa-sort-amount-down"></i>
+                    Prix croissant
+                </div>
+                <div class="sort-option" [class.active]="selectedSortOption === 'priceDesc'" (click)="selectedSortOption = 'priceDesc'; applyFilters()">
+                    <i class="fas fa-sort-amount-up"></i>
+                    Prix décroissant
+                </div>
+                <div class="sort-option" [class.active]="selectedSortOption === 'popularity'" (click)="selectedSortOption = 'popularity'; applyFilters()">
+                    <i class="fas fa-fire"></i>
+                    Popularité
+                </div>
+                <div class="sort-option" [class.active]="selectedSortOption === 'newArrivals'" (click)="selectedSortOption = 'newArrivals'; applyFilters()">
+                    <i class="fas fa-sparkles"></i>
+                    Nouveautés
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="product-count">
-        {{ displayedProduits.length }} produits affichés
+        <i class="fas fa-box"></i>
+        <span>{{ displayedProduits.length }} produit{{ displayedProduits.length > 1 ? 's' : '' }} trouvé{{ displayedProduits.length > 1 ? 's' : '' }}</span>
     </div>
 
     @if (displayedProduits.length > 0) {
 
     <div class="produits-grid">
-
         @for (produit of displayedProduits; track produit.id) {
-
-        <div class="produit-card" (click)="viewProductDetails(produit.id)">
-
-            <img [src]="produit.cover_image" [alt]="produit.title" class="produit-image">
+        <div class="produit-card">
+            <div class="card-image-wrapper" (click)="viewProductDetails(produit.id)">
+                <img [src]="produit.cover_image" [alt]="produit.title" class="produit-image">
+                <div class="image-overlay"></div>
+                <div class="card-badge">
+                    <span class="badge-platform">
+                        <i class="fas fa-gamepad"></i>
+                        {{ produit.platform }}
+                    </span>
+                </div>
+            </div>
 
             <div class="produit-info">
-
-                <h3 class="produit-title">{{ produit.title }}</h3>
-                <div class="rating-text">
-                    {{ produit.rating != null ? (produit.rating) : '—' }}
+                <div class="info-header">
+                    <h3 class="produit-title" (click)="viewProductDetails(produit.id)">{{ produit.title }}</h3>
+                    <span class="badge-genre">{{ produit.genre }}</span>
                 </div>
-                <p class="produit-price">{{ produit.price }} DT</p>
-                <button class="btn-add-to-cart" (click)="addToCart(produit)">
+
+                <div class="rating-section">
+                    @for (star of [1,2,3,4,5]; track star; let idx = $index) {
+                    <i class="fa-star" [ngClass]="idx < (produit.rating || 0) ? 'fas text-warning' : 'far'"></i>
+                    }
+                    <span class="rating-value">{{ produit.rating != null ? produit.rating.toFixed(1) : 'N/A' }}</span>
+                </div>
+
+                <div class="price-section">
+                    <span class="price-label">Prix</span>
+                    <span class="produit-price">{{ produit.price }} DT</span>
+                </div>
+
+                <button class="btn-add-to-cart" (click)="addToCart(produit); $event.stopPropagation()">
+                    <i class="fas fa-shopping-cart"></i>
                     Ajouter au panier
                 </button>
             </div>
@@ -66,15 +124,23 @@
 
 
     <div class="pagination-controls">
-        <button (click)="previousPage()" [disabled]="currentPage === 1" class="pagination-button">Précédent</button>
-
-        @for (page of [].constructor(totalPages); track $index) {
-        <button (click)="goToPage($index + 1)" [class.active]="currentPage === $index + 1" class="pagination-button">
-            {{ $index + 1 }}
+        <button (click)="previousPage()" [disabled]="currentPage === 1" class="pagination-button pagination-nav">
+            <i class="fas fa-chevron-left"></i>
+            Précédent
         </button>
-        }
 
-        <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-button">Suivant</button>
+        <div class="pagination-numbers">
+            @for (page of [].constructor(totalPages); track $index) {
+            <button (click)="goToPage($index + 1)" [class.active]="currentPage === $index + 1" class="pagination-button">
+                {{ $index + 1 }}
+            </button>
+            }
+        </div>
+
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-button pagination-nav">
+            Suivant
+            <i class="fas fa-chevron-right"></i>
+        </button>
     </div>
 
     
