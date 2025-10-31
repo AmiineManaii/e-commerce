@@ -5,651 +5,880 @@
       "title": "Cyberpunk 2077",
       "platform": "PC",
       "genre": "RPG",
-      "price": 149.900,
+      "price": 59.99,
       "rating": 4.5,
       "release_date": "2020-12-10",
       "stock": 12,
-      "description": "Plongez dans Night City, une mégalopole obsédée par le pouvoir, le glamour et les modifications corporelles.",
+      "description": "Incarnez V, un mercenaire dans la mégalopole futuriste de Night City. Personnalisez votre cyberware, vos compétences et votre style de jeu pour survivre dans une ville obsédée par le pouvoir et la technologie. Avec Keanu Reeves dans le rôle de Johnny Silverhand.",
       "cover_image": "/assets/games/cover/cyberpunk.jpg",
       "images": [
-        "/assets/games/cyberpunk.jpg"
+        "/assets/games/screenshots/cyberpunk1.jpg",
+        "/assets/games/screenshots/cyberpunk2.jpg",
+        "/assets/games/screenshots/cyberpunk3.jpg",
+        "/assets/games/screenshots/cyberpunk4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=8X2kIfS6fb8",
       "promo": true,
       "popular": false,
-      "tags": [
-        "RPG",
-        "Simulation"
-      ]
+      "tags": ["RPG", "Cyberpunk", "Open World", "Futuriste", "Action"]
     },
     {
       "id": 2,
       "title": "Red Dead Redemption 2",
       "platform": "PC",
       "genre": "Aventure",
-      "price": 99.900,
+      "price": 49.99,
       "rating": 4.7,
       "release_date": "2018-10-26",
       "stock": 18,
-      "description": "Red Dead Redemption 2 vous emmène dans l'histoire d'un ancien gangster à la recherche de sa famille et de ses amis.",
+      "description": "Vivez l'Amérique à la fin de l'ère du Far West. Incarnez Arthur Morgan, un hors-la-loi en fuite avec sa bande. Chassez, pêchez, braquez des banques et survivez dans un monde ouvert immense et réaliste. Une histoire épique sur la loyauté et la rédemption.",
       "cover_image": "/assets/games/cover/rdr2.jpg",
       "images": [
-        "/assets/games/rdr2.jpg"
+        "/assets/games/screenshots/rdr2_1.jpg",
+        "/assets/games/screenshots/rdr2_2.jpg",
+        "/assets/games/screenshots/rdr2_3.jpg",
+        "/assets/games/screenshots/rdr2_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=gmA6MrX81z4",
       "promo": false,
       "popular": false,
-      "tags": [
-        "Aventure",
-        "RPG"
-      ]
+      "tags": ["Aventure", "Western", "Open World", "Action", "Histoire"]
     },
     {
       "id": 3,
       "title": "The Witcher 3: Wild Hunt",
       "platform": "PC",
       "genre": "RPG",
-      "price": 99.900,
+      "price": 39.99,
       "rating": 4.9,
       "release_date": "2015-05-19",
       "stock": 20,
-      "description": "The Witcher 3: Wild Hunt vous emmène dans l'histoire d'Geralt de Rivia, un chasseur de monstres qui se réincarne pour protéger la Terre.",
+      "description": "Geralt de Rivia, chasseur de monstres légendaire, part à la recherche de Ciri, l'enfant de la prophétie. Explorez un continent déchiré par la guerre, combattez des créatures redoutables et prenez des décisions qui changeront le cours de l'histoire.",
       "cover_image": "/assets/games/cover/witcher3.jpg",
       "images": [
-        "/assets/games/witcher3.jpg"
+        "/assets/games/screenshots/witcher3_1.jpg",
+        "/assets/games/screenshots/witcher3_2.jpg",
+        "/assets/games/screenshots/witcher3_3.jpg",
+        "/assets/games/screenshots/witcher3_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=c0i88t0Kacs",
       "promo": false,
       "popular": true,
-      "tags": [
-        "RPG",
-        "Adventure"
-      ]
+      "tags": ["RPG", "Fantasy", "Open World", "Aventure", "Choix"]
     },
     {
       "id": 4,
       "title": "Assassin's Creed Valhalla",
       "platform": "PC",
       "genre": "Action",
-      "price": 149.900,
+      "price": 54.99,
       "rating": 4.8,
       "release_date": "2020-11-12",
       "stock": 10,
-      "description": "Assassin's Creed Valhalla vous emmène dans l'histoire d'Nurgle, un ancien assassin qui se réincarne pour protéger la civilisation.",
+      "description": "Devenez Eivor, un fier guerrier viking élevé dans les légendes de bataille et de gloire. Explorez l'Angleterre médiévale, menez des raids, construisez votre colonie et gagnez votre place au Valhalla dans ce chapitre épique de la saga Assassin's Creed.",
       "cover_image": "/assets/games/cover/valhalla.jpg",
       "images": [
-        "/assets/games/valhalla.jpg"
+        "/assets/games/screenshots/valhalla1.jpg",
+        "/assets/games/screenshots/valhalla2.jpg",
+        "/assets/games/screenshots/valhalla3.jpg",
+        "/assets/games/screenshots/valhalla4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=ssrNcwxALS4",
       "promo": false,
       "popular": true,
-      "tags": [
-        "Action",
-        "Adventure"
-      ]
+      "tags": ["Action", "Vikings", "Open World", "Aventure", "Histoire"]
     },
     {
       "id": 5,
       "title": "Grand Theft Auto V",
       "platform": "PC",
       "genre": "Action",
-      "price": 99.900,
+      "price": 29.99,
       "rating": 4.8,
       "release_date": "2013-09-17",
       "stock": 15,
-      "description": "Grand Theft Auto V vous emmène dans l'histoire d'un ancien gangster à la recherche de sa famille et de ses amis.",
+      "description": "Explorez Los Santos, une métropole éclatante dans l'État de San Andreas. Incarnez trois criminels aux histoires entrelacées : Michael, Franklin et Trevor. Une satire mordante de la société américaine moderne avec un mode histoire captivant et GTA Online illimité.",
       "cover_image": "/assets/games/cover/gtav.jpg",
       "images": [
-        "/assets/games/gtav.jpg"
+        "/assets/games/screenshots/gtav1.jpg",
+        "/assets/games/screenshots/gtav2.jpg",
+        "/assets/games/screenshots/gtav3.jpg",
+        "/assets/games/screenshots/gtav4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=QkkoHAzjnUs",
       "promo": true,
       "popular": true,
-      "tags": [
-        "Action",
-        "Adventure"
-      ]
+      "tags": ["Action", "Open World", "Crime", "Multiplayer", "Satire"]
     },
     {
       "id": 6,
       "title": "Call of Duty: Warzone",
       "platform": "PC",
       "genre": "FPS",
-      "price": 0.000,
+      "price": 57.00,
       "rating": 4.8,
       "release_date": "2020-12-22",
       "stock": 10,
-      "description": "Call of Duty: Warzone vous emmène dans l'histoire d'un ancien gangster à la recherche de sa famille et de ses amis.",
+      "description": "Battle royale intense dans l'univers de Call of Duty. Affrontez jusqu'à 150 joueurs dans la carte massive de Verdansk. Récupérez des contrats, personnalisez vos armes et soyez le dernier survivant dans cette expérience de combat tactique.",
       "cover_image": "/assets/games/cover/cod.jpg",
       "images": [
-        "/assets/games/cod.jpg"
+        "/assets/games/screenshots/warzone1.jpg",
+        "/assets/games/screenshots/warzone2.jpg",
+        "/assets/games/screenshots/warzone3.jpg",
+        "/assets/games/screenshots/warzone4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=0E44DClsX5Q",
       "promo": false,
       "popular": true,
-      "tags": [
-        "FPS",
-        "Action"
-      ]
+      "tags": ["FPS", "Battle Royale", "Multiplayer", "Gratuit", "Tactical"]
     },
     {
       "id": 7,
       "title": "Mortal Kombat 11",
       "platform": "PC",
       "genre": "Fighting",
-      "price": 149.900,
+      "price": 44.99,
       "rating": 4.6,
       "release_date": "2021-05-21",
       "stock": 15,
-      "description": "Mortal Kombat 11 vous emmène dans l'histoire de la guerre entre deux super-héros, Kratos et Atreus.",
+      "description": "Le combat ultime revient avec des graphismes époustouflants et une violence extrême. Personnalisez vos combattants préférés, découvrez une nouvelle histoire temporelle et maîtrisez des combos dévastateurs dans le jeu de combat le plus sanglant de la planète.",
       "cover_image": "/assets/games/cover/mk11.jpg",
       "images": [
-        "/assets/games/mk11.jpg"
+        "/assets/games/screenshots/mk11_1.jpg",
+        "/assets/games/screenshots/mk11_2.jpg",
+        "/assets/games/screenshots/mk11_3.jpg",
+        "/assets/games/screenshots/mk11_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=UoTams2yc0s",
       "promo": false,
       "popular": false,
-      "tags": [
-        "Fighting",
-        "Action"
-      ]
+      "tags": ["Fighting", "Combat", "Violent", "Multiplayer", "Esport"]
     },
     {
       "id": 8,
       "title": "Street Fighter 6",
       "platform": "PC",
       "genre": "Fighting",
-      "price": 199.900,
+      "price": 59.99,
       "rating": 4.6,
       "release_date": "2023-09-20",
       "stock": 15,
-      "description": "Street Fighter 6 vous emmène dans l'histoire de la guerre entre deux super-héros, Kratos et Atreus.",
+      "description": "La révolution du combat arrive ! Avec un nouveau système de combat innovant, un mode monde ouvert inédit et des graphismes next-gen. Rejoignez le Fighting Ground, le World Tour et le Battle Hub pour l'expérience Street Fighter ultime.",
       "cover_image": "/assets/games/cover/sf6.jpg",
       "images": [
-        "/assets/games/sf6.jpg"
+        "/assets/games/screenshots/sf6_1.jpg",
+        "/assets/games/screenshots/sf6_2.jpg",
+        "/assets/games/screenshots/sf6_3.jpg",
+        "/assets/games/screenshots/sf6_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=Jy2TjXIM0yY",
       "promo": false,
       "popular": false,
-      "tags": [
-        "Fighting",
-        "Action"
-      ]
+      "tags": ["Fighting", "Arcade", "Competitive", "Multiplayer", "Next-Gen"]
     },
     {
       "id": 9,
       "title": "EA Sports FC 24",
       "platform": "PC",
       "genre": "Sport",
-      "price": 239.900,
+      "price": 69.99,
       "rating": 4.8,
       "release_date": "2024-09-28",
       "stock": 10,
-      "description": "EA Sports FC 24 vous emmène dans l'histoire d'un ancien gangster à la recherche de sa famille et de ses amis.",
+      "description": "L'ère nouvelle du football vidéo commence. Avec la technologie HyperMotionV, l'Opta optimisée et les styles de jeu PlayStyles, vivez le jeu le plus réaliste jamais créé. Plus de 19,000 joueurs, 700 équipes et 30 ligues.",
       "cover_image": "/assets/games/cover/fc24.jpg",
       "images": [
-        "/assets/games/fc24.jpg"
+        "/assets/games/screenshots/fc24_1.jpg",
+        "/assets/games/screenshots/fc24_2.jpg",
+        "/assets/games/screenshots/fc24_3.jpg",
+        "/assets/games/screenshots/fc24_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=XhP3Xh4LMA8",
       "promo": false,
       "popular": true,
-      "tags": [
-        "Sport",
-        "Action"
-      ]
+      "tags": ["Sport", "Football", "Simulation", "Multiplayer", "Realiste"]
     },
     {
       "id": 10,
       "title": "Baldur's Gate 3",
       "platform": "PC",
       "genre": "RPG",
-      "price": 199.900,
+      "price": 59.99,
       "rating": 4.9,
       "release_date": "2023-08-03",
       "stock": 8,
-      "description": "Un RPG épique avec des choix profonds et un système de combat tactique exceptionnel.",
+      "description": "Plongez dans un RPG épique où chaque choix compte. Créez votre personnage, formez votre groupe et explorez les Royaumes Oubliés dans cette aventure aux possibilités infinies. Basé sur les règles de D&D 5e, avec un système de combat tactique et des milliers de dialogues.",
       "cover_image": "/assets/games/cover/baldursgate3.jpg",
       "images": [
-        "/assets/games/baldursgate3.jpg"
+        "/assets/games/screenshots/baldurs1.jpg",
+        "/assets/games/screenshots/baldurs2.jpg",
+        "/assets/games/screenshots/baldurs3.jpg",
+        "/assets/games/screenshots/baldurs4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=W9iHUcnxgq4",
       "promo": true,
       "popular": true,
-      "tags": [
-        "RPG",
-        "Fantasy"
-      ]
+      "tags": ["RPG", "Fantasy", "Turn-Based", "Co-op", "Choix"]
     },
     {
       "id": 11,
       "title": "Valorant",
       "platform": "PC",
       "genre": "FPS",
-      "price": 30.000,
+      "price": 39.00,
       "rating": 4.5,
       "release_date": "2020-06-02",
       "stock": 75,
-      "description": "FPS tactique 5v5 mêlant précision au tir et compétences d'agents uniques.",
+      "description": "FPS tactique 5v5 qui mélange précision au tir et compétences d'agents uniques. Chaque agent possède des capacités spéciales qui peuvent changer le cours d'une manche. Stratégie, teamwork et skill sont la clé pour dominer.",
       "cover_image": "/assets/games/cover/valorant.jpg",
       "images": [
-        "/assets/games/valorant.jpg"
+        "/assets/games/screenshots/valorant1.jpg",
+        "/assets/games/screenshots/valorant2.jpg",
+        "/assets/games/screenshots/valorant3.jpg",
+        "/assets/games/screenshots/valorant4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=lWr6dhTcu-E",
       "promo": false,
       "popular": false,
-      "tags": [
-        "FPS",
-        "Tactical"
-      ]
+      "tags": ["FPS", "Tactical", "Competitive", "Gratuit", "Esport"]
     },
     {
       "id": 12,
       "title": "Starfield",
       "platform": "PC",
       "genre": "RPG",
-      "price": 199.900,
+      "price": 69.99,
       "rating": 4.3,
       "release_date": "2023-09-06",
       "stock": 14,
-      "description": "Explorez l'espace dans ce RPG épique de Bethesda Game Studios.",
+      "description": "Le premier nouvel univers de Bethesda en 25 ans. Explorez plus de 1000 planètes, personnalisez votre vaisseau, recrutez un équipage et découvrez les secrets de la galaxie dans ce RPG spatial épique.",
       "cover_image": "/assets/games/cover/starfield.jpg",
       "images": [
-        "/assets/games/starfield.jpg"
+        "/assets/games/screenshots/starfield1.jpg",
+        "/assets/games/screenshots/starfield2.jpg",
+        "/assets/games/screenshots/starfield3.jpg",
+        "/assets/games/screenshots/starfield4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=kfYEiTdsyas",
       "promo": false,
       "popular": false,
-      "tags": [
-        "RPG",
-        "Space"
-      ]
+      "tags": ["RPG", "Space", "Exploration", "Sci-Fi", "Open World"]
     },
     {
       "id": 13,
       "title": "Diablo IV",
       "platform": "PC",
       "genre": "RPG",
-      "price": 199.900,
+      "price": 69.99,
       "rating": 4.6,
       "release_date": "2023-06-06",
       "stock": 11,
-      "description": "Retournez dans le monde sombre de Sanctuary dans ce nouvel opus de Diablo.",
+      "description": "Retournez dans le monde sombre de Sanctuary dans ce nouvel opus de Diablo. Affrontez les forces du mal, personnalisez votre héros avec des compétences et équipements légendaires, et explorez un monde ouvert persistant rempli de donjons et de secrets.",
       "cover_image": "/assets/games/cover/diablo4.jpg",
       "images": [
-        "/assets/games/diablo4.jpg"
+        "/assets/games/screenshots/diablo4_1.jpg",
+        "/assets/games/screenshots/diablo4_2.jpg",
+        "/assets/games/screenshots/diablo4_3.jpg",
+        "/assets/games/screenshots/diablo4_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=9bRWIdOMfro",
       "promo": false,
       "popular": false,
-      "tags": [
-        "RPG",
-        "Fantasy"
-      ]
+      "tags": ["RPG", "Fantasy", "Dark", "Multiplayer", "Action"]
     },
     {
       "id": 14,
       "title": "Forza Horizon 5",
       "platform": "PC",
       "genre": "Racing",
-      "price": 149.900,
+      "price": 59.99,
       "rating": 4.8,
       "release_date": "2021-11-09",
       "stock": 9,
-      "description": "Course en monde ouvert au Mexique avec des centaines de voitures.",
+      "description": "Course en monde ouvert au Mexique avec des centaines de voitures. Explorez des paysages époustouflants, participez à des festivals de musique et devenez une star de la course dans le plus grand Horizon à ce jour.",
       "cover_image": "/assets/games/cover/forza5.jpg",
       "images": [
-        "/assets/games/forza5.jpg"
+        "/assets/games/screenshots/forza5_1.jpg",
+        "/assets/games/screenshots/forza5_2.jpg",
+        "/assets/games/screenshots/forza5_3.jpg",
+        "/assets/games/screenshots/forza5_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=FYH9n37B7Yw",
       "promo": true,
       "popular": true,
-      "tags": [
-        "Racing",
-        "Open World"
-      ]
+      "tags": ["Racing", "Open World", "Cars", "Simulation", "Multiplayer"]
     },
     {
       "id": 15,
-      "title": "Daying Light :The Beast",
+      "title": "Dying Light 2: Stay Human",
       "platform": "PC",
       "genre": "RPG",
-      "price": 199.900,
+      "price": 49.99,
       "rating": 4.8,
       "release_date": "2023-09-28",
       "stock": 10,
-      "description": "Un RPG épique avec des choix profonds et un système de combat tactique exceptionnel.",
-      "cover_image": "/assets/games/cover/dayinglight.jpg",
+      "description": "Survie dans un monde post-apocalyptique ravagé par des zombies. Utilisez le parkour pour explorer la ville, combattez des infectés et des factions hostiles, et prenez des décisions qui affectent le monde autour de vous.",
+      "cover_image": "/assets/games/cover/dyinglight.jpg",
       "images": [
-        "/assets/games/dayinglight.jpg"
+        "/assets/games/screenshots/dyinglight1.jpg",
+        "/assets/games/screenshots/dyinglight2.jpg",
+        "/assets/games/screenshots/dyinglight3.jpg",
+        "/assets/games/screenshots/dyinglight4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=UwJAAy7tPhE",
       "promo": false,
       "popular": true,
-      "tags": [
-        "RPG",
-        "Fantasy"
-      ]
+      "tags": ["RPG", "Zombie", "Horror", "Parkour", "Action"]
     },
     {
       "id": 16,
       "title": "God of War Ragnarök",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 199.900,
+      "price": 69.99,
       "rating": 4.8,
       "release_date": "2022-11-09",
       "stock": 10,
-      "description": "La suite épique de l'histoire de Kratos et Atreus dans la mythologie nordique.",
+      "description": "La suite épique de l'histoire de Kratos et Atreus dans la mythologie nordique. Affrontez des dieux et des créatures légendaires tout en explorant les Neuf Royaumes dans cette aventure émotionnelle intense.",
       "cover_image": "/assets/games/cover/gow.jpg",
       "images": [
-        "/assets/games/gow.jpg"
+        "/assets/games/screenshots/gow_1.jpg",
+        "/assets/games/screenshots/gow_2.jpg",
+        "/assets/games/screenshots/gow_3.jpg",
+        "/assets/games/screenshots/gow_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=EE-4GvjKcfs",
       "promo": false,
       "popular": true,
-      "tags": [
-        "Action",
-        "Adventure"
-      ]
+      "tags": ["Action", "Adventure", "Mythology", "Story-Rich", "Combat"]
     },
     {
       "id": 17,
       "title": "The Last of Us Part II",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 149.900,
+      "price": 59.99,
       "rating": 4.9,
       "release_date": "2020-06-19",
       "stock": 8,
-      "description": "Une aventure émotionnelle intense dans un monde post-apocalyptique.",
+      "description": "Une aventure émotionnelle intense dans un monde post-apocalyptique. Suivez Ellie dans sa quête de vengeance à travers l'Amérique dévastée, où chaque décision a un prix et chaque combat est une lutte pour la survie.",
       "cover_image": "/assets/games/cover/lastofus2.jpg",
       "images": [
-        "/assets/games/lastofus2.jpg"
+        "/assets/games/screenshots/tlou2_1.jpg",
+        "/assets/games/screenshots/tlou2_2.jpg",
+        "/assets/games/screenshots/tlou2_3.jpg",
+        "/assets/games/screenshots/tlou2_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=btmN-bWwv0A",
       "promo": false,
       "popular": true,
-      "tags": [
-        "Action",
-        "Adventure"
-      ]
+      "tags": ["Action", "Adventure", "Zombie", "Story-Rich", "Emotional"]
     },
     {
       "id": 18,
       "title": "EA Sports FC 25",
       "platform": "PlayStation 5",
       "genre": "Sport",
-      "price": 239.900,
+      "price": 79.99,
       "rating": 4.3,
       "release_date": "2024-09-27",
       "stock": 22,
-      "description": "La nouvelle génération de football avec HyperMotionV et une IA améliorée.",
+      "description": "La nouvelle génération de football avec HyperMotionV et une IA améliorée. Profitez d'une expérience de jeu ultra-réaliste avec des animations fluides, une physique avancée et des modes de jeu innovants.",
       "cover_image": "/assets/games/cover/fifa25.jpg",
       "images": [
-        "/assets/games/fifa25.jpg"
+        "/assets/games/screenshots/fc25_1.jpg",
+        "/assets/games/screenshots/fc25_2.jpg",
+        "/assets/games/screenshots/fc25_3.jpg",
+        "/assets/games/screenshots/fc25_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=J7nJ4Q7_pUU",
       "promo": true,
       "popular": false,
-      "tags": [
-        "Sport",
-        "Football"
-      ]
+      "tags": ["Sport", "Football", "Simulation", "Next-Gen", "Multiplayer"]
     },
     {
       "id": 19,
       "title": "Spider-Man 2",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 199.900,
+      "price": 69.99,
       "rating": 4.8,
       "release_date": "2023-10-20",
       "stock": 12,
-      "description": "Incarnez Peter Parker et Miles Morales dans cette aventure arachnéenne.",
+      "description": "Incarnez Peter Parker et Miles Morales dans cette aventure arachnéenne épique. Affrontez de nouveaux villains dangereux, explorez New York élargi et maîtrisez de nouvelles capacités dans le combat le plus dynamique de la série.",
       "cover_image": "/assets/games/cover/spiderman2.jpg",
       "images": [
-        "/assets/games/spiderman2.jpg"
+        "/assets/games/screenshots/spiderman2_1.jpg",
+        "/assets/games/screenshots/spiderman2_2.jpg",
+        "/assets/games/screenshots/spiderman2_3.jpg",
+        "/assets/games/screenshots/spiderman2_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=qIQ3xNqkVC4",
       "promo": false,
       "popular": true,
-      "tags": [
-        "Action",
-        "Superhero"
-      ]
+      "tags": ["Action", "Superhero", "Open World", "Adventure", "Combat"]
     },
     {
       "id": 20,
       "title": "Horizon Forbidden West",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 199.900,
+      "price": 69.99,
       "rating": 4.7,
       "release_date": "2022-02-18",
       "stock": 14,
-      "description": "Explorez l'Ouest interdit dans cette suite épique d'Horizon Zero Dawn.",
+      "description": "Explorez l'Ouest interdit dans cette suite épique d'Horizon Zero Dawn. Aloy découvre de nouvelles terres, affronte des machines plus dangereuses et révèle des secrets qui pourraient changer le destin du monde.",
       "cover_image": "/assets/games/cover/horizon2.jpg",
       "images": [
-        "/assets/games/horizon2.jpg"
+        "/assets/games/screenshots/horizon2_1.jpg",
+        "/assets/games/screenshots/horizon2_2.jpg",
+        "/assets/games/screenshots/horizon2_3.jpg",
+        "/assets/games/screenshots/horizon2_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=Lq594XmpPBg",
       "promo": false,
       "popular": false,
-      "tags": [
-        "Action",
-        "Open World"
-      ]
+      "tags": ["Action", "Open World", "Robots", "Adventure", "RPG"]
     },
     {
       "id": 21,
       "title": "Final Fantasy XVI",
       "platform": "PlayStation 5",
       "genre": "RPG",
-      "price": 199.900,
+      "price": 69.99,
       "rating": 4.6,
       "release_date": "2023-06-22",
       "stock": 9,
-      "description": "Un nouveau chapitre épique dans la saga Final Fantasy.",
+      "description": "Un nouveau chapitre épique dans la saga Final Fantasy. Plongez dans un monde de magie et de conflits politiques, où les Égides, gardiens de cristaux, s'affrontent dans des combats spectaculaires.",
       "cover_image": "/assets/games/cover/ff16.jpg",
       "images": [
-        "/assets/games/ff16.jpg"
+        "/assets/games/screenshots/ff16_1.jpg",
+        "/assets/games/screenshots/ff16_2.jpg",
+        "/assets/games/screenshots/ff16_3.jpg",
+        "/assets/games/screenshots/ff16_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=3ke1cD2rA4k",
       "promo": false,
       "popular": false,
-      "tags": [
-        "RPG",
-        "Fantasy"
-      ]
+      "tags": ["RPG", "Fantasy", "Story-Rich", "Action", "Adventure"]
     },
     {
       "id": 22,
       "title": "Demon's Souls",
       "platform": "PlayStation 5",
       "genre": "RPG",
-      "price": 149.900,
+      "price": 79.99,
       "rating": 4.7,
       "release_date": "2020-11-12",
       "stock": 7,
-      "description": "Remake du classique de FromSoftware avec des graphismes next-gen.",
+      "description": "Remake du classique de FromSoftware avec des graphismes next-gen. Affrontez des démons dans le royaume de Boletaria, améliorez vos compétences et survivez à l'un des jeux les plus difficiles et gratifiants jamais créés.",
       "cover_image": "/assets/games/cover/demonssouls.jpg",
       "images": [
-        "/assets/games/demonssouls.jpg"
+        "/assets/games/screenshots/demonssouls1.jpg",
+        "/assets/games/screenshots/demonssouls2.jpg",
+        "/assets/games/screenshots/demonssouls3.jpg",
+        "/assets/games/screenshots/demonssouls4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=2TMs2E6cms4",
       "promo": false,
       "popular": false,
-      "tags": [
-        "RPG",
-        "Souls-like"
-      ]
+      "tags": ["RPG", "Souls-like", "Difficult", "Fantasy", "Action"]
     },
     {
       "id": 23,
       "title": "Ratchet & Clank: Rift Apart",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 149.900,
+      "price": 69.99,
       "rating": 4.8,
       "release_date": "2021-06-11",
       "stock": 11,
-      "description": "Aventure interdimensionnelle avec des graphismes incroyables.",
+      "description": "Aventure interdimensionnelle avec des graphismes incroyables. Voyagez entre les dimensions, utilisez des armes créatives et sauvez la galaxie dans cette aventure palpitante de Ratchet et Clank.",
       "cover_image": "/assets/games/cover/ratchet.jpg",
       "images": [
-        "/assets/games/ratchet.jpg"
+        "/assets/games/screenshots/ratchet1.jpg",
+        "/assets/games/screenshots/ratchet2.jpg",
+        "/assets/games/screenshots/ratchet3.jpg",
+        "/assets/games/screenshots/ratchet4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=btmN-bWwv0A",
       "promo": true,
       "popular": true,
-      "tags": [
-        "Action",
-        "Platformer"
-      ]
+      "tags": ["Action", "Platformer", "Sci-Fi", "Adventure", "Shooter"]
     },
     {
       "id": 24,
       "title": "Returnal",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 149.900,
+      "price": 69.99,
       "rating": 4.4,
       "release_date": "2021-04-30",
       "stock": 6,
-      "description": "Jeu de tir roguelike third-person avec une boucle temporelle.",
+      "description": "Jeu de tir roguelike third-person avec une boucle temporelle. Explorez une planète étrangère en constante évolution, où chaque mort vous ramène au début mais avec de nouvelles connaissances et possibilités.",
       "cover_image": "/assets/games/cover/returnal.jpg",
       "images": [
-        "/assets/games/returnal.jpg"
+        "/assets/games/screenshots/returnal1.jpg",
+        "/assets/games/screenshots/returnal2.jpg",
+        "/assets/games/screenshots/returnal3.jpg",
+        "/assets/games/screenshots/returnal4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=J7nJ4Q7_pUU",
       "promo": false,
       "popular": false,
-      "tags": [
-        "Action",
-        "Roguelike"
-      ]
+      "tags": ["Action", "Roguelike", "Sci-Fi", "Bullet Hell", "Third-person"]
     },
     {
       "id": 25,
       "title": "Gran Turismo 7",
       "platform": "PlayStation 5",
       "genre": "Racing",
-      "price": 199.900,
+      "price": 69.99,
       "rating": 4.6,
       "release_date": "2022-03-04",
       "stock": 13,
-      "description": "Simulation de course ultime avec des centaines de voitures.",
+      "description": "Simulation de course ultime avec des centaines de voitures. Profitez de graphismes photoréalistes, d'une physique avancée et d'une collection complète de voitures dans l'expérience Gran Turismo la plus aboutie.",
       "cover_image": "/assets/games/cover/gt7.jpg",
       "images": [
-        "/assets/games/gt7.jpg"
+        "/assets/games/screenshots/gt7_1.jpg",
+        "/assets/games/screenshots/gt7_2.jpg",
+        "/assets/games/screenshots/gt7_3.jpg",
+        "/assets/games/screenshots/gt7_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=uRVT2lGjhuM",
       "promo": false,
       "popular": false,
-      "tags": [
-        "Racing",
-        "Simulation"
-      ]
+      "tags": ["Racing", "Simulation", "Cars", "Realistic", "Multiplayer"]
     },
     {
       "id": 26,
       "title": "Ghost of Tsushima Director's Cut",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 149.900,
+      "price": 69.99,
       "rating": 4.8,
       "release_date": "2021-08-20",
       "stock": 10,
-      "description": "Édition complète du chef-d'œuvre de Sucker Punch Productions.",
+      "description": "Édition complète du chef-d'œuvre de Sucker Punch Productions. Devenez Jin Sakai, un samurai luttant pour libérer l'île de Tsushima de l'invasion mongole en utilisant des techniques de combat traditionnelles et de nouvelles méthodes de ghost.",
       "cover_image": "/assets/games/cover/ghost.jpg",
       "images": [
-        "/assets/games/ghost.jpg"
+        "/assets/games/screenshots/ghost1.jpg",
+        "/assets/games/screenshots/ghost2.jpg",
+        "/assets/games/screenshots/ghost3.jpg",
+        "/assets/games/screenshots/ghost4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=iqysmS4lxCQ",
       "promo": false,
       "popular": true,
-      "tags": [
-        "Action",
-        "Open World"
-      ]
+      "tags": ["Action", "Open World", "Samurai", "Adventure", "Stealth"]
     },
     {
       "id": 27,
       "title": "Death Stranding Director's Cut",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 149.900,
+      "price": 59.99,
       "rating": 4.3,
       "release_date": "2021-09-24",
       "stock": 8,
-      "description": "Édition étendue du jeu unique de Hideo Kojima.",
+      "description": "Édition étendue du jeu unique de Hideo Kojima. Incarnez Sam Porter Bridges dans un monde post-apocalyptique où vous devez reconnecter une Amérique dévastée en livrant des colis et en évitant des entités spectrales.",
       "cover_image": "/assets/games/cover/deathstranding.jpg",
       "images": [
-        "/assets/games/deathstranding.jpg"
+        "/assets/games/screenshots/deathstranding1.jpg",
+        "/assets/games/screenshots/deathstranding2.jpg",
+        "/assets/games/screenshots/deathstranding3.jpg",
+        "/assets/games/screenshots/deathstranding4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=piIgkJWDuQg",
       "promo": true,
       "popular": false,
-      "tags": [
-        "Action",
-        "Adventure"
-      ]
+      "tags": ["Action", "Adventure", "Sci-Fi", "Story-Rich", "Exploration"]
     },
     {
       "id": 28,
       "title": "Sackboy: A Big Adventure",
       "platform": "PlayStation 5",
       "genre": "Platformer",
-      "price": 149.900,
+      "price": 59.99,
       "rating": 4.5,
       "release_date": "2020-11-12",
       "stock": 15,
-      "description": "Aventure coopérative mignonne et amusante avec Sackboy.",
+      "description": "Aventure coopérative mignonne et amusante avec Sackboy. Parcourez des mondes créatifs, résolvez des énigmes et collectionnez des objets dans cette aventure plateforme colorée et imaginative.",
       "cover_image": "/assets/games/cover/sackboy.jpg",
       "images": [
-        "/assets/games/sackboy.jpg"
+        "/assets/games/screenshots/sackboy1.jpg",
+        "/assets/games/screenshots/sackboy2.jpg",
+        "/assets/games/screenshots/sackboy3.jpg",
+        "/assets/games/screenshots/sackboy4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=BT46BoEcKxM",
       "promo": false,
       "popular": false,
-      "tags": [
-        "Platformer",
-        "Co-op"
-      ]
+      "tags": ["Platformer", "Co-op", "Family", "Adventure", "Puzzle"]
     },
     {
       "id": 29,
       "title": "Kena: Bridge of Spirits",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 149.900,
+      "price": 39.99,
       "rating": 4.6,
       "release_date": "2021-09-21",
       "stock": 11,
-      "description": "Aventure d'action-aventure avec un art magnifique et des esprits mignons.",
+      "description": "Aventure d'action-aventure avec un art magnifique et des esprits mignons. Aidez les esprits à passer dans l'au-delà en utilisant vos pouvoirs magiques et vos compagnons Rot dans ce monde enchanté.",
       "cover_image": "/assets/games/cover/kena.jpg",
       "images": [
-        "/assets/games/kena.jpg"
+        "/assets/games/screenshots/kena1.jpg",
+        "/assets/games/screenshots/kena2.jpg",
+        "/assets/games/screenshots/kena3.jpg",
+        "/assets/games/screenshots/kena4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=pWh538xR3oI",
       "promo": false,
       "popular": false,
-      "tags": [
-        "Action",
-        "Adventure"
-      ]
+      "tags": ["Action", "Adventure", "Indie", "Fantasy", "Story-Rich"]
     },
     {
       "id": 30,
       "title": "The Last of Us Part I",
       "platform": "PlayStation 5",
       "genre": "Action",
-      "price": 199.900,
+      "price": 69.99,
       "rating": 4.8,
       "release_date": "2022-09-02",
       "stock": 9,
-      "description": "Remake du chef-d'œuvre original avec des graphismes next-gen.",
+      "description": "Remake du chef-d'œuvre original avec des graphismes next-gen. Revivez l'histoire émotionnelle de Joel et Ellie dans un monde post-apocalyptique, avec des graphismes repensés et une jouabilité améliorée.",
       "cover_image": "/assets/games/cover/lastofus1.jpg",
       "images": [
-        "/assets/games/lastofus1.jpg"
+        "/assets/games/screenshots/tlou1_1.jpg",
+        "/assets/games/screenshots/tlou1_2.jpg",
+        "/assets/games/screenshots/tlou1_3.jpg",
+        "/assets/games/screenshots/tlou1_4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=R2Ebc_OFeug",
       "promo": false,
       "popular": true,
-      "tags": [
-        "Action",
-        "Adventure"
-      ]
+      "tags": ["Action", "Adventure", "Zombie", "Remake", "Story-Rich"]
     },
     {
       "id": 31,
       "title": "Halo Infinite",
       "platform": "Xbox",
       "genre": "FPS",
-      "price": 149.900,
+      "price": 59.99,
       "rating": 4.5,
       "release_date": "2021-12-08",
       "stock": 16,
-      "description": "Le retour du Master Chief dans une aventure en monde ouvert.",
+      "description": "Le retour du Master Chief dans une aventure en monde ouvert. Explorez l'anneau Halo, combattez le Banished et découvrez les secrets de l'univers Halo dans cette épique aventure spatiale.",
       "cover_image": "/assets/games/cover/halo.jpg",
       "images": [
-        "/assets/games/halo.jpg"
+        "/assets/games/screenshots/halo1.jpg",
+        "/assets/games/screenshots/halo2.jpg",
+        "/assets/games/screenshots/halo3.jpg",
+        "/assets/games/screenshots/halo4.jpg"
       ],
+      "url_trailer": "https://www.youtube.com/watch?v=PyMlV5_HRWk",
       "promo": false,
       "popular": false,
-      "tags": [
-        "FPS",
-        "Sci-Fi"
-      ]
+      "tags": ["FPS", "Sci-Fi", "Open World", "Multiplayer", "Action"]
+    },
+    {
+      "id": 32,
+      "title": "Gears 5",
+      "platform": "Xbox",
+      "genre": "Action",
+      "price": 39.99,
+      "rating": 4.6,
+      "release_date": "2019-09-10",
+      "stock": 12,
+      "description": "Continuez la lutte contre l'Essaim dans cette suite épique. Incarnez Kait Diaz et découvrez les origines du Locust dans cette aventure third-person shooter intense et émotionnelle.",
+      "cover_image": "/assets/games/cover/gears5.jpg",
+      "images": [
+        "/assets/games/screenshots/gears5_1.jpg",
+        "/assets/games/screenshots/gears5_2.jpg",
+        "/assets/games/screenshots/gears5_3.jpg",
+        "/assets/games/screenshots/gears5_4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=37KR4yqNDa4",
+      "promo": false,
+      "popular": false,
+      "tags": ["Action", "Third-person", "Sci-Fi", "Co-op", "Shooter"]
+    },
+    {
+      "id": 33,
+      "title": "Microsoft Flight Simulator",
+      "platform": "Xbox",
+      "genre": "Simulation",
+      "price": 59.99,
+      "rating": 4.7,
+      "release_date": "2021-07-27",
+      "stock": 8,
+      "description": "Simulateur de vol le plus réaliste avec le monde entier. Pilotez des avions légendaires, explorez la planète entière en temps réel et vivez l'expérience ultime du vol dans cette simulation incroyablement détaillée.",
+      "cover_image": "/assets/games/cover/flightsim.jpg",
+      "images": [
+        "/assets/games/screenshots/flightsim1.jpg",
+        "/assets/games/screenshots/flightsim2.jpg",
+        "/assets/games/screenshots/flightsim3.jpg",
+        "/assets/games/screenshots/flightsim4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=TYqJALPVn0Y",
+      "promo": false,
+      "popular": false,
+      "tags": ["Simulation", "Flight", "Realistic", "Open World", "Education"]
+    },
+    {
+      "id": 34,
+      "title": "Sea of Thieves",
+      "platform": "Xbox",
+      "genre": "Adventure",
+      "price": 39.99,
+      "rating": 4.4,
+      "release_date": "2018-03-20",
+      "stock": 20,
+      "description": "Jeu de pirates multijoueur en monde ouvert. Formez votre équipage, hissez les voiles et partez à l'aventure dans un monde pirate persistant rempli de trésors, de batailles navales et de mystères.",
+      "cover_image": "/assets/games/cover/seaofthieves.jpg",
+      "images": [
+        "/assets/games/screenshots/seaofthieves1.jpg",
+        "/assets/games/screenshots/seaofthieves2.jpg",
+        "/assets/games/screenshots/seaofthieves3.jpg",
+        "/assets/games/screenshots/seaofthieves4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=r5JIBaasuE8",
+      "promo": true,
+      "popular": false,
+      "tags": ["Adventure", "Multiplayer", "Pirates", "Open World", "Co-op"]
+    },
+    {
+      "id": 35,
+      "title": "Forza Motorsport",
+      "platform": "Xbox",
+      "genre": "Racing",
+      "price": 69.99,
+      "rating": 4.5,
+      "release_date": "2023-10-10",
+      "stock": 11,
+      "description": "Simulation de course sur circuit avec une physique réaliste. Profitez de graphismes next-gen, d'une physique de conduite avancée et de centaines de voitures dans la simulation de course la plus réaliste de sa génération.",
+      "cover_image": "/assets/games/cover/forzamotorsport.jpg",
+      "images": [
+        "/assets/games/screenshots/forzamotorsport1.jpg",
+        "/assets/games/screenshots/forzamotorsport2.jpg",
+        "/assets/games/screenshots/forzamotorsport3.jpg",
+        "/assets/games/screenshots/forzamotorsport4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=uRVT2lGjhuM",
+      "promo": false,
+      "popular": false,
+      "tags": ["Racing", "Simulation", "Cars", "Realistic", "Multiplayer"]
+    },
+    {
+      "id": 36,
+      "title": "Psychonauts 2",
+      "platform": "Xbox",
+      "genre": "Platformer",
+      "price": 59.99,
+      "rating": 4.8,
+      "release_date": "2021-08-25",
+      "stock": 9,
+      "description": "Aventure psychédélique dans les esprits des personnages. Incarnez Raz et explorez les méandres de l'esprit humain dans cette aventure plateforme unique et créative remplie d'humour et de personnages mémorables.",
+      "cover_image": "/assets/games/cover/psychonauts2.jpg",
+      "images": [
+        "/assets/games/screenshots/psychonauts1.jpg",
+        "/assets/games/screenshots/psychonauts2.jpg",
+        "/assets/games/screenshots/psychonauts3.jpg",
+        "/assets/games/screenshots/psychonauts4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=2_TsK7RkqWI",
+      "popular": true,
+      "promo": false,
+      "tags": ["Platformer", "Adventure", "Comedy", "Indie", "Story-Rich"]
+    },
+    {
+      "id": 37,
+      "title": "Grounded",
+      "platform": "Xbox",
+      "genre": "Survival",
+      "price": 39.99,
+      "rating": 4.6,
+      "release_date": "2022-09-27",
+      "stock": 13,
+      "description": "Survie dans un jardin où vous êtes de la taille d'une fourmi. Construisez des bases, combattez des insectes géants et explorez un monde dangereux dans cette aventure de survie unique en perspective.",
+      "cover_image": "/assets/games/cover/grounded.jpg",
+      "images": [
+        "/assets/games/screenshots/grounded1.jpg",
+        "/assets/games/screenshots/grounded2.jpg",
+        "/assets/games/screenshots/grounded3.jpg",
+        "/assets/games/screenshots/grounded4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=5yf0nvwT-34",
+      "popular": false,
+      "promo": true,
+      "tags": ["Survival", "Multiplayer", "Crafting", "Adventure", "Base Building"]
+    },
+    {
+      "id": 38,
+      "title": "State of Decay 2",
+      "platform": "Xbox",
+      "genre": "Survival",
+      "price": 29.99,
+      "rating": 4.3,
+      "release_date": "2018-05-22",
+      "stock": 10,
+      "description": "Survie zombie avec gestion de communauté et base building. Recrutez des survivants, construisez votre base et survivez à l'apocalypse zombie dans ce jeu de survie en monde ouvert.",
+      "cover_image": "/assets/games/cover/stateofdecay2.jpg",
+      "images": [
+        "/assets/games/screenshots/stateofdecay1.jpg",
+        "/assets/games/screenshots/stateofdecay2.jpg",
+        "/assets/games/screenshots/stateofdecay3.jpg",
+        "/assets/games/screenshots/stateofdecay4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=Z13cODkIE8s",
+      "popular": false,
+      "promo": false,
+      "tags": ["Survival", "Zombie", "Base Building", "Open World", "Action"]
+    },
+    {
+      "id": 39,
+      "title": "Splatoon 3",
+      "platform": "Nintendo Switch",
+      "genre": "Shooter",
+      "price": 59.99,
+      "rating": 4.7,
+      "release_date": "2022-09-09",
+      "stock": 16,
+      "description": "Jeu de tir multijoueur coloré avec des encres et des armes uniques. Personnalisez votre Inklings, participez à des batailles territoriales et découvrez de nouvelles armes et capacités dans cet univers coloré et compétitif.",
+      "cover_image": "/assets/games/cover/splatoon3.jpg",
+      "images": [
+        "/assets/games/screenshots/splatoon1.jpg",
+        "/assets/games/screenshots/splatoon2.jpg",
+        "/assets/games/screenshots/splatoon3.jpg",
+        "/assets/games/screenshots/splatoon4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=7Ixyp5cPeAk",
+      "popular": false,
+      "promo": false,
+      "tags": ["Shooter", "Multiplayer", "Colorful", "Family", "Competitive"]
+    },
+    {
+      "id": 40,
+      "title": "Super Mario Party",
+      "platform": "Nintendo Switch",
+      "genre": "Party",
+      "price": 59.99,
+      "rating": 4.5,
+      "release_date": "2018-10-05",
+      "stock": 20,
+      "description": "Jeu de plateau multijoueur avec mini-jeux. Réunissez vos amis et votre famille pour des parties endiablées avec vos personnages Mario préférés dans cette collection de mini-jeux amusants et compétitifs.",
+      "cover_image": "/assets/games/cover/marioparty.jpg",
+      "images": [
+        "/assets/games/screenshots/marioparty1.jpg",
+        "/assets/games/screenshots/marioparty2.jpg",
+        "/assets/games/screenshots/marioparty3.jpg",
+        "/assets/games/screenshots/marioparty4.jpg"
+      ],
+      "url_trailer": "https://www.youtube.com/watch?v=3kuv5w16jJE",
+      "popular": false,
+      "promo": false,
+      "tags": ["Party", "Multiplayer", "Family", "Mini-games", "Board Game"]
     }
   ],
   "users": [

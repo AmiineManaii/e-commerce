@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Header } from "../header/header";
 import { Footer } from "../footer/footer";
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-produits',
@@ -14,6 +15,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './produits.scss'
 })
 export class Produits implements OnInit {
+  
   allProduits: Game[] = []; 
   displayedProduits: Game[] = []; 
   error: string = "";
@@ -29,7 +31,7 @@ export class Produits implements OnInit {
   Math: any;
   Number: any;
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadProduits();
@@ -75,7 +77,7 @@ export class Produits implements OnInit {
         filteredProduits.sort((a, b) => b.price - a.price);
         break;
       case 'popularity':
-        filteredProduits.sort((a, b) => b.rating - a.rating); // Assuming rating represents popularity
+        filteredProduits.sort((a, b) => b.rating - a.rating); 
         break;
       case 'newArrivals':
         filteredProduits.sort((a, b) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime());
@@ -109,25 +111,29 @@ export class Produits implements OnInit {
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.applyFilters(); // Apply filters again to re-paginate with new page
+      this.applyFilters(); 
     }
   }
 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.applyFilters(); // Apply filters again to re-paginate with new page
+      this.applyFilters(); 
     }
   }
 
   previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.applyFilters(); // Apply filters again to re-paginate with new page
+      this.applyFilters(); 
     }
   }
   addToCart(produit: Game): void {
-    // Add the product to the cart
+  
     console.log('Add to cart:', produit);
+  }
+
+  viewProductDetails(id: number): void {
+    this.router.navigate(['/produitDetails', id]);
   }
 }

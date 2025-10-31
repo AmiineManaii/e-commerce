@@ -1,0 +1,119 @@
+<app-header></app-header>
+
+<div class="product-detail-container">
+
+
+  @if (produit) {
+
+
+    <div class="product-header">
+
+      <h1>{{ produit.title }}</h1>
+
+      <p class="genre">{{ produit.genre }}</p>
+
+    </div>
+
+    <div class="product-media">
+
+      <div class="media-section">
+
+         @if (produit && trailerUrl) {
+
+          <div class="trailer-container">
+
+            <iframe
+              [src]="trailerUrl"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+
+
+          </div>
+        }
+
+        @if (produit && produit.images && produit.images.length > 0) {
+
+
+          <div class="carousel-container">
+            <img [src]="produit.images[currentImageIndex]" alt="Product Screenshot" class="carousel-image">
+            <button class="carousel-button prev" (click)="changeImage(-1)">&#10094;</button>
+            <button class="carousel-button next" (click)="changeImage(1)">&#10095;</button>
+          </div>
+        }
+
+       
+      </div>
+    </div>
+
+    <div class="product-info">
+
+
+      <p class="description">{{ produit.description }}</p>
+
+      <p class="price">{{ produit.price }} DT</p>
+
+      <p class="rating">Note: {{ produit.rating }} / 5</p>
+
+      <p class="release-date">Date de sortie: {{ produit.release_date }}</p>
+
+
+      <p class="stock-availability">Disponibilité: @if (produit.stock > 0) { En stock ({{ produit.stock }}) } @else { Rupture de stock }</p>
+
+
+      <div class="quantity-selector">
+        <label for="quantity">Quantité:</label>
+        <input type="number" id="quantity" value="1" min="1" [max]="produit.stock" #quantityInput>
+      </div>
+
+      <button class="add-to-cart-button" (click)="addToCart(quantityInput.valueAsNumber)">Ajouter au panier</button>
+    </div>
+
+
+  } @else if (error) {
+
+    <div class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+
+  } @else {
+    <div class="loading-message">
+      Chargement des détails du produit...
+    </div>
+  }
+</div>
+
+
+
+<div class="similar-products-section">
+  <h2>Produits similaires</h2>
+
+  @if (similarProducts.length > 0) {
+
+
+    <div class="similar-products-scroll-container">
+
+      <div class="similar-products-grid">
+
+        @for (similarProduct of similarProducts; track similarProduct.id) {
+
+          <div class="similar-product-card">
+
+            <img [src]="similarProduct.cover_image" alt="{{ similarProduct.title }}">
+
+            <h3>{{ similarProduct.title }}</h3>
+
+            <p>{{ similarProduct.price }} DT</p>
+            
+            <a [routerLink]="['/produit', similarProduct.id]">Voir les détails</a>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <p>Aucun produit similaire trouvé.</p>
+  }
+</div>
+
+<app-footer></app-footer>

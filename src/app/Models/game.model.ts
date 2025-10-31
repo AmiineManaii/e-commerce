@@ -12,6 +12,7 @@ export interface Game {
   images: string[];       
   promo?: boolean;        
   tags?: string[];
+  url_trailer: string;
 }
 
 
