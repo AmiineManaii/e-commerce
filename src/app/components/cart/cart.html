@@ -47,7 +47,7 @@
                   @for (star of [1,2,3,4,5]; track star; let idx = $index) {
                     <i class="fa-star" [ngClass]="idx < (item.game.rating || 0) ? 'fas text-warning' : 'far'"></i>
                   }
-                  <span class="rating-value">{{ item.game.rating?.toFixed(1) || 'N/A' }}</span>
+                  <span class="rating-value">{{ item.game.rating.toFixed(1) || 'N/A' }}</span>
                 </div>
               </div>
 

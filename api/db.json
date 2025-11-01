@@ -928,7 +928,7 @@
       "id": "34",
       "title": "Sea of Thieves",
       "platform": "Xbox",
-      "genre": "Adventure",
+      "genre": "Aventure",
       "price": 39.99,
       "rating": 4.4,
       "release_date": "2018-03-20",
@@ -1127,6 +1127,22 @@
       "name": "Amine",
       "email": "amine@example.com",
       "password": "123456"
+    },
+    {
+      "id": "46a4",
+      "nom": "manai",
+      "prenom": "amine",
+      "email": "amine@test.com",
+      "password": "amine6",
+      "adresse": "tunis"
+    },
+    {
+      "id": "ae02",
+      "nom": "amine",
+      "prenom": "amine",
+      "email": "sdsadsad@fjads.xn--vpa-5na",
+      "password": "aaaaaa",
+      "adresse": "aaa"
     }
   ],
   "orders": [],

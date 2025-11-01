@@ -1,0 +1,116 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #1e1e1e;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  color: #f0f0f0;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #82aaff;
+    font-size: 2em;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .form-group {
+      flex: 1;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1em;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      background-color: #333;
+      color: #f0f0f0;
+      font-size: 1em;
+
+      &:focus {
+        outline: none;
+        border-color: #82aaff;
+        box-shadow: 0 0 0 0.2rem rgba(130, 170, 255, 0.35);
+      }
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+  }
+
+  .error-message {
+    color: #ef5350;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #82aaff;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      background-color: #6a9eff;
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      background-color: #555555;
+      cursor: not-allowed;
+      color: #aaaaaa;
+      transform: none;
+    }
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+
+    a {
+      color: #82aaff;
+      text-decoration: none;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
