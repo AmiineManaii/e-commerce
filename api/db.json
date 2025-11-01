@@ -1,7 +1,7 @@
 {
   "games": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Cyberpunk 2077",
       "platform": "PC",
       "genre": "RPG",
@@ -20,10 +20,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=8X2kIfS6fb8",
       "promo": true,
       "popular": false,
-      "tags": ["RPG", "Cyberpunk", "Open World", "Futuriste", "Action"]
+      "tags": [
+        "RPG",
+        "Cyberpunk",
+        "Open World",
+        "Futuriste",
+        "Action"
+      ]
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Red Dead Redemption 2",
       "platform": "PC",
       "genre": "Aventure",
@@ -42,10 +48,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=gmA6MrX81z4",
       "promo": false,
       "popular": false,
-      "tags": ["Aventure", "Western", "Open World", "Action", "Histoire"]
+      "tags": [
+        "Aventure",
+        "Western",
+        "Open World",
+        "Action",
+        "Histoire"
+      ]
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "The Witcher 3: Wild Hunt",
       "platform": "PC",
       "genre": "RPG",
@@ -64,10 +76,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=c0i88t0Kacs",
       "promo": false,
       "popular": true,
-      "tags": ["RPG", "Fantasy", "Open World", "Aventure", "Choix"]
+      "tags": [
+        "RPG",
+        "Fantasy",
+        "Open World",
+        "Aventure",
+        "Choix"
+      ]
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "Assassin's Creed Valhalla",
       "platform": "PC",
       "genre": "Action",
@@ -86,10 +104,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=ssrNcwxALS4",
       "promo": false,
       "popular": true,
-      "tags": ["Action", "Vikings", "Open World", "Aventure", "Histoire"]
+      "tags": [
+        "Action",
+        "Vikings",
+        "Open World",
+        "Aventure",
+        "Histoire"
+      ]
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "Grand Theft Auto V",
       "platform": "PC",
       "genre": "Action",
@@ -108,14 +132,20 @@
       "url_trailer": "https://www.youtube.com/watch?v=QkkoHAzjnUs",
       "promo": true,
       "popular": true,
-      "tags": ["Action", "Open World", "Crime", "Multiplayer", "Satire"]
+      "tags": [
+        "Action",
+        "Open World",
+        "Crime",
+        "Multiplayer",
+        "Satire"
+      ]
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "Call of Duty: Warzone",
       "platform": "PC",
       "genre": "FPS",
-      "price": 57.00,
+      "price": 57,
       "rating": 4.8,
       "release_date": "2020-12-22",
       "stock": 10,
@@ -130,10 +160,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=0E44DClsX5Q",
       "promo": false,
       "popular": true,
-      "tags": ["FPS", "Battle Royale", "Multiplayer", "Gratuit", "Tactical"]
+      "tags": [
+        "FPS",
+        "Battle Royale",
+        "Multiplayer",
+        "Gratuit",
+        "Tactical"
+      ]
     },
     {
-      "id": 7,
+      "id": "7",
       "title": "Mortal Kombat 11",
       "platform": "PC",
       "genre": "Fighting",
@@ -152,10 +188,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=UoTams2yc0s",
       "promo": false,
       "popular": false,
-      "tags": ["Fighting", "Combat", "Violent", "Multiplayer", "Esport"]
+      "tags": [
+        "Fighting",
+        "Combat",
+        "Violent",
+        "Multiplayer",
+        "Esport"
+      ]
     },
     {
-      "id": 8,
+      "id": "8",
       "title": "Street Fighter 6",
       "platform": "PC",
       "genre": "Fighting",
@@ -174,10 +216,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=Jy2TjXIM0yY",
       "promo": false,
       "popular": false,
-      "tags": ["Fighting", "Arcade", "Competitive", "Multiplayer", "Next-Gen"]
+      "tags": [
+        "Fighting",
+        "Arcade",
+        "Competitive",
+        "Multiplayer",
+        "Next-Gen"
+      ]
     },
     {
-      "id": 9,
+      "id": "9",
       "title": "EA Sports FC 24",
       "platform": "PC",
       "genre": "Sport",
@@ -196,10 +244,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=XhP3Xh4LMA8",
       "promo": false,
       "popular": true,
-      "tags": ["Sport", "Football", "Simulation", "Multiplayer", "Realiste"]
+      "tags": [
+        "Sport",
+        "Football",
+        "Simulation",
+        "Multiplayer",
+        "Realiste"
+      ]
     },
     {
-      "id": 10,
+      "id": "10",
       "title": "Baldur's Gate 3",
       "platform": "PC",
       "genre": "RPG",
@@ -218,14 +272,20 @@
       "url_trailer": "https://www.youtube.com/watch?v=W9iHUcnxgq4",
       "promo": true,
       "popular": true,
-      "tags": ["RPG", "Fantasy", "Turn-Based", "Co-op", "Choix"]
+      "tags": [
+        "RPG",
+        "Fantasy",
+        "Turn-Based",
+        "Co-op",
+        "Choix"
+      ]
     },
     {
-      "id": 11,
+      "id": "11",
       "title": "Valorant",
       "platform": "PC",
       "genre": "FPS",
-      "price": 39.00,
+      "price": 39,
       "rating": 4.5,
       "release_date": "2020-06-02",
       "stock": 75,
@@ -240,10 +300,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=lWr6dhTcu-E",
       "promo": false,
       "popular": false,
-      "tags": ["FPS", "Tactical", "Competitive", "Gratuit", "Esport"]
+      "tags": [
+        "FPS",
+        "Tactical",
+        "Competitive",
+        "Gratuit",
+        "Esport"
+      ]
     },
     {
-      "id": 12,
+      "id": "12",
       "title": "Starfield",
       "platform": "PC",
       "genre": "RPG",
@@ -262,10 +328,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=kfYEiTdsyas",
       "promo": false,
       "popular": false,
-      "tags": ["RPG", "Space", "Exploration", "Sci-Fi", "Open World"]
+      "tags": [
+        "RPG",
+        "Space",
+        "Exploration",
+        "Sci-Fi",
+        "Open World"
+      ]
     },
     {
-      "id": 13,
+      "id": "13",
       "title": "Diablo IV",
       "platform": "PC",
       "genre": "RPG",
@@ -284,10 +356,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=9bRWIdOMfro",
       "promo": false,
       "popular": false,
-      "tags": ["RPG", "Fantasy", "Dark", "Multiplayer", "Action"]
+      "tags": [
+        "RPG",
+        "Fantasy",
+        "Dark",
+        "Multiplayer",
+        "Action"
+      ]
     },
     {
-      "id": 14,
+      "id": "14",
       "title": "Forza Horizon 5",
       "platform": "PC",
       "genre": "Racing",
@@ -306,10 +384,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=FYH9n37B7Yw",
       "promo": true,
       "popular": true,
-      "tags": ["Racing", "Open World", "Cars", "Simulation", "Multiplayer"]
+      "tags": [
+        "Racing",
+        "Open World",
+        "Cars",
+        "Simulation",
+        "Multiplayer"
+      ]
     },
     {
-      "id": 15,
+      "id": "15",
       "title": "Dying Light 2: Stay Human",
       "platform": "PC",
       "genre": "RPG",
@@ -328,10 +412,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=UwJAAy7tPhE",
       "promo": false,
       "popular": true,
-      "tags": ["RPG", "Zombie", "Horror", "Parkour", "Action"]
+      "tags": [
+        "RPG",
+        "Zombie",
+        "Horror",
+        "Parkour",
+        "Action"
+      ]
     },
     {
-      "id": 16,
+      "id": "16",
       "title": "God of War Ragnarök",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -350,10 +440,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=EE-4GvjKcfs",
       "promo": false,
       "popular": true,
-      "tags": ["Action", "Adventure", "Mythology", "Story-Rich", "Combat"]
+      "tags": [
+        "Action",
+        "Adventure",
+        "Mythology",
+        "Story-Rich",
+        "Combat"
+      ]
     },
     {
-      "id": 17,
+      "id": "17",
       "title": "The Last of Us Part II",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -372,10 +468,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=btmN-bWwv0A",
       "promo": false,
       "popular": true,
-      "tags": ["Action", "Adventure", "Zombie", "Story-Rich", "Emotional"]
+      "tags": [
+        "Action",
+        "Adventure",
+        "Zombie",
+        "Story-Rich",
+        "Emotional"
+      ]
     },
     {
-      "id": 18,
+      "id": "18",
       "title": "EA Sports FC 25",
       "platform": "PlayStation 5",
       "genre": "Sport",
@@ -394,10 +496,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=J7nJ4Q7_pUU",
       "promo": true,
       "popular": false,
-      "tags": ["Sport", "Football", "Simulation", "Next-Gen", "Multiplayer"]
+      "tags": [
+        "Sport",
+        "Football",
+        "Simulation",
+        "Next-Gen",
+        "Multiplayer"
+      ]
     },
     {
-      "id": 19,
+      "id": "19",
       "title": "Spider-Man 2",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -416,10 +524,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=qIQ3xNqkVC4",
       "promo": false,
       "popular": true,
-      "tags": ["Action", "Superhero", "Open World", "Adventure", "Combat"]
+      "tags": [
+        "Action",
+        "Superhero",
+        "Open World",
+        "Adventure",
+        "Combat"
+      ]
     },
     {
-      "id": 20,
+      "id": "20",
       "title": "Horizon Forbidden West",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -438,10 +552,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=Lq594XmpPBg",
       "promo": false,
       "popular": false,
-      "tags": ["Action", "Open World", "Robots", "Adventure", "RPG"]
+      "tags": [
+        "Action",
+        "Open World",
+        "Robots",
+        "Adventure",
+        "RPG"
+      ]
     },
     {
-      "id": 21,
+      "id": "21",
       "title": "Final Fantasy XVI",
       "platform": "PlayStation 5",
       "genre": "RPG",
@@ -460,10 +580,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=3ke1cD2rA4k",
       "promo": false,
       "popular": false,
-      "tags": ["RPG", "Fantasy", "Story-Rich", "Action", "Adventure"]
+      "tags": [
+        "RPG",
+        "Fantasy",
+        "Story-Rich",
+        "Action",
+        "Adventure"
+      ]
     },
     {
-      "id": 22,
+      "id": "22",
       "title": "Demon's Souls",
       "platform": "PlayStation 5",
       "genre": "RPG",
@@ -482,10 +608,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=2TMs2E6cms4",
       "promo": false,
       "popular": false,
-      "tags": ["RPG", "Souls-like", "Difficult", "Fantasy", "Action"]
+      "tags": [
+        "RPG",
+        "Souls-like",
+        "Difficult",
+        "Fantasy",
+        "Action"
+      ]
     },
     {
-      "id": 23,
+      "id": "23",
       "title": "Ratchet & Clank: Rift Apart",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -504,10 +636,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=btmN-bWwv0A",
       "promo": true,
       "popular": true,
-      "tags": ["Action", "Platformer", "Sci-Fi", "Adventure", "Shooter"]
+      "tags": [
+        "Action",
+        "Platformer",
+        "Sci-Fi",
+        "Adventure",
+        "Shooter"
+      ]
     },
     {
-      "id": 24,
+      "id": "24",
       "title": "Returnal",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -526,10 +664,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=J7nJ4Q7_pUU",
       "promo": false,
       "popular": false,
-      "tags": ["Action", "Roguelike", "Sci-Fi", "Bullet Hell", "Third-person"]
+      "tags": [
+        "Action",
+        "Roguelike",
+        "Sci-Fi",
+        "Bullet Hell",
+        "Third-person"
+      ]
     },
     {
-      "id": 25,
+      "id": "25",
       "title": "Gran Turismo 7",
       "platform": "PlayStation 5",
       "genre": "Racing",
@@ -548,10 +692,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=uRVT2lGjhuM",
       "promo": false,
       "popular": false,
-      "tags": ["Racing", "Simulation", "Cars", "Realistic", "Multiplayer"]
+      "tags": [
+        "Racing",
+        "Simulation",
+        "Cars",
+        "Realistic",
+        "Multiplayer"
+      ]
     },
     {
-      "id": 26,
+      "id": "26",
       "title": "Ghost of Tsushima Director's Cut",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -570,10 +720,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=iqysmS4lxCQ",
       "promo": false,
       "popular": true,
-      "tags": ["Action", "Open World", "Samurai", "Adventure", "Stealth"]
+      "tags": [
+        "Action",
+        "Open World",
+        "Samurai",
+        "Adventure",
+        "Stealth"
+      ]
     },
     {
-      "id": 27,
+      "id": "27",
       "title": "Death Stranding Director's Cut",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -592,10 +748,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=piIgkJWDuQg",
       "promo": true,
       "popular": false,
-      "tags": ["Action", "Adventure", "Sci-Fi", "Story-Rich", "Exploration"]
+      "tags": [
+        "Action",
+        "Adventure",
+        "Sci-Fi",
+        "Story-Rich",
+        "Exploration"
+      ]
     },
     {
-      "id": 28,
+      "id": "28",
       "title": "Sackboy: A Big Adventure",
       "platform": "PlayStation 5",
       "genre": "Platformer",
@@ -614,10 +776,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=BT46BoEcKxM",
       "promo": false,
       "popular": false,
-      "tags": ["Platformer", "Co-op", "Family", "Adventure", "Puzzle"]
+      "tags": [
+        "Platformer",
+        "Co-op",
+        "Family",
+        "Adventure",
+        "Puzzle"
+      ]
     },
     {
-      "id": 29,
+      "id": "29",
       "title": "Kena: Bridge of Spirits",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -636,10 +804,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=pWh538xR3oI",
       "promo": false,
       "popular": false,
-      "tags": ["Action", "Adventure", "Indie", "Fantasy", "Story-Rich"]
+      "tags": [
+        "Action",
+        "Adventure",
+        "Indie",
+        "Fantasy",
+        "Story-Rich"
+      ]
     },
     {
-      "id": 30,
+      "id": "30",
       "title": "The Last of Us Part I",
       "platform": "PlayStation 5",
       "genre": "Action",
@@ -658,10 +832,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=R2Ebc_OFeug",
       "promo": false,
       "popular": true,
-      "tags": ["Action", "Adventure", "Zombie", "Remake", "Story-Rich"]
+      "tags": [
+        "Action",
+        "Adventure",
+        "Zombie",
+        "Remake",
+        "Story-Rich"
+      ]
     },
     {
-      "id": 31,
+      "id": "31",
       "title": "Halo Infinite",
       "platform": "Xbox",
       "genre": "FPS",
@@ -680,10 +860,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=PyMlV5_HRWk",
       "promo": false,
       "popular": false,
-      "tags": ["FPS", "Sci-Fi", "Open World", "Multiplayer", "Action"]
+      "tags": [
+        "FPS",
+        "Sci-Fi",
+        "Open World",
+        "Multiplayer",
+        "Action"
+      ]
     },
     {
-      "id": 32,
+      "id": "32",
       "title": "Gears 5",
       "platform": "Xbox",
       "genre": "Action",
@@ -702,10 +888,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=37KR4yqNDa4",
       "promo": false,
       "popular": false,
-      "tags": ["Action", "Third-person", "Sci-Fi", "Co-op", "Shooter"]
+      "tags": [
+        "Action",
+        "Third-person",
+        "Sci-Fi",
+        "Co-op",
+        "Shooter"
+      ]
     },
     {
-      "id": 33,
+      "id": "33",
       "title": "Microsoft Flight Simulator",
       "platform": "Xbox",
       "genre": "Simulation",
@@ -724,10 +916,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=TYqJALPVn0Y",
       "promo": false,
       "popular": false,
-      "tags": ["Simulation", "Flight", "Realistic", "Open World", "Education"]
+      "tags": [
+        "Simulation",
+        "Flight",
+        "Realistic",
+        "Open World",
+        "Education"
+      ]
     },
     {
-      "id": 34,
+      "id": "34",
       "title": "Sea of Thieves",
       "platform": "Xbox",
       "genre": "Adventure",
@@ -746,10 +944,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=r5JIBaasuE8",
       "promo": true,
       "popular": false,
-      "tags": ["Adventure", "Multiplayer", "Pirates", "Open World", "Co-op"]
+      "tags": [
+        "Adventure",
+        "Multiplayer",
+        "Pirates",
+        "Open World",
+        "Co-op"
+      ]
     },
     {
-      "id": 35,
+      "id": "35",
       "title": "Forza Motorsport",
       "platform": "Xbox",
       "genre": "Racing",
@@ -768,10 +972,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=uRVT2lGjhuM",
       "promo": false,
       "popular": false,
-      "tags": ["Racing", "Simulation", "Cars", "Realistic", "Multiplayer"]
+      "tags": [
+        "Racing",
+        "Simulation",
+        "Cars",
+        "Realistic",
+        "Multiplayer"
+      ]
     },
     {
-      "id": 36,
+      "id": "36",
       "title": "Psychonauts 2",
       "platform": "Xbox",
       "genre": "Platformer",
@@ -790,10 +1000,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=2_TsK7RkqWI",
       "popular": true,
       "promo": false,
-      "tags": ["Platformer", "Adventure", "Comedy", "Indie", "Story-Rich"]
+      "tags": [
+        "Platformer",
+        "Adventure",
+        "Comedy",
+        "Indie",
+        "Story-Rich"
+      ]
     },
     {
-      "id": 37,
+      "id": "37",
       "title": "Grounded",
       "platform": "Xbox",
       "genre": "Survival",
@@ -812,10 +1028,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=5yf0nvwT-34",
       "popular": false,
       "promo": true,
-      "tags": ["Survival", "Multiplayer", "Crafting", "Adventure", "Base Building"]
+      "tags": [
+        "Survival",
+        "Multiplayer",
+        "Crafting",
+        "Adventure",
+        "Base Building"
+      ]
     },
     {
-      "id": 38,
+      "id": "38",
       "title": "State of Decay 2",
       "platform": "Xbox",
       "genre": "Survival",
@@ -834,10 +1056,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=Z13cODkIE8s",
       "popular": false,
       "promo": false,
-      "tags": ["Survival", "Zombie", "Base Building", "Open World", "Action"]
+      "tags": [
+        "Survival",
+        "Zombie",
+        "Base Building",
+        "Open World",
+        "Action"
+      ]
     },
     {
-      "id": 39,
+      "id": "39",
       "title": "Splatoon 3",
       "platform": "Nintendo Switch",
       "genre": "Shooter",
@@ -856,10 +1084,16 @@
       "url_trailer": "https://www.youtube.com/watch?v=7Ixyp5cPeAk",
       "popular": false,
       "promo": false,
-      "tags": ["Shooter", "Multiplayer", "Colorful", "Family", "Competitive"]
+      "tags": [
+        "Shooter",
+        "Multiplayer",
+        "Colorful",
+        "Family",
+        "Competitive"
+      ]
     },
     {
-      "id": 40,
+      "id": "40",
       "title": "Super Mario Party",
       "platform": "Nintendo Switch",
       "genre": "Party",
@@ -878,16 +1112,126 @@
       "url_trailer": "https://www.youtube.com/watch?v=3kuv5w16jJE",
       "popular": false,
       "promo": false,
-      "tags": ["Party", "Multiplayer", "Family", "Mini-games", "Board Game"]
+      "tags": [
+        "Party",
+        "Multiplayer",
+        "Family",
+        "Mini-games",
+        "Board Game"
+      ]
     }
   ],
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Amine",
       "email": "amine@example.com",
       "password": "123456"
     }
   ],
-  "orders": []
+  "orders": [],
+  "cart": [
+    {
+      "id": "1761953001756",
+      "game": {
+        "id": 2,
+        "title": "Red Dead Redemption 2",
+        "platform": "PC",
+        "genre": "Aventure",
+        "price": 49.99,
+        "rating": 4.7,
+        "release_date": "2018-10-26",
+        "stock": 18,
+        "description": "Vivez l'Amérique à la fin de l'ère du Far West. Incarnez Arthur Morgan, un hors-la-loi en fuite avec sa bande. Chassez, pêchez, braquez des banques et survivez dans un monde ouvert immense et réaliste. Une histoire épique sur la loyauté et la rédemption.",
+        "cover_image": "/assets/games/cover/rdr2.jpg",
+        "images": [
+          "/assets/games/screenshots/rdr2_1.jpg",
+          "/assets/games/screenshots/rdr2_2.jpg",
+          "/assets/games/screenshots/rdr2_3.jpg",
+          "/assets/games/screenshots/rdr2_4.jpg"
+        ],
+        "url_trailer": "https://www.youtube.com/watch?v=gmA6MrX81z4",
+        "promo": false,
+        "popular": false,
+        "tags": [
+          "Aventure",
+          "Western",
+          "Open World",
+          "Action",
+          "Histoire"
+        ]
+      },
+      "quantity": 1,
+      "subtotal": 49.99,
+      "createdAt": "2025-10-31T23:23:21.756Z"
+    },
+    {
+      "id": "1761953030316",
+      "game": {
+        "id": 1,
+        "title": "Cyberpunk 2077",
+        "platform": "PC",
+        "genre": "RPG",
+        "price": 59.99,
+        "rating": 4.5,
+        "release_date": "2020-12-10",
+        "stock": 12,
+        "description": "Incarnez V, un mercenaire dans la mégalopole futuriste de Night City. Personnalisez votre cyberware, vos compétences et votre style de jeu pour survivre dans une ville obsédée par le pouvoir et la technologie. Avec Keanu Reeves dans le rôle de Johnny Silverhand.",
+        "cover_image": "/assets/games/cover/cyberpunk.jpg",
+        "images": [
+          "/assets/games/screenshots/cyberpunk1.jpg",
+          "/assets/games/screenshots/cyberpunk2.jpg",
+          "/assets/games/screenshots/cyberpunk3.jpg",
+          "/assets/games/screenshots/cyberpunk4.jpg"
+        ],
+        "url_trailer": "https://www.youtube.com/watch?v=8X2kIfS6fb8",
+        "promo": true,
+        "popular": false,
+        "tags": [
+          "RPG",
+          "Cyberpunk",
+          "Open World",
+          "Futuriste",
+          "Action"
+        ]
+      },
+      "quantity": 1,
+      "subtotal": 59.99,
+      "createdAt": "2025-10-31T23:23:50.316Z"
+    },
+    {
+      "id": "1761953033620",
+      "game": {
+        "id": 3,
+        "title": "The Witcher 3: Wild Hunt",
+        "platform": "PC",
+        "genre": "RPG",
+        "price": 39.99,
+        "rating": 4.9,
+        "release_date": "2015-05-19",
+        "stock": 20,
+        "description": "Geralt de Rivia, chasseur de monstres légendaire, part à la recherche de Ciri, l'enfant de la prophétie. Explorez un continent déchiré par la guerre, combattez des créatures redoutables et prenez des décisions qui changeront le cours de l'histoire.",
+        "cover_image": "/assets/games/cover/witcher3.jpg",
+        "images": [
+          "/assets/games/screenshots/witcher3_1.jpg",
+          "/assets/games/screenshots/witcher3_2.jpg",
+          "/assets/games/screenshots/witcher3_3.jpg",
+          "/assets/games/screenshots/witcher3_4.jpg"
+        ],
+        "url_trailer": "https://www.youtube.com/watch?v=c0i88t0Kacs",
+        "promo": false,
+        "popular": true,
+        "tags": [
+          "RPG",
+          "Fantasy",
+          "Open World",
+          "Aventure",
+          "Choix"
+        ]
+      },
+      "quantity": 1,
+      "subtotal": 39.99,
+      "createdAt": "2025-10-31T23:23:53.620Z"
+    }
+  ]
 }

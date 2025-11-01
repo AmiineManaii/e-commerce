@@ -3,12 +3,15 @@
     <h1 class="section-title">Jeux en promotions</h1>
     
     <div class="carousel">
+
+
       @if (promoGames.length > 1) {
         <button class="nav prev" (click)="prevSlide()" aria-label="Slide précédent">
           <i class="fas fa-chevron-left"></i>
         </button>
       }
 
+      
       <div class="slides">
         @for (game of promoGames; track game.id; let i = $index) {
           <div class="slide" [class.active]="i === currentSlide">
@@ -47,11 +50,11 @@
                   </div>
                 </div>
                 <div class="content-footer">
-                  <button class="btn-primary">
+                  <button class="btn-primary" (click)="addToCart(game); $event.stopPropagation()">
                     <i class="fas fa-shopping-cart"></i>
                     Ajouter au panier
                   </button>
-                  <button class="btn-secondary">
+                  <button class="btn-secondary" [routerLink]="['/produitDetails', game.id]">
                     <i class="fas fa-info-circle"></i>
                     Voir détails
                   </button>

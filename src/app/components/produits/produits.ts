@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
+import { CartService } from '../../services/cart.service';
 import { Game } from '../../Models/game.model';
 import { CommonModule } from '@angular/common';
 import { Header } from "../header/header";
@@ -31,7 +32,11 @@ export class Produits implements OnInit {
   Math: any;
   Number: any;
 
-  constructor(private gameService: GameService, private router: Router) { }
+  constructor(
+    private gameService: GameService,
+    private router: Router,
+    private cartService: CartService
+  ) { }
 
   ngOnInit(): void {
     this.loadProduits();
@@ -129,8 +134,15 @@ export class Produits implements OnInit {
     }
   }
   addToCart(produit: Game): void {
-  
-    console.log('Add to cart:', produit);
+    this.cartService.addToCart(produit, 1).subscribe({
+      next: () => {
+        // Optionnel: afficher une notification de succès
+        console.log('Produit ajouté au panier:', produit.title);
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'ajout au panier:', error);
+      }
+    });
   }
 
   viewProductDetails(id: number): void {

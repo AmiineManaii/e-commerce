@@ -30,7 +30,10 @@
 
                   <div class="d-flex justify-content-between align-items-center mt-auto">
                     <span class="price text-primary fw-bold">{{ game.price}}DT</span>
-                    <button class="btn btn-sm btn-outline-primary">Voir Détails</button>
+                    <button class="btn btn-sm btn-outline-primary" [routerLink]="['/produitDetails', game.id]">
+                      <i class="fas fa-info-circle me-1"></i>
+                      Voir Détails
+                    </button>
                   </div>
                 </div>
               </div>

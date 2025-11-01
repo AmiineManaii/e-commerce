@@ -29,11 +29,13 @@
           <a class="nav-link user-icon" href="#" title="Profil">
             <i class="fas fa-user-circle"></i>
           </a>
-          <a class="nav-link cart-icon position-relative" href="#" title="Panier">
+          <a class="nav-link cart-icon position-relative" [routerLink]="['/cart']" title="Panier">
             <i class="fas fa-shopping-cart"></i>
-            <span class="cart-badge badge rounded-pill bg-danger">
-              0 <span class="visually-hidden">articles dans le panier</span>
-            </span>
+            @if (cartItemCount > 0) {
+              <span class="cart-badge badge rounded-pill bg-danger">
+                {{ cartItemCount }} <span class="visually-hidden">articles dans le panier</span>
+              </span>
+            }
           </a>
         </div>
       </div>

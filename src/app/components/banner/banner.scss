@@ -33,7 +33,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -41,7 +41,8 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
-  background: linear-gradient(90deg, #00c6ff, #0070f3, #ff00ff, #ff8c00);
+  //background: linear-gradient(90deg, #00c6ff, #0070f3, #ff00ff, #ff8c00);
+  background: linear-gradient(to right, #4d4e4f, #86aad1, #3cd1e8, #74e6f7);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -50,10 +51,10 @@
   text-align: center;
   letter-spacing: 1px;
 
-  @keyframes gradientAnimation {
+  /*@keyframes gradientAnimation {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
-  }
+  }*/
 }
 
 .carousel {
