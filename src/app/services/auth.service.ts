@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map, tap,switchMap } from 'rxjs/operators';
+import { map, Observable } from 'rxjs';
 import { User } from '../Models/user.model';
 
 @Injectable({
@@ -9,90 +8,105 @@ import { User } from '../Models/user.model';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/users';
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
-  
-  constructor(private http: HttpClient) {
-    this.loadUserFromStorage();
+
+  constructor(private http: HttpClient) { }
+
+
+
+  register(user: User): Observable<User> {
+    return new Observable(observer => {
+      
+      this.http.get<User[]>(`${this.apiUrl}?email=${user.email}`).subscribe({
+        next: (users) => {
+          if (users.length > 0) {
+            observer.error('Cet email est deja existe');
+            return;
+          }
+          
+
+          this.http.post<User>(this.apiUrl, user).subscribe({
+            next: (createdUser) => {
+              const { password, ...userWithoutPassword } = createdUser;
+              localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+              observer.next(userWithoutPassword);
+              observer.complete();
+            },
+            error: (error) => {
+              observer.error(error);
+            }
+          });
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
   }
 
-  private loadUserFromStorage(): void {
+ 
+  login(email: string, password: string): Observable<User> {
+    return new Observable(observer => {
+
+      this.http.get<User[]>(`${this.apiUrl}?email=${email}`).subscribe({
+        next: (users) => {
+          const user = users[0];
+          if (!user) {
+            observer.error('Utilisateur non trouvé');
+            return;
+          }
+
+          if (user.password !== password) {
+            observer.error('Mot de passe incorrect');
+            return;
+          }
+
+          
+          const { password: _, ...userWithoutPassword } = user;
+          localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+          observer.next(userWithoutPassword);
+          observer.complete();
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+ 
+  logout(): void {
+    localStorage.removeItem('currentUser');
+  }
+
+  
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('currentUser');
+  }
+
+  
+  getCurrentUser(): User | null {
     const userJson = localStorage.getItem('currentUser');
     if (userJson) {
       try {
-        const user = JSON.parse(userJson);
-        this.currentUserSubject.next(user);
-      } catch (e) {
-        localStorage.removeItem('currentUser');
+        return JSON.parse(userJson);
+      } catch (error) {
+        console.error('Erreur lors du parsing de l\'utilisateur:', error);
+        return null;
       }
     }
+    return null;
   }
 
-  register(user: User): Observable<User> {
 
-
-    return this.checkEmailExists(user.email).pipe(
-
-
-      map(exists => {
-        if (exists) {
-          throw new Error('Cet email est déjà utilisé');
-        }
-        return user;
-      }),
-
-
-      switchMap(newUser => this.http.post<User>(this.apiUrl, newUser).pipe(
-
-        
-        tap(createdUser => {
-
-          const { password, ...userWithoutPassword } = createdUser;
-          localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-          this.currentUserSubject.next(userWithoutPassword);
-        })
-      ))
-    );
+  updateUser(userId: number, userData: Partial<User>): Observable<User> {
+    return this.http.patch<User>(`${this.apiUrl}/${userId}`, userData);
   }
 
-  login(email: string, password: string): Observable<User> {
-    return this.http.get<User[]>(`${this.apiUrl}?email=${email}`).pipe(
-      map(users => {
-        const user = users[0];
-        if (!user) {
-          throw new Error('Utilisateur non trouvé');
-        }
-        if (user.password !== password) {
-          throw new Error('Mot de passe incorrect');
-        }
-        
-        // Supprimer le mot de passe avant de stocker l'utilisateur
-        const { password: _, ...userWithoutPassword } = user;
-        localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-        this.currentUserSubject.next(userWithoutPassword);
-        return userWithoutPassword;
-      }),
-      catchError(error => throwError(() => error))
-    );
-  }
-
-  logout(): void {
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.currentUserSubject.value;
-  }
-
-  getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
-  }
-
-  private checkEmailExists(email: string): Observable<boolean> {
+  
+  
+  checkEmailExists(email: string): Observable<boolean> {
     return this.http.get<User[]>(`${this.apiUrl}?email=${email}`).pipe(
       map(users => users.length > 0)
     );
   }
 }
-

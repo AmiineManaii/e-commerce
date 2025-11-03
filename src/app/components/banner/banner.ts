@@ -11,11 +11,11 @@ import { CartService } from '../../services/cart.service';
   templateUrl: './banner.html',
   styleUrl: './banner.scss'
 })
-export class Banner implements OnInit{
+export class Banner implements OnInit {
   promoGames: Game[] = [];
   error: string = '';
   currentSlide: number = 0;
-  private slideInterval: any;
+  private slideInterval: number | undefined; 
 
   constructor(
     private gameService: GameService,
@@ -26,13 +26,12 @@ export class Banner implements OnInit{
     this.loadPromoGames();
   }
 
-
+  
 
   loadPromoGames(): void {
     this.gameService.getPromoGames().subscribe({
       next: (games) => {
         this.promoGames = games;
-        //console.log(this.promoGames);
         if (this.promoGames.length > 1) {
           this.startAutoSlide();
         }
@@ -45,10 +44,13 @@ export class Banner implements OnInit{
   }
 
   startAutoSlide(): void {
-    this.slideInterval = setInterval(() => {
+    
+    this.slideInterval = window.setInterval(() => {
       this.nextSlide();
     }, 5000); // 5 secondes
   }
+
+  
 
   nextSlide(): void {
     this.currentSlide = (this.currentSlide + 1) % this.promoGames.length;
@@ -58,14 +60,11 @@ export class Banner implements OnInit{
     this.currentSlide = (this.currentSlide - 1 + this.promoGames.length) % this.promoGames.length;
   }
 
+  
+
+  
+
   addToCart(game: Game): void {
-    this.cartService.addToCart(game, 1).subscribe({
-      next: () => {
-        console.log('Produit ajouté au panier:', game.title);
-      },
-      error: (error) => {
-        console.error('Erreur lors de l\'ajout au panier:', error);
-      }
-    });
+    this.cartService.addToCart(game, 1);
   }
 }

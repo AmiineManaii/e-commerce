@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, of, throwError } from 'rxjs';
-import { tap, catchError, map } from 'rxjs/operators';
+import { Observable, Subject, tap } from 'rxjs';
 import { CartItem, CartSummary } from '../Models/cart-item.model';
 import { Game } from '../Models/game.model';
 
@@ -10,175 +9,145 @@ import { Game } from '../Models/game.model';
 })
 export class CartService {
   private apiUrl = 'http://localhost:3000/cart';
-  private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
-  public cartItems$ = this.cartItemsSubject.asObservable();
+  private cartChanged = new Subject<void>()
 
-  constructor(private http: HttpClient) {
-    this.loadCartFromServer();
-  }
+  constructor(private http: HttpClient) { }
 
 
-  loadCartFromServer(): void {
-    this.http.get<CartItem[]>(this.apiUrl).subscribe({
+ ;
 
-      next: (items) => {
-        this.cartItemsSubject.next(items || []);
-      
-      },
+getCartChanges(): Observable<void> {
+  return this.cartChanged.asObservable();
+}
 
-      error: (error) => {
-        console.error('Error loading cart:', error);
-        this.cartItemsSubject.next([]);
-      
-      }
-    });
-  }
-
- 
   getCartItems(): Observable<CartItem[]> {
-    return this.cartItems$;
+    return new Observable(observer => {
+      this.http.get<CartItem[]>(this.apiUrl).subscribe({
+        next: (items) => {
+          observer.next(items);
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
   }
 
   
 
   addToCart(game: Game, quantity: number = 1): Observable<CartItem> {
-
-    const existingItem = this.findCartItemByGameId(game.id);
     
-    if (existingItem) {
-
-
-      return this.updateQuantity(existingItem.id, existingItem.quantity + quantity);
-    }
-
     const newItem: CartItem = {
-      id: Date.now(), 
+      id: Date.now(),
       game: game,
       quantity: quantity,
       subtotal: game.price * quantity,
       createdAt: new Date().toISOString()
     };
 
-
     return this.http.post<CartItem>(this.apiUrl, newItem).pipe(
-      
-      tap((item) => {
-        const currentItems = this.cartItemsSubject.value;
-        this.cartItemsSubject.next([...currentItems, item]);
-      }),
-
-      catchError((error) => {
-        console.error('Error adding to cart:', error);
-        alert(error.message);
-        return throwError(() => error);
-      })
-    );
+    tap(() => this.cartChanged.next())
+  );
   }
 
 
   updateQuantity(itemId: number, quantity: number): Observable<CartItem> {
-    if (quantity <= 0) {
-      this.removeFromCart(itemId).subscribe();
-
-      return of({
-        id: itemId,
-        game: {} as Game,
-        quantity: 0,
-        subtotal: 0,
-        createdAt: new Date().toISOString()
-      });
-    }
-
-    const currentItems = this.cartItemsSubject.value;
-    const item = currentItems.find(i => i.id === itemId);
     
-    if (!item) {
-      throw new Error('Item not found in cart');
-    }
+    return new Observable(observer => {
+      this.http.get<CartItem>(`${this.apiUrl}/${itemId}`).subscribe({
+        next: (currentItem) => {
+          const updatedItem: CartItem = {
+            ...currentItem,
+            quantity: quantity,
+            subtotal: currentItem.game.price * quantity
+          };
 
-    const updatedItem: CartItem = {
-      ...item,
-      quantity: quantity,
-      subtotal: item.game.price * quantity
-    };
-
-
-    return this.http.patch<CartItem>(`${this.apiUrl}/${itemId}`, updatedItem).pipe(
-      tap((updated) => {
-        const items = currentItems.map(i => i.id === itemId ? updated : i);
-        this.cartItemsSubject.next(items);
-      }),
-      catchError((error) => {
-        console.error('Error updating quantity:', error);
-        const items = currentItems.map(i => i.id === itemId ? updatedItem : i);
-        this.cartItemsSubject.next(items);
-        return of(updatedItem);
-      })
-    );
-  }
-
-  removeFromCart(itemId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${itemId}`).pipe(
-      tap(() => {
-        const currentItems = this.cartItemsSubject.value;
-        const items = currentItems.filter(i => i.id !== itemId);
-        this.cartItemsSubject.next(items);
-      }),
-      catchError((error) => {
-        console.error('Error removing from cart:', error);
-        alert(error.message);
-        return throwError(() => error);
-
-      })
-    );
-  }
-
-
-
-  clearCart(): Observable<void> {
-
-  return this.http.get<CartItem[]>(this.apiUrl).pipe(
-    tap((items) => {
-      items.forEach((item) => {
-        this.http.delete(`${this.apiUrl}/${item.id}`).subscribe();
+          this.http.patch<CartItem>(`${this.apiUrl}/${itemId}`, updatedItem).subscribe({
+            next: (savedItem) => {
+              observer.next(savedItem);
+              observer.complete();
+            },
+            error: (error) => {
+              observer.error(error);
+            }
+          });
+        },
+        error: (error) => {
+          observer.error(error);
+        }
       });
-      this.cartItemsSubject.next([]);
-      alert('Tous les éléments ont été supprimés');
-    }),
-    map(() => void 0),
-    catchError((error) => {
-      console.error('Erreur lors du vidage du panier :', error);
-      return of(void 0);
-    })
+    });
+  }
+
+
+  removeFromCart(itemId: number): Observable<CartItem> {
+    //console.log(itemId);
+    return this.http.delete<CartItem>(`${this.apiUrl}/${itemId}`).pipe(
+    tap(() => this.cartChanged.next())
   );
+  }
+
+ 
+  clearCart(): Observable<void> {
+    return new Observable(observer => {
+      this.getCartItems().subscribe({
+        next: (items) => {
+          
+          const deleteRequests = items.map(item => 
+            this.removeFromCart(item.id).subscribe()
+          );
+          
+          
+          observer.next();
+          observer.complete();
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+
+
+  getCartSummary(): Observable<CartSummary> {
+    return new Observable(observer => {
+      this.getCartItems().subscribe({
+        next: (items) => {
+          const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+          const shippingFee = subtotal > 100 ? 15 : 0;
+          const total = subtotal + shippingFee;
+          const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
+          const summary: CartSummary = {
+            subtotal,
+            shippingFee,
+            total,
+            itemCount
+          };
+
+          observer.next(summary);
+          observer.complete();
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+  getTotalItems(): Observable<number> {
+    return new Observable(observer => {
+      this.getCartItems().subscribe({
+        next: (items) => {
+          const total = items.reduce((sum, item) => sum + item.quantity, 0);
+          observer.next(total);
+          observer.complete();
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
 }
-
-
-
-
-  getCartSummary(): CartSummary {
-    const items = this.cartItemsSubject.value;
-    const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-    const shippingFee = subtotal > 0 ? 15 : 0; 
-    const total = subtotal + shippingFee;
-    const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-
-    return {
-      subtotal,
-      shippingFee,
-      total,
-      itemCount
-    };
-  }
-
-
-  getTotalItems(): number {
-    return this.cartItemsSubject.value.reduce((sum, item) => sum + item.quantity, 0);
-  }
-
-
-  private findCartItemByGameId(gameId: number): CartItem | undefined {
-    return this.cartItemsSubject.value.find(item => item.game.id === gameId);
-  }
-}
-

@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { GameService } from '../services/game.service';
-import { Game } from '../Models/game.model';
+import { GameService } from '../../services/game.service';
+import { Game } from '../../Models/game.model';
 import { CommonModule } from '@angular/common';
-import { Header } from "../components/header/header";
-import { Footer } from "../components/footer/footer";
+import { Header } from "../header/header";
+import { Footer } from "../footer/footer";
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { UserProfileService } from '../../services/user-profile.service';
+import { User } from '../../Models/user.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-produit-details',
@@ -17,19 +20,26 @@ import { RouterLink } from '@angular/router';
 })
 export class ProduitDetailsComponent implements OnInit {
   produit: Game | undefined;
+  currentUser:User|null=null;
   error: string = '';
   currentImageIndex: number = 0;
   private slideshowInterval: any;
   trailerUrl: SafeResourceUrl | undefined;
   similarProducts: Game[] = [];
+  wishlistError: string = '';
+  wishlistSuccess: string = '';
+  wishlistLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private gameService: GameService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private userProfileService: UserProfileService,
+    private authService:AuthService
   ) { }
 
   ngOnInit(): void {
+    this.currentUser=this.authService.getCurrentUser();
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
       if (id) {
@@ -126,5 +136,28 @@ export class ProduitDetailsComponent implements OnInit {
       console.log(`Added ${quantity} of ${this.produit.title} to cart.`);
       // Here you would typically add logic to interact with a cart service
     }
+  }
+
+  addToWishlist(): void {
+    if (!this.currentUser?.id) {
+      this.wishlistError = 'Vous devez être connecté pour ajouter à la liste de souhaits';
+      return;
+    }
+    if (!this.produit) { return; }
+    this.wishlistError = '';
+    this.wishlistSuccess = '';
+    this.wishlistLoading = true;
+
+    this.userProfileService.addToWishlist(this.currentUser.id,this.produit.id).subscribe({
+      next: () => {
+        this.wishlistSuccess = 'Ajouté à votre liste de souhaits';
+        this.wishlistLoading = false;
+      },
+      error: (err) => {
+        this.wishlistError = 'Erreur lors de l\'ajout à la liste de souhaits';
+        console.error(err);
+        this.wishlistLoading = false;
+      }
+    });
   }
 }

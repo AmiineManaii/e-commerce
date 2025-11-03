@@ -1,0 +1,62 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <h2>Mon Profil</h2>
+    
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+    
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!editMode && user">
+      <div class="profile-info">
+        <div class="info-group">
+          <label>Nom:</label>
+          <p>{{ user.nom }}</p>
+        </div>
+        <div class="info-group">
+          <label>Prénom:</label>
+          <p>{{ user.prenom }}</p>
+        </div>
+        <div class="info-group">
+          <label>Email:</label>
+          <p>{{ user.email }}</p>
+        </div>
+        <div class="info-group">
+          <label>Adresse:</label>
+          <p>{{ user.adresse }}</p>
+        </div>
+      </div>
+      <button class="btn btn-primary" (click)="toggleEditMode()">Modifier</button>
+    </div>
+
+    <form *ngIf="editMode" (ngSubmit)="saveProfile()">
+      <div class="form-group">
+        <label for="nom">Nom</label>
+        <input type="text" id="nom" name="nom" class="form-control" [(ngModel)]="userForm.nom" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="prenom">Prénom</label>
+        <input type="text" id="prenom" name="prenom" class="form-control" [(ngModel)]="userForm.prenom" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" class="form-control" [(ngModel)]="userForm.email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="adresse">Adresse</label>
+        <textarea id="adresse" name="adresse" class="form-control" [(ngModel)]="userForm.adresse" required></textarea>
+      </div>
+      
+      <div class="button-group">
+        <button type="submit" class="btn btn-success">Enregistrer</button>
+        <button type="button" class="btn btn-secondary" (click)="toggleEditMode()">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { CartService } from '../../services/cart.service';
 import { CartItem, CartSummary } from '../../Models/cart-item.model';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -14,7 +15,7 @@ import { Footer } from '../footer/footer';
   styleUrl: './cart.scss'
 })
 export class CartComponent implements OnInit {
-  cartItems: CartItem[] = [];
+  cartItems$ = new BehaviorSubject<CartItem[]>([]);
   cartSummary: CartSummary = {
     subtotal: 0,
     shippingFee: 0,
@@ -25,49 +26,94 @@ export class CartComponent implements OnInit {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    
-    this.cartService.cartItems$.subscribe(items => {
-      this.cartItems = items;
-      this.updateSummary();
+    this.loadCartItems();
+  }
+
+  loadCartItems(): void {
+    this.cartService.getCartItems().subscribe({
+      next: (items) => {
+        this.cartItems$.next(items);
+        this.updateSummary(items);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des articles du panier :', error);
+      }
     });
   }
 
-  updateSummary(): void {
-    this.cartSummary = this.cartService.getCartSummary();
+  updateSummary(items: CartItem[]): void {
+    const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+    const shippingFee = subtotal > 0 ? 15 : 0;
+    const total = subtotal + shippingFee;
+    const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
+    this.cartSummary = {
+      subtotal,
+      shippingFee,
+      total,
+      itemCount
+    };
   }
 
   updateQuantity(itemId: number, quantity: number): void {
     if (quantity > 0) {
-      this.cartService.updateQuantity(itemId, quantity).subscribe();
+      this.cartService.updateQuantity(itemId, quantity).subscribe({
+        next: (updatedItem) => {
+          const currentItems = this.cartItems$.value;
+          const updatedItems = currentItems.map(item => 
+            item.id === updatedItem.id ? updatedItem : item
+          );
+          this.cartItems$.next(updatedItems);
+          this.updateSummary(updatedItems);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la mise à jour de la quantité :', error);
+        }
+      });
     }
   }
 
   removeItem(itemId: number): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet article du panier ?')) {
-      this.cartService.removeFromCart(itemId).subscribe(() => {
-        this.updateSummary();
+    if (confirm('Vous etes sur de supprimer cet article du panier ?')) {
+      this.cartService.removeFromCart(itemId).subscribe({
+        next: () => {
+
+          const currentItems = this.cartItems$.value;
+          const updatedItems = currentItems.filter(item => item.id !== itemId);
+          this.cartItems$.next(updatedItems);
+          this.updateSummary(updatedItems);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression de larticle :', error);
+        }
       });
     }
   }
 
   clearCart(): void {
-    if (confirm('Êtes-vous sûr de vouloir vider tout le panier ?')) {
-      this.cartService.clearCart().subscribe();
+    if (confirm('vous etes sur de vider le panier ?')) {
+      this.cartService.clearCart().subscribe({
+        next: () => {
+          this.cartItems$.next([]);
+          this.updateSummary([]);
+        },
+        error: (error) => {
+          console.error('Erreur lors du vidage du panier :', error);
+        }
+      });
     }
   }
 
   proceedToCheckout(): void {
-    if (this.cartItems.length === 0) {
+    const currentItems = this.cartItems$.value;
+    if (currentItems.length === 0) {
       alert('Votre panier est vide');
       return;
     }
-  
     alert('Redirection vers la page de paiement...');
- 
   }
 
   getTotalItems(): number {
     return this.cartSummary.itemCount;
   }
 }
-

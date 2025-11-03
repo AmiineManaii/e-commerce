@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Game } from '../Models/game.model';
-import { GameService } from '../services/game.service';
-import { Header } from "../components/header/header";
+import { Game } from '../../Models/game.model';
+import { GameService } from '../../services/game.service';
+import { Header } from "../header/header";
 
 
 @Component({

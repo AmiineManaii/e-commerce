@@ -68,6 +68,16 @@
       </div>
 
       <button class="add-to-cart-button" (click)="addToCart(quantityInput.valueAsNumber)">Ajouter au panier</button>
+      <button class="add-to-cart-button" style="margin-left:10px; background-color:#dc3545; color:#fff" (click)="addToWishlist()" [disabled]="wishlistLoading">
+        <i class="fas fa-heart"></i> {{ wishlistLoading ? 'Ajout...' : 'Ajouter à la liste de souhaits' }}
+      </button>
+
+      @if (wishlistSuccess) {
+        <div class="alert alert-success" style="margin-top:10px">{{ wishlistSuccess }}</div>
+      }
+      @if (wishlistError) {
+        <div class="alert alert-danger" style="margin-top:10px">{{ wishlistError }}</div>
+      }
     </div>
 
 

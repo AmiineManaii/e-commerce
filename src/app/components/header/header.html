@@ -33,8 +33,10 @@
                 <span class="user-name">{{ currentUser.prenom }}</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Mon profil</a></li>
-                <li><a class="dropdown-item" href="#">Mes commandes</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/user/profile']">Mon profil</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/user/orders']">Mes commandes</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/user/wishlist']">Liste de souhaits</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/user/addresses']">Mes adresses</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#" (click)="logout()">Déconnexion</a></li>
               </ul>
@@ -51,7 +53,7 @@
           }
           <a class="nav-link cart-icon position-relative" [routerLink]="['/cart']" title="Panier">
             <i class="fas fa-shopping-cart"></i>
-            @if (cartItemCount > 0) {
+            @if (cartItemCount > 0 )  {
               <span class="cart-badge badge rounded-pill bg-danger">
                 {{ cartItemCount }} <span class="visually-hidden">articles dans le panier</span>
               </span>

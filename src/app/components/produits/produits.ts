@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { CartService } from '../../services/cart.service';
+import { UserProfileService } from '../../services/user-profile.service';
 import { Game } from '../../Models/game.model';
 import { CommonModule } from '@angular/common';
 import { Header } from "../header/header";
 import { Footer } from "../footer/footer";
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { User } from '../../Models/user.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-produits',
@@ -31,14 +34,18 @@ export class Produits implements OnInit {
   selectedSortOption: string = 'none';
   Math: any;
   Number: any;
+  currentUser:User|null=null;
 
   constructor(
     private gameService: GameService,
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private userProfileService: UserProfileService,
+    private authService:AuthService
   ) { }
 
   ngOnInit(): void {
+    this.currentUser=this.authService.getCurrentUser();
     this.loadProduits();
   }
 
@@ -136,16 +143,35 @@ export class Produits implements OnInit {
   addToCart(produit: Game): void {
     this.cartService.addToCart(produit, 1).subscribe({
       next: () => {
-        // Optionnel: afficher une notification de succès
-        alert('Produit ajouté au panier: ' + produit.title);
+        alert('Ajouté au panier: ' + produit.title);
       },
       error: (error) => {
         console.error('Erreur lors de l\'ajout au panier:', error);
+        alert('Erreur lors de l\'ajout au panier. Veuillez réessayer.');
       }
     });
+    
   }
 
   viewProductDetails(id: number): void {
     this.router.navigate(['/produitDetails', id]);
+  }
+
+  addToWishlist(produit: Game): void {
+    if (!this.currentUser?.id) {
+      alert('Veuillez vous connecter pour ajouter aux favoris');
+      return;
+    }
+
+    this.userProfileService.addToWishlist(this.currentUser.id, produit.id).subscribe({
+      next: () => {
+        
+        alert('Ajouté à la liste de souhaits: ' + produit.title);
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'ajout à la liste de souhaits:', error);
+        alert('Veuillez vous connecter pour ajouter aux favoris');
+      }
+    });
   }
 }

@@ -113,10 +113,15 @@
                     <span class="produit-price">{{ produit.price }} DT</span>
                 </div>
 
-                <button class="btn-add-to-cart" (click)="addToCart(produit); $event.stopPropagation()">
-                    <i class="fas fa-shopping-cart"></i>
-                    Ajouter au panier
-                </button>
+                <div class="actions-inline">
+                  <button class="btn-add-to-cart" (click)="addToCart(produit); $event.stopPropagation()">
+                      <i class="fas fa-shopping-cart"></i>
+                      Ajouter au panier
+                  </button>
+                  <button class="btn-wishlist" (click)="addToWishlist(produit); $event.stopPropagation()" title="Ajouter aux favoris">
+                      <i class="fas fa-heart"></i>
+                  </button>
+                </div>
             </div>
         </div>
         }

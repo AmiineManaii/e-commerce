@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -14,10 +14,10 @@ import { User } from '../../Models/user.model';
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
-export class Header implements OnInit, OnDestroy {
+export class Header implements OnInit {
   cartItemCount: number = 0;
   currentUser: User | null = null;
-  private destroy$ = new Subject<void>();
+ 
 
   constructor(
     private router: Router,
@@ -26,23 +26,18 @@ export class Header implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.cartService.cartItems$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(items => {
-        this.cartItemCount = this.cartService.getTotalItems();
-      });
-      
-    this.authService.currentUser$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        this.currentUser = user;
-      });
+    this.loadCart();
+    this.cartService.getCartChanges().subscribe(() => this.loadCart());
+    this.currentUser = this.authService.getCurrentUser();
   }
+  loadCart() {
+  this.cartService.getCartItems().subscribe(items => {
+    this.cartItemCount = items.length;
+  });
+  
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+}
+
 
   onSearch(searchTerm: string) {
     if (searchTerm.trim() !== "") {

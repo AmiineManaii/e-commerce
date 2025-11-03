@@ -4,14 +4,6 @@
     
     <div class="carousel">
 
-
-      @if (promoGames.length > 1) {
-        <button class="nav prev" (click)="prevSlide()" aria-label="Slide précédent">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-      }
-
-      
       <div class="slides">
         @for (game of promoGames; track game.id; let i = $index) {
           <div class="slide" [class.active]="i === currentSlide">
@@ -72,11 +64,6 @@
         }
       </div>
 
-      @if (promoGames.length > 1) {
-        <button class="nav next" (click)="nextSlide()" aria-label="Slide suivant">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      }
     </div>
 
     @if (error) {
