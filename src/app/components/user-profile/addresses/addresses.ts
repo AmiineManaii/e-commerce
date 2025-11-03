@@ -34,23 +34,10 @@ export class AddressesComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     if (!this.currentUser || !this.currentUser.id){
       this.error = 'Utilisateur non connecté';
+      this.loading = false;
       return;
     }
-    else{
-      
-      this.userProfileService.getAddresses(this.currentUser.id).subscribe({
-      next: (addresses) => {
-        this.addresses = addresses;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Erreur lors du chargement des adresses';
-        this.loading = false;
-        console.error(err);
-      }
-    });
-    }
-    
+    this.loadAddresses();
   }
 
   toggleAddForm(): void {
@@ -71,7 +58,7 @@ export class AddressesComponent implements OnInit {
 
   saveAddress(): void {
     const currentUser = this.authService.getCurrentUser();
-    if (!currentUser) return;
+    if (!currentUser || !currentUser.id) return;
 
     const addressToSave = { ...this.newAddress, userId: currentUser.id };
     
@@ -80,6 +67,7 @@ export class AddressesComponent implements OnInit {
         this.showAddForm = false;
         this.successMessage = 'Adresse ajoutée avec succès';
         this.resetNewAddress();
+        this.loadAddresses();
         setTimeout(() => this.successMessage = '', 3000);
       },
       error: (err) => {
@@ -103,6 +91,8 @@ export class AddressesComponent implements OnInit {
         this.showAddForm = false;
         this.editingAddress = null;
         this.successMessage = 'Adresse mise à jour avec succès';
+        this.resetNewAddress();
+        this.loadAddresses();
         setTimeout(() => this.successMessage = '', 3000);
       },
       error: (err) => {
@@ -118,6 +108,7 @@ export class AddressesComponent implements OnInit {
     this.userProfileService.deleteAddress(addressId).subscribe({
       next: () => {
         this.successMessage = 'Adresse supprimée avec succès';
+        this.loadAddresses();
         setTimeout(() => this.successMessage = '', 3000);
       },
       error: (err) => {
@@ -133,10 +124,29 @@ export class AddressesComponent implements OnInit {
     this.userProfileService.setDefaultAddress(this.currentUser.id, addressId).subscribe({
       next: () => {
         this.successMessage = 'Adresse définie par défaut';
+        this.loadAddresses();
         setTimeout(() => this.successMessage = '', 3000);
       },
       error: (err) => {
         this.error = 'Erreur lors de la définition de l\'adresse par défaut';
+        console.error(err);
+      }
+    });
+  }
+
+  loadAddresses(): void {
+    if (!this.currentUser || !this.currentUser.id) return;
+    
+    this.loading = true;
+    this.error = '';
+    this.userProfileService.getAddresses(this.currentUser.id).subscribe({
+      next: (addresses) => {
+        this.addresses = addresses;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Erreur lors du chargement des adresses';
+        this.loading = false;
         console.error(err);
       }
     });

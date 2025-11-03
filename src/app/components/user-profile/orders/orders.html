@@ -16,7 +16,15 @@
     
     @if (!loading && !error && orders.length === 0) {
       <div class="no-orders">
-        <p>Vous n'avez pas encore passé de commande.</p>
+        <div class="empty-icon">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <h3>Vous n'avez pas encore passé de commande</h3>
+        <p>Découvrez nos jeux et passez votre première commande</p>
+        <a [routerLink]="['/produits']" class="btn btn-primary">
+          <i class="fas fa-store"></i>
+          Voir les produits
+        </a>
       </div>
     }
     
@@ -27,6 +35,7 @@
             <div class="order-header">
               <div class="order-info">
                 <span class="order-number">Commande #{{ order.id }}</span>
+                
                 <span class="order-date">{{ order.date | date:'dd/MM/yyyy' }}</span>
               </div>
               <div class="order-status" [ngClass]="getStatusClass(order.status)">
@@ -39,15 +48,15 @@
                 @for (item of order.items; track item.gameId) {
                   <div class="item">
                     <span class="item-quantity">{{ item.quantity }}x</span>
-                    <span class="item-name">Jeu #{{ item.gameId }}</span>
-                    <span class="item-price">{{ item.price | currency:'EUR' }}</span>
+                    <span class="item-name">Jeu #{{ getGameTitle(item.gameId) }}</span>
+                    <span class="item-price">{{ item.price }}DT</span>
                   </div>
                 }
               </div>
               
               <div class="order-total">
                 <span>Total:</span>
-                <span class="total-amount">{{ order.total | currency:'EUR' }}</span>
+                <span class="total-amount">{{ order.total }}DT</span>
               </div>
             </div>
           </div>

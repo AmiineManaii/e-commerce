@@ -490,8 +490,15 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
 }
 
-.btn-add-to-cart {
+.actions-inline {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
   margin-top: auto;
+}
+
+.btn-add-to-cart {
+  flex: 1;
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(0, 198, 255, 0.4);
   color: #00c6ff;
@@ -520,6 +527,40 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:active {
     transform: translateY(-1px) scale(0.98);
+  }
+}
+
+.btn-wishlist {
+  background: rgba(233, 69, 96, 0.2);
+  border: 2px solid rgba(233, 69, 96, 0.4);
+  color: #ff6b81;
+  padding: 0.875rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: $transition;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  min-width: 44px;
+  height: 44px;
+
+  i {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    background: rgba(233, 69, 96, 0.3);
+    border-color: #ff6b81;
+    color: #ff4757;
+    transform: scale(1.1);
+    box-shadow: 0 4px 20px rgba(233, 69, 96, 0.4);
+  }
+
+  &:active {
+    transform: scale(1.05);
   }
 }
 

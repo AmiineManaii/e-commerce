@@ -2,36 +2,94 @@
   <div class="wishlist-card">
     <h2>Ma liste de souhaits</h2>
     
-    <div *ngIf="loading" class="loading">
-      Chargement de votre liste de souhaits...
-    </div>
-    
-    <div *ngIf="error" class="alert alert-danger">
-      {{ error }}
-    </div>
-    
-    <div *ngIf="!loading && !error && wishlistItems.length === 0" class="no-items">
-      <p>Votre liste de souhaits est vide.</p>
-      <a routerLink="/products" class="btn btn-primary">Découvrir des jeux</a>
-    </div>
-    
-    <div *ngIf="!loading && wishlistItems.length > 0" class="wishlist-items">
-      <div class="game-card" *ngFor="let game of wishlistItems">
-        <div class="game-image">
-          <img [src]=game.cover_image [alt]="game.title" *ngIf="game.cover_image">
-          <div class="no-image" *ngIf="!game.cover_image">Image non disponible</div>
-        </div>
-        
-        <div class="game-info">
-          <h3 class="game-title">{{ game.title }}</h3>
-          <p class="game-price">{{ game.price | currency:'EUR' }}</p>
-          
-          <div class="game-actions">
-            <a [routerLink]="['/produitDetails', game.id]" class="btn btn-info">Voir détails</a>
-            <button class="btn btn-danger" (click)="removeFromWishlist(game.id)">Retirer</button>
-          </div>
-        </div>
+    @if (loading) {
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>Chargement de votre liste de souhaits...</p>
       </div>
-    </div>
+    }
+    
+    @if (error) {
+      <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+    }
+    
+    @if (!loading && !error && wishlistItems.length === 0) {
+      <div class="no-items">
+        <div class="empty-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <h3>Votre liste de souhaits est vide</h3>
+        <p>Découvrez nos jeux et ajoutez-les à votre liste de souhaits</p>
+        <a [routerLink]="['/produits']" class="btn btn-primary">
+          <i class="fas fa-store"></i>
+          Découvrir des jeux
+        </a>
+      </div>
+    }
+    
+    @if (!loading && wishlistItems.length > 0) {
+      <div class="wishlist-items">
+        @for (game of wishlistItems; track game.id) {
+          <div class="game-card">
+            <div class="game-image-wrapper" [routerLink]="['/produitDetails', game.id]">
+              @if (game.cover_image) {
+                <img [src]="game.cover_image" [alt]="game.title" class="game-image">
+              } @else {
+                <div class="no-image">
+                  <i class="fas fa-image"></i>
+                  <span>Image non disponible</span>
+                </div>
+              }
+              <div class="image-overlay"></div>
+            </div>
+            
+            <div class="game-info">
+              <h3 class="game-title" [routerLink]="['/produitDetails', game.id]">{{ game.title }}</h3>
+              
+              <div class="game-meta">
+                @if (game.genre) {
+                  <span class="badge-genre">
+                    <i class="fas fa-tag"></i>
+                    {{ game.genre }}
+                  </span>
+                }
+                @if (game.platform) {
+                  <span class="badge-platform">
+                    <i class="fas fa-gamepad"></i>
+                    {{ game.platform }}
+                  </span>
+                }
+              </div>
+
+              <div class="rating-section">
+                @for (star of [1,2,3,4,5]; track star; let idx = $index) {
+                  <i class="fa-star" [ngClass]="idx < (game.rating || 0) ? 'fas text-warning' : 'far'"></i>
+                }
+                <span class="rating-value">{{ game.rating != null ? game.rating.toFixed(1) : 'N/A' }}</span>
+              </div>
+              
+              <div class="price-section">
+                <span class="price-label">Prix</span>
+                <span class="game-price">{{ game.price }} DT</span>
+              </div>
+              
+              <div class="game-actions">
+                <a [routerLink]="['/produitDetails', game.id]" class="btn btn-info">
+                  <i class="fas fa-eye"></i>
+                  Voir détails
+                </a>
+                <button class="btn btn-danger" (click)="removeFromWishlist(game.id)">
+                  <i class="fas fa-trash"></i>
+                  Retirer
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
   </div>
 </div>

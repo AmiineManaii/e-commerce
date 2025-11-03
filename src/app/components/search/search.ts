@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Game } from '../../Models/game.model';
 import { GameService } from '../../services/game.service';
 import { Header } from "../header/header";
+import { Footer } from "../footer/footer";
 
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, Header],
+  imports: [CommonModule, Header, Footer],
   templateUrl: './search.html',
   styleUrl: './search.scss'
 })
@@ -49,6 +50,10 @@ export class SearchComponent implements OnInit {
 
   goHome(): void {
     this.router.navigate(['/']);
+  }
+
+  viewGameDetails(id: number): void {
+    this.router.navigate(['/produitDetails', id]);
   }
 }
 

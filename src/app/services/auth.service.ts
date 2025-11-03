@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { User } from '../Models/user.model';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class AuthService {
       this.http.get<User[]>(`${this.apiUrl}?email=${user.email}`).subscribe({
         next: (users) => {
           if (users.length > 0) {
-            observer.error('Cet email est deja existe');
+            observer.error({message: 'Cet email est deja existe'});
             return;
           }
           
@@ -99,7 +99,17 @@ export class AuthService {
 
 
   updateUser(userId: number, userData: Partial<User>): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${userId}`, userData);
+    return this.http.patch<User>(`${this.apiUrl}/${userId}`, userData).pipe(
+      tap(() => {
+        const userJson = localStorage.getItem('currentUser');
+        if (userJson) {
+          localStorage.removeItem('currentUser');
+          const currentUser = JSON.parse(userJson);
+          const updatedUser = {id: currentUser.id, ...userData};
+          localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+        }
+      })
+    );
   }
 
   

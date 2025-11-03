@@ -23,16 +23,19 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.user = this.authService.getCurrentUser();
-    if (this.user) {
-        this.userForm = {
-          nom: this.user.nom,
-          prenom: this.user.prenom,
-          email: this.user.email,
-          adresse: this.user.adresse
-        };
-      }
+    this.loadUserProfile();
     
+  }
+  loadUserProfile(): void {
+    this.user = this.authService.getCurrentUser();
+    
+    this.userForm = {
+          nom: this.user?.nom,
+          prenom: this.user?.prenom,
+          email: this.user?.email,
+          adresse: this.user?.adresse
+        };
+      
   }
 
   toggleEditMode(): void {
@@ -45,6 +48,7 @@ export class ProfileComponent implements OnInit {
     if (!this.user || !this.user.id) return;
 
     this.userProfileService.updateUserProfile(this.user.id, this.userForm).subscribe({
+
       next: (updatedUser) => {
         this.successMessage = 'Profil mis à jour avec succès';
         this.editMode = false;
@@ -56,6 +60,23 @@ export class ProfileComponent implements OnInit {
         this.errorMessage = 'Erreur lors de la mise à jour du profil';
         console.error('Erreur de mise à jour:', error);
       }
+      
     });
+    this.authService.updateUser(this.user.id, this.userForm).subscribe({
+        next: (updatedUser) => {
+          this.successMessage = 'Profil mis à jour avec succès';
+          this.editMode = false;
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
+        },
+        error: (error) => {
+          this.errorMessage = 'Erreur lors de la mise à jour du profil';
+          console.error('Erreur de mise à jour:', error);
+        }
+      });
+      setTimeout(() => {
+        this.loadUserProfile();
+      }, 500);
   }
 }

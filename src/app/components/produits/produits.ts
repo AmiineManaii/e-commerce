@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Header } from "../header/header";
 import { Footer } from "../footer/footer";
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../../Models/user.model';
 import { AuthService } from '../../services/auth.service';
 
@@ -39,6 +39,7 @@ export class Produits implements OnInit {
   constructor(
     private gameService: GameService,
     private router: Router,
+    private route: ActivatedRoute,
     private cartService: CartService,
     private userProfileService: UserProfileService,
     private authService:AuthService
@@ -46,7 +47,14 @@ export class Produits implements OnInit {
 
   ngOnInit(): void {
     this.currentUser=this.authService.getCurrentUser();
-    this.loadProduits();
+    
+    // Read query parameters for category filter
+    this.route.queryParams.subscribe(params => {
+      if (params['category']) {
+        this.selectedCategory = params['category'];
+      }
+      this.loadProduits();
+    });
   }
 
   loadProduits(): void {

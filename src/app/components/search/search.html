@@ -2,29 +2,47 @@
 <div class="search-results-container">
   <div class="container mt-4">
     <button class="btn btn-secondary mb-3" (click)="goHome()">
-      Retour à l'accueil</button>
+      <i class="fas fa-arrow-left"></i>
+      Retour à l'accueil
+    </button>
 
-    <h2>Résultats de recherche pour "{{ searchTerm }}"</h2>
+    <h2 class="search-title">Résultats de recherche pour "{{ searchTerm }}"</h2>
 
     @if (filteredGames.length > 0) {
-      <div class="row">
+      <div class="search-results-grid">
         @for (game of filteredGames; track game.id) {
-          <div class="col-md-4 mb-4" >
-            <div class="card product-card">
+          <div class="game-card">
+            <div class="card-image-wrapper" (click)="viewGameDetails(game.id)">
               <img [src]="game.cover_image" class="card-img-top" [alt]="game.title">
-              <div class="card-body">
-                <h5 class="card-title">{{ game.title }}</h5>
-                <p class="card-text">{{ game.description }}</p>
-                <p class="card-price">{{ game.price}}</p>
+              <div class="image-overlay"></div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title" (click)="viewGameDetails(game.id)">{{ game.title }}</h5>
+              <p class="card-text">{{ game.description }}</p>
+              <div class="card-footer">
+                <span class="card-price">{{ game.price }} DT</span>
+                <button class="btn-view-details" (click)="viewGameDetails(game.id)">
+                  <i class="fas fa-eye"></i>
+                  Voir détails
+                </button>
               </div>
             </div>
           </div>
         }
       </div>
     } @else {
-      <div class="alert alert-warning" role="alert">
-        Aucun résultat trouvé pour "{{ searchTerm }}".
+      <div class="empty-results">
+        <div class="empty-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <h3>Aucun résultat trouvé</h3>
+        <p>Aucun résultat trouvé pour "{{ searchTerm }}".</p>
+        <button class="btn-secondary" (click)="goHome()">
+          <i class="fas fa-home"></i>
+          Retour à l'accueil
+        </button>
       </div>
     }
   </div>
 </div>
+<app-footer></app-footer>

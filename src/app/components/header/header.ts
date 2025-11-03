@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
@@ -10,7 +10,7 @@ import { User } from '../../Models/user.model';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
@@ -51,5 +51,6 @@ export class Header implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
+    this.currentUser = null;
   }
 }

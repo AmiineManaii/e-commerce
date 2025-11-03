@@ -12,8 +12,8 @@ import { UserProfileComponent } from './components/user-profile/user-profile';
 import { ProfileComponent } from './components/user-profile/profile/profile';
 import { OrdersComponent } from './components/user-profile/orders/orders';
 import { WishlistComponent } from './components/user-profile/wishlist/wishlist';
-import { CheckoutComponent } from './checkout/checkout';
-import { OrderConfirmationComponent } from './order-confirmation/order-confirmation';
+import { CheckoutComponent } from './components/checkout/checkout';
+import { OrderConfirmationComponent } from './components/order-confirmation/order-confirmation';
 
 
 export const routes: Routes = [

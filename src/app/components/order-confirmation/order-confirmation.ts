@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
-import { Header } from '../components/header/header';
-import { Footer } from '../components/footer/footer';
-import { UserProfileService } from '../services/user-profile.service';
-import { Order } from '../Models/user.model';
+import { Header } from '../header/header';
+import { Footer } from '../footer/footer';
+import { UserProfileService } from '../../services/user-profile.service';
+import { Order } from '../../Models/user.model';
 
 @Component({
   selector: 'app-order-confirmation',
@@ -25,8 +25,10 @@ export class OrderConfirmationComponent implements OnInit {
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
-    const id = idParam ? parseInt(idParam, 10) : NaN;
+    const id = idParam 
+    //console.log(!id);
     if (!id) {
+      console.log('Commande introuvable');
       this.error = 'Commande introuvable';
       this.loading = false;
       return;

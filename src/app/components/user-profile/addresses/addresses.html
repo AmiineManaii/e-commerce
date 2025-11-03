@@ -22,19 +22,29 @@
     
     @if (!loading && !addresses.length && !showAddForm) {
       <div class="no-addresses">
-        <p>Vous n'avez pas encore enregistré d'adresse.</p>
-        <button class="btn btn-primary" (click)="toggleAddForm()">Ajouter une adresse</button>
+        <div class="empty-icon">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <h3>Vous n'avez pas encore enregistré d'adresse</h3>
+        <p>Ajoutez votre première adresse pour faciliter vos commandes</p>
+        <button class="btn btn-primary" (click)="toggleAddForm()">
+          <i class="fas fa-plus"></i>
+          Ajouter une adresse
+        </button>
       </div>
     }
     
     @if (!loading && addresses.length > 0 && !showAddForm) {
       <div class="address-list">
         <div class="address-actions">
-          <button class="btn btn-primary" (click)="toggleAddForm()">Ajouter une adresse</button>
+          <button class="btn btn-primary" (click)="toggleAddForm()">
+            <i class="fas fa-plus"></i>
+            Ajouter une adresse
+          </button>
         </div>
         
         @for (address of addresses; track address.id) {
-          <div class="address-item">
+          <div class="address-item" [ngClass]="{'default-address': address.default}">
             <div class="address-content">
               <div class="address-header">
                 <h3>{{ address.nom }}</h3>
@@ -49,13 +59,20 @@
               </div>
             </div>
             <div class="address-buttons">
-              <button class="btn btn-sm btn-info" (click)="editAddress(address)">Modifier</button>
-              <button class="btn btn-sm btn-danger" (click)="deleteAddress(address.id!)">Supprimer</button>
+              <button class="btn btn-sm btn-info" (click)="editAddress(address)">
+                <i class="fas fa-edit"></i>
+                Modifier
+              </button>
               @if (!address.default) {
                 <button class="btn btn-sm btn-secondary" (click)="setAsDefault(address.id!)">
-                  Définir par défaut
+                  <i class="fas fa-star"></i>
+                  Par défaut
                 </button>
               }
+              <button class="btn btn-sm btn-danger" (click)="deleteAddress(address.id!)">
+                <i class="fas fa-trash"></i>
+                Supprimer
+              </button>
             </div>
           </div>
         }
@@ -95,8 +112,14 @@
           </div>
           
           <div class="form-buttons">
-            <button type="submit" class="btn btn-success">{{ editingAddress ? 'Mettre à jour' : 'Enregistrer' }}</button>
-            <button type="button" class="btn btn-secondary" (click)="toggleAddForm()">Annuler</button>
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-check"></i>
+              {{ editingAddress ? 'Mettre à jour' : 'Enregistrer' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="toggleAddForm()">
+              <i class="fas fa-times"></i>
+              Annuler
+            </button>
           </div>
         </form>
       </div>

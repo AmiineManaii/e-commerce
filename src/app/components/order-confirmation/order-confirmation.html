@@ -1,0 +1,44 @@
+<app-header></app-header>
+
+<section class="confirm-container" *ngIf="!loading">
+  <h2 class="section-title">Confirmation de votre commande</h2>
+
+  @if (error) {
+    <div class="alert alert-danger" role="alert">
+      <strong>Erreur :</strong> {{ error }}
+    </div>
+  } @else {
+    @if (order) {
+      <!-- Carte principale -->
+      <div class="success-card">
+        <div class="check-icon">✓</div>
+        <h3 class="thank-you">Merci pour votre achat !</h3>
+
+        <!-- Détails de la commande -->
+        <div class="order-summary">
+          <p>
+            <span class="label">Numéro de commande :</span>
+            <span class="value">#{{ order.id }}</span>
+          </p>
+          <p>
+            <span class="label">Date :</span>
+            <span class="value">{{ order.date | date:'short' }}</span>
+          </p>
+          <p>
+            <span class="label">Montant total :</span>
+            <span class="value price">{{ order.total }} DT</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" [routerLink]="['/user/orders']">Voir mes commandes</a>
+        <a class="btn secondary" [routerLink]="['/produits']">Continuer mes achats</a>
+      </div>
+    }
+  }
+</section>
+
+
+
+<app-footer></app-footer>

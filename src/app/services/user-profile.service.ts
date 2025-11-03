@@ -79,7 +79,7 @@ export class UserProfileService {
     return this.http.get<Order[]>(`${this.apiUrl}/orders?userId=${userId}`);
   }
 
-  getOrderDetails(orderId: number): Observable<Order> {
+  getOrderDetails(orderId: string): Observable<Order> {
     return this.http.get<Order>(`${this.apiUrl}/orders/${orderId}`);
   }
 

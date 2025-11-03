@@ -2,24 +2,55 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
-  padding: 20px;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(0, 198, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 
 .register-card {
   width: 100%;
   max-width: 600px;
-  padding: 30px;
-  border-radius: 12px;
-  background-color: #1e1e1e;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  padding: 2.5rem;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(30, 30, 46, 0.95), rgba(26, 26, 38, 0.98));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(0, 198, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   color: #f0f0f0;
+  position: relative;
+  z-index: 1;
 
   h2 {
     text-align: center;
-    margin-bottom: 30px;
-    color: #82aaff;
-    font-size: 2em;
+    margin-bottom: 2rem;
+    background: linear-gradient(90deg, #00c6ff, #0070f3, #ff00ff, #ff8c00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 300% 300%;
+    animation: gradientAnimation 6s ease infinite;
+    letter-spacing: 1px;
+    font-size: 2.5rem;
+    font-weight: 700;
+
+    @keyframes gradientAnimation {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
   }
 
   .form-row {
@@ -48,17 +79,24 @@
 
     input, textarea {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #555;
-      border-radius: 8px;
-      background-color: #333;
+      padding: 0.875rem 1rem;
+      border: 2px solid rgba(0, 198, 255, 0.3);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
       color: #f0f0f0;
       font-size: 1em;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
 
       &:focus {
         outline: none;
-        border-color: #82aaff;
-        box-shadow: 0 0 0 0.2rem rgba(130, 170, 255, 0.35);
+        border-color: #00c6ff;
+        box-shadow: 0 0 20px rgba(0, 198, 255, 0.3);
+        background: rgba(255, 255, 255, 0.12);
       }
     }
 
@@ -76,41 +114,81 @@
 
   button {
     width: 100%;
-    padding: 12px;
-    background-color: #82aaff;
-    color: #1e1e1e;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #00c6ff, #0070f3);
+    color: #000;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 1.1em;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 198, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 
-    &:hover {
-      background-color: #6a9eff;
-      transform: translateY(-2px);
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, #00d4ff, #0080ff);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(0, 198, 255, 0.6);
     }
 
     &:disabled {
-      background-color: #555555;
+      background: rgba(85, 85, 85, 0.3);
       cursor: not-allowed;
       color: #aaaaaa;
       transform: none;
+      box-shadow: none;
     }
   }
 
   .login-link {
     text-align: center;
-    margin-top: 20px;
-    font-size: 0.9em;
+    margin-top: 1.5rem;
+    font-size: 0.95em;
+    color: rgba(255, 255, 255, 0.7);
 
     a {
-      color: #82aaff;
+      color: #00c6ff;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
+      transition: all 0.3s ease;
 
       &:hover {
+        color: #00d4ff;
         text-decoration: underline;
       }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .register-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .register-card {
+    padding: 2rem 1.5rem;
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .register-card {
+    padding: 1.5rem 1rem;
+
+    h2 {
+      font-size: 1.75rem;
+    }
+
+    .form-row {
+      flex-direction: column;
     }
   }
 }

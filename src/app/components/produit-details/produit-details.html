@@ -48,45 +48,66 @@
     </div>
 
     <div class="product-info">
-
-
       <p class="description">{{ produit.description }}</p>
 
-      <p class="price">{{ produit.price }} DT</p>
+      <div class="price-section">
+        <span class="price-label">Prix</span>
+        <span class="price">{{ produit.price }} DT</span>
+      </div>
 
-      <p class="rating">Note: {{ produit.rating }} / 5</p>
+      <div class="rating-section">
+        @for (star of [1,2,3,4,5]; track star; let idx = $index) {
+          <i class="fa-star" [ngClass]="idx < (produit.rating || 0) ? 'fas text-warning' : 'far'"></i>
+        }
+        <span class="rating-value">{{ produit.rating != null ? produit.rating.toFixed(1) : 'N/A' }}</span>
+      </div>
 
-      <p class="release-date">Date de sortie: {{ produit.release_date }}</p>
+      <p class="release-date">Date de sortie: {{ produit.release_date | date:'dd/MM/yyyy' }}</p>
 
-
-      <p class="stock-availability">Disponibilité: @if (produit.stock > 0) { En stock ({{ produit.stock }}) } @else { Rupture de stock }</p>
-
+      <p class="stock-availability" [ngClass]="{'out-of-stock': produit.stock <= 0}">
+        @if (produit.stock > 0) { 
+          En stock ({{ produit.stock }} disponibles)
+        } @else { 
+          Rupture de stock 
+        }
+      </p>
 
       <div class="quantity-selector">
         <label for="quantity">Quantité:</label>
         <input type="number" id="quantity" value="1" min="1" [max]="produit.stock" #quantityInput>
       </div>
 
-      <button class="add-to-cart-button" (click)="addToCart(quantityInput.valueAsNumber)">Ajouter au panier</button>
-      <button class="add-to-cart-button" style="margin-left:10px; background-color:#dc3545; color:#fff" (click)="addToWishlist()" [disabled]="wishlistLoading">
-        <i class="fas fa-heart"></i> {{ wishlistLoading ? 'Ajout...' : 'Ajouter à la liste de souhaits' }}
-      </button>
+      <div class="actions-group">
+        <button class="add-to-cart-button" (click)="addToCart(quantityInput.valueAsNumber)">
+          <i class="fas fa-shopping-cart"></i>
+          Ajouter au panier
+        </button>
+        <button class="add-to-cart-button btn-wishlist" (click)="addToWishlist()" [disabled]="wishlistLoading">
+          <i class="fas fa-heart"></i>
+          {{ wishlistLoading ? 'Ajout...' : 'Ajouter à la liste de souhaits' }}
+        </button>
+      </div>
 
       @if (wishlistSuccess) {
-        <div class="alert alert-success" style="margin-top:10px">{{ wishlistSuccess }}</div>
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i>
+          {{ wishlistSuccess }}
+        </div>
       }
       @if (wishlistError) {
-        <div class="alert alert-danger" style="margin-top:10px">{{ wishlistError }}</div>
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ wishlistError }}
+        </div>
       }
     </div>
 
 
   } @else if (error) {
-
     <div class="alert alert-danger" role="alert">
+      <i class="fas fa-exclamation-circle"></i>
       {{ error }}
     </div>
-
   } @else {
     <div class="loading-message">
       Chargement des détails du produit...
@@ -116,7 +137,7 @@
 
             <p>{{ similarProduct.price }} DT</p>
             
-            <a [routerLink]="['/produit', similarProduct.id]">Voir les détails</a>
+            <a [routerLink]="['/produitDetails', similarProduct.id]">Voir les détails</a>
           </div>
         }
       </div>

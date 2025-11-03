@@ -4,6 +4,9 @@ import { RouterModule } from '@angular/router';
 import { Order, User } from '../../../Models/user.model';
 import { UserProfileService } from '../../../services/user-profile.service';
 import { AuthService } from '../../../services/auth.service';
+import { GameService } from '../../../services/game.service';
+import { Observable, of } from 'rxjs';
+import { Game } from '../../../Models/game.model';
 
 @Component({
   selector: 'app-orders',
@@ -15,11 +18,12 @@ import { AuthService } from '../../../services/auth.service';
 export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   currentUser: User | null = null;
+  games: Game[] = [];
   loading = true;
   error = '';
 
 
-  constructor(private userProfileService: UserProfileService, private authService: AuthService) {}
+  constructor(private userProfileService: UserProfileService, private authService: AuthService,private gameService: GameService) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
@@ -40,6 +44,7 @@ export class OrdersComponent implements OnInit {
         console.error(err);
       }
     });
+    this.loadgames();
   }
 
   getStatusLabel(status: string): string {
@@ -58,5 +63,21 @@ export class OrdersComponent implements OnInit {
       case 'cancelled': return 'status-cancelled';
       default: return '';
     }
+  }
+
+
+
+  loadgames() {
+    this.gameService.getAllGames().subscribe({
+      next: (games) => {
+        this.games = games;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des jeux :', err);
+      }
+    });
+  }
+  getGameTitle(gameId: number) {
+    return this.games.find(game => game.id === gameId)?.title || '';
   }
 }

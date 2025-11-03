@@ -54,6 +54,7 @@ export class RegisterComponent {
         this.router.navigate(['/']);
       },
       error: (error) => {
+        console.log(error.message)
         this.errorMessage = error.message || 'Une erreur est survenue lors de l\'inscription';
         this.isSubmitting = false;
       }

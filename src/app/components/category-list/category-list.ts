@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { Genre } from '../../Models/game.model';
 
@@ -13,7 +14,10 @@ import { Genre } from '../../Models/game.model';
 export class CategoryList implements OnInit {
   categories: string[] = [];
 
-  constructor(private gameService: GameService) { }
+  constructor(
+    private gameService: GameService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.gameService.getAllGames().subscribe(games => {
@@ -28,7 +32,7 @@ export class CategoryList implements OnInit {
   }
 
   onCategoryClick(category: string): void {
-    // Navigate to the games page with the selected category as a query parameter
-    //navigator.navigate(['/games'], { queryParams: { category } });
+    // Navigate to the products page with the selected category as a query parameter
+    this.router.navigate(['/produits'], { queryParams: { category } });
   }
 }

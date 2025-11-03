@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { Game } from '../../Models/game.model';
@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { UserProfileService } from '../../services/user-profile.service';
 import { User } from '../../Models/user.model';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-produit-details',
@@ -18,7 +19,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './produit-details.html',
   styleUrl: './produit-details.scss'
 })
-export class ProduitDetailsComponent implements OnInit {
+export class ProduitDetailsComponent implements OnInit, OnDestroy {
   produit: Game | undefined;
   currentUser:User|null=null;
   error: string = '';
@@ -35,7 +36,8 @@ export class ProduitDetailsComponent implements OnInit {
     private gameService: GameService,
     private sanitizer: DomSanitizer,
     private userProfileService: UserProfileService,
-    private authService:AuthService
+    private authService: AuthService,
+    private cartService: CartService
   ) { }
 
   ngOnInit(): void {
@@ -133,8 +135,15 @@ export class ProduitDetailsComponent implements OnInit {
 
   addToCart(quantity: number): void {
     if (this.produit) {
-      console.log(`Added ${quantity} of ${this.produit.title} to cart.`);
-      // Here you would typically add logic to interact with a cart service
+      this.cartService.addToCart(this.produit, quantity).subscribe({
+        next: () => {
+          alert('Ajouté au panier: ' + this.produit!.title + ' (x' + quantity + ')');
+        },
+        error: (error) => {
+          console.error('Erreur lors de l\'ajout au panier:', error);
+          alert('Erreur lors de l\'ajout au panier. Veuillez réessayer.');
+        }
+      });
     }
   }
 

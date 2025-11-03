@@ -65,6 +65,14 @@ export class Banner implements OnInit {
   
 
   addToCart(game: Game): void {
-    this.cartService.addToCart(game, 1);
+    this.cartService.addToCart(game, 1).subscribe({
+      next: () => {
+        alert('Ajouté au panier: ' + game.title);
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'ajout au panier:', error);
+        alert('Erreur lors de l\'ajout au panier. Veuillez réessayer.');
+      }
+    });
   }
 }

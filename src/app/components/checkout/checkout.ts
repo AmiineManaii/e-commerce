@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { Header } from '../components/header/header';
-import { Footer } from '../components/footer/footer';
-import { CartService } from '../services/cart.service';
-import { UserProfileService } from '../services/user-profile.service';
-import { AuthService } from '../services/auth.service';
-import { CartItem, CartSummary } from '../Models/cart-item.model';
-import { Address, Order, OrderItem, User } from '../Models/user.model';
+import { Header } from '../header/header';
+import { Footer } from '../footer/footer';
+import { CartService } from '../../services/cart.service';
+import { UserProfileService } from '../../services/user-profile.service';
+import { AuthService } from '../../services/auth.service';
+import { CartItem, CartSummary } from '../../Models/cart-item.model';
+import { Address, Order, OrderItem, User } from '../../Models/user.model';
 
 @Component({
   selector: 'app-checkout',
@@ -60,7 +60,9 @@ export class CheckoutComponent implements OnInit {
       next: (items) => {
         this.cartItems = items;
         this.updateSummary(items);
-        this.loadAddresses(this.currentUser!.id!);
+        if (this.currentUser && this.currentUser.id) {
+          this.loadAddresses(this.currentUser.id);
+        }
       },
       error: (err) => {
         this.error = 'Erreur lors du chargement du panier';
@@ -98,7 +100,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   confirmOrder(): void {
-    if (!this.currentUser?.id) { return; }
+    if (!this.currentUser || !this.currentUser.id) { return; }
     if (this.cartItems.length === 0) {
       alert('Votre panier est vide');
       return;
@@ -119,7 +121,7 @@ export class CheckoutComponent implements OnInit {
     }));
 
     const order: Order = {
-      userId: this.currentUser.id!,
+      userId: this.currentUser.id,
       date: new Date().toISOString(),
       items,
       total: this.cartSummary.total,
@@ -133,18 +135,18 @@ export class CheckoutComponent implements OnInit {
         this.cartService.clearCart().subscribe({
           next: () => {
             this.router.navigate(['/order-confirmation', created.id]);
+            
           },
-          error: (err) => {
-            console.error('Erreur lors du vidage du panier après commande', err);
-            this.router.navigate(['/order-confirmation', created.id]);
+          error: (error) => {
+            console.error('Erreur lors de la navigation vers la confirmation de commande :', error);
           }
         });
       },
-      error: (err) => {
+      error: (error) => {
+        console.error('Erreur lors de la création de la commande :', error);
         this.error = 'Erreur lors de la création de la commande';
-        console.error(err);
         this.placingOrder = false;
       }
-    });
+    }); 
   }
 }
