@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of, throwError } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
 import { CartItem, CartSummary } from '../Models/cart-item.model';
 import { Game } from '../Models/game.model';
 
@@ -20,12 +20,16 @@ export class CartService {
 
   loadCartFromServer(): void {
     this.http.get<CartItem[]>(this.apiUrl).subscribe({
+
       next: (items) => {
         this.cartItemsSubject.next(items || []);
+      
       },
+
       error: (error) => {
         console.error('Error loading cart:', error);
         this.cartItemsSubject.next([]);
+      
       }
     });
   }
@@ -35,44 +39,47 @@ export class CartService {
     return this.cartItems$;
   }
 
-  // Ajouter un article au panier
+  
+
   addToCart(game: Game, quantity: number = 1): Observable<CartItem> {
+
     const existingItem = this.findCartItemByGameId(game.id);
     
     if (existingItem) {
-      // Mettre à jour la quantité si l'article existe déjà
+
+
       return this.updateQuantity(existingItem.id, existingItem.quantity + quantity);
     }
 
-    // Créer un nouvel article
     const newItem: CartItem = {
-      id: Date.now(), // ID temporaire, le serveur peut le remplacer
+      id: Date.now(), 
       game: game,
       quantity: quantity,
       subtotal: game.price * quantity,
       createdAt: new Date().toISOString()
     };
 
+
     return this.http.post<CartItem>(this.apiUrl, newItem).pipe(
+      
       tap((item) => {
         const currentItems = this.cartItemsSubject.value;
         this.cartItemsSubject.next([...currentItems, item]);
       }),
+
       catchError((error) => {
         console.error('Error adding to cart:', error);
-        // En cas d'erreur, ajouter localement quand même
-        const currentItems = this.cartItemsSubject.value;
-        this.cartItemsSubject.next([...currentItems, newItem]);
-        return of(newItem);
+        alert(error.message);
+        return throwError(() => error);
       })
     );
   }
 
-  // Mettre à jour la quantité d'un article
+
   updateQuantity(itemId: number, quantity: number): Observable<CartItem> {
     if (quantity <= 0) {
       this.removeFromCart(itemId).subscribe();
-      // Retourner un observable vide (ne devrait pas arriver car on vérifie avant)
+
       return of({
         id: itemId,
         game: {} as Game,
@@ -95,6 +102,7 @@ export class CartService {
       subtotal: item.game.price * quantity
     };
 
+
     return this.http.patch<CartItem>(`${this.apiUrl}/${itemId}`, updatedItem).pipe(
       tap((updated) => {
         const items = currentItems.map(i => i.id === itemId ? updated : i);
@@ -109,7 +117,6 @@ export class CartService {
     );
   }
 
-  // Supprimer un article du panier
   removeFromCart(itemId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${itemId}`).pipe(
       tap(() => {
@@ -119,33 +126,40 @@ export class CartService {
       }),
       catchError((error) => {
         console.error('Error removing from cart:', error);
-        const currentItems = this.cartItemsSubject.value;
-        const items = currentItems.filter(i => i.id !== itemId);
-        this.cartItemsSubject.next(items);
-        return of(void 0);
+        alert(error.message);
+        return throwError(() => error);
+
       })
     );
   }
 
-  // Vider le panier
+
+
   clearCart(): Observable<void> {
-    return this.http.delete<void>(this.apiUrl).pipe(
-      tap(() => {
-        this.cartItemsSubject.next([]);
-      }),
-      catchError((error) => {
-        console.error('Error clearing cart:', error);
-        this.cartItemsSubject.next([]);
-        return of(void 0);
-      })
-    );
-  }
 
-  // Obtenir le récapitulatif du panier
+  return this.http.get<CartItem[]>(this.apiUrl).pipe(
+    tap((items) => {
+      items.forEach((item) => {
+        this.http.delete(`${this.apiUrl}/${item.id}`).subscribe();
+      });
+      this.cartItemsSubject.next([]);
+      alert('Tous les éléments ont été supprimés');
+    }),
+    map(() => void 0),
+    catchError((error) => {
+      console.error('Erreur lors du vidage du panier :', error);
+      return of(void 0);
+    })
+  );
+}
+
+
+
+
   getCartSummary(): CartSummary {
     const items = this.cartItemsSubject.value;
     const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-    const shippingFee = subtotal > 0 ? 15 : 0; // Frais de livraison de 15 DT
+    const shippingFee = subtotal > 0 ? 15 : 0; 
     const total = subtotal + shippingFee;
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -157,12 +171,12 @@ export class CartService {
     };
   }
 
-  // Obtenir le nombre total d'articles dans le panier
+
   getTotalItems(): number {
     return this.cartItemsSubject.value.reduce((sum, item) => sum + item.quantity, 0);
   }
 
-  // Trouver un article par ID de jeu
+
   private findCartItemByGameId(gameId: number): CartItem | undefined {
     return this.cartItemsSubject.value.find(item => item.game.id === gameId);
   }

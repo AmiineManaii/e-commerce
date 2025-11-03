@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { CartItem, CartSummary } from '../../Models/cart-item.model';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -14,7 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './cart.html',
   styleUrl: './cart.scss'
 })
-export class CartComponent implements OnInit, OnDestroy {
+export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
   cartSummary: CartSummary = {
     subtotal: 0,
@@ -22,22 +21,15 @@ export class CartComponent implements OnInit, OnDestroy {
     total: 0,
     itemCount: 0
   };
-  private destroy$ = new Subject<void>();
 
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.cartService.cartItems$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(items => {
-        this.cartItems = items;
-        this.updateSummary();
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    
+    this.cartService.cartItems$.subscribe(items => {
+      this.cartItems = items;
+      this.updateSummary();
+    });
   }
 
   updateSummary(): void {
@@ -52,7 +44,9 @@ export class CartComponent implements OnInit, OnDestroy {
 
   removeItem(itemId: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet article du panier ?')) {
-      this.cartService.removeFromCart(itemId).subscribe();
+      this.cartService.removeFromCart(itemId).subscribe(() => {
+        this.updateSummary();
+      });
     }
   }
 
@@ -67,9 +61,9 @@ export class CartComponent implements OnInit, OnDestroy {
       alert('Votre panier est vide');
       return;
     }
-    // Navigation vers la page de paiement (à implémenter)
+  
     alert('Redirection vers la page de paiement...');
-    // this.router.navigate(['/checkout']);
+ 
   }
 
   getTotalItems(): number {

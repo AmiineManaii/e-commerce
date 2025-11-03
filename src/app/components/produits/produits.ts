@@ -137,7 +137,7 @@ export class Produits implements OnInit {
     this.cartService.addToCart(produit, 1).subscribe({
       next: () => {
         // Optionnel: afficher une notification de succès
-        console.log('Produit ajouté au panier:', produit.title);
+        alert('Produit ajouté au panier: ' + produit.title);
       },
       error: (error) => {
         console.error('Erreur lors de l\'ajout au panier:', error);
