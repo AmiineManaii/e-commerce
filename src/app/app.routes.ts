@@ -12,6 +12,8 @@ import { UserProfileComponent } from './components/user-profile/user-profile';
 import { ProfileComponent } from './components/user-profile/profile/profile';
 import { OrdersComponent } from './components/user-profile/orders/orders';
 import { WishlistComponent } from './components/user-profile/wishlist/wishlist';
+import { CheckoutComponent } from './checkout/checkout';
+import { OrderConfirmationComponent } from './order-confirmation/order-confirmation';
 
 
 export const routes: Routes = [
@@ -20,6 +22,8 @@ export const routes: Routes = [
   { path: 'produitDetails/:id', component: ProduitDetailsComponent},
   { path: 'search', component: SearchComponent },
   { path: 'cart', component: CartComponent },//,canActivate: [authGuard] },
+  { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] },
+  { path: 'order-confirmation/:id', component: OrderConfirmationComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent, canActivate: [nonAuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [nonAuthGuard] },
   { path: 'user', component: UserProfileComponent, canActivate: [authGuard],

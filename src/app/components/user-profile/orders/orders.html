@@ -2,45 +2,57 @@
   <div class="orders-card">
     <h2>Historique des commandes</h2>
     
-    <div *ngIf="loading" class="loading">
-      Chargement des commandes...
-    </div>
+    @if (loading) {
+      <div class="loading">
+        Chargement des commandes...
+      </div>
+    }
     
-    <div *ngIf="error" class="alert alert-danger">
-      {{ error }}
-    </div>
+    @if (error) {
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    }
     
-    <div *ngIf="!loading && !error && orders.length === 0" class="no-orders">
-      <p>Vous n'avez pas encore passé de commande.</p>
-    </div>
+    @if (!loading && !error && orders.length === 0) {
+      <div class="no-orders">
+        <p>Vous n'avez pas encore passé de commande.</p>
+      </div>
+    }
     
-    <div *ngIf="!loading && orders.length > 0" class="orders-list">
-      <div class="order-item" *ngFor="let order of orders">
-        <div class="order-header">
-          <div class="order-info">
-            <span class="order-number">Commande #{{ order.id }}</span>
-            <span class="order-date">{{ order.date | date:'dd/MM/yyyy' }}</span>
-          </div>
-          <div class="order-status" [ngClass]="getStatusClass(order.status)">
-            {{ getStatusLabel(order.status) }}
-          </div>
-        </div>
-        
-        <div class="order-details">
-          <div class="order-items">
-            <div class="item" *ngFor="let item of order.items">
-              <span class="item-quantity">{{ item.quantity }}x</span>
-              <span class="item-name">Jeu #{{ item.gameId }}</span>
-              <span class="item-price">{{ item.price | currency:'EUR' }}</span>
+    @if (!loading && orders.length > 0) {
+      <div class="orders-list">
+        @for (order of orders; track order.id) {
+          <div class="order-item">
+            <div class="order-header">
+              <div class="order-info">
+                <span class="order-number">Commande #{{ order.id }}</span>
+                <span class="order-date">{{ order.date | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="order-status" [ngClass]="getStatusClass(order.status)">
+                {{ getStatusLabel(order.status) }}
+              </div>
+            </div>
+            
+            <div class="order-details">
+              <div class="order-items">
+                @for (item of order.items; track item.gameId) {
+                  <div class="item">
+                    <span class="item-quantity">{{ item.quantity }}x</span>
+                    <span class="item-name">Jeu #{{ item.gameId }}</span>
+                    <span class="item-price">{{ item.price | currency:'EUR' }}</span>
+                  </div>
+                }
+              </div>
+              
+              <div class="order-total">
+                <span>Total:</span>
+                <span class="total-amount">{{ order.total | currency:'EUR' }}</span>
+              </div>
             </div>
           </div>
-          
-          <div class="order-total">
-            <span>Total:</span>
-            <span class="total-amount">{{ order.total | currency:'EUR' }}</span>
-          </div>
-        </div>
+        }
       </div>
-    </div>
+    }
   </div>
 </div>

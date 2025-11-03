@@ -83,6 +83,11 @@ export class UserProfileService {
     return this.http.get<Order>(`${this.apiUrl}/orders/${orderId}`);
   }
 
+ 
+  createOrder(order: Order): Observable<Order> {
+    return this.http.post<Order>(`${this.apiUrl}/orders`, order);
+  }
+
 
   getWishlist(userId: number): Observable<number[]> {
     return new Observable(observer => {

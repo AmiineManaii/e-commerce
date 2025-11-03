@@ -1,0 +1,99 @@
+<app-header></app-header>
+
+<section class="checkout-container" *ngIf="!loading">
+  <h2 class="section-title">Checkout</h2>
+
+  @if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+  }
+
+  <div class="grid">
+    <!-- Récapitulatif de la commande -->
+    <div class="card">
+      <h3>Récapitulatif</h3>
+      @if (cartItems.length > 0) {
+        <ul class="items">
+          @for (item of cartItems; track $index) {
+            <li class="item">
+              <img [src]="item.game.cover_image" [alt]="item.game.title" />
+              <div class="details">
+                <div class="title">{{ item.game.title }}</div>
+                <div class="meta">Qté: {{ item.quantity }} • Prix: {{ item.game.price | currency:'EUR':'symbol' }}</div>
+                <div class="subtotal">Sous-total: {{ item.subtotal | currency:'EUR':'symbol' }}</div>
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p>Votre panier est vide.</p>
+      }
+      <div class="summary">
+        <div>Sous-total: <strong>{{ cartSummary.subtotal | currency:'EUR':'symbol' }}</strong></div>
+        <div>Livraison: <strong>{{ cartSummary.shippingFee | currency:'EUR':'symbol' }}</strong></div>
+        <div>Total: <strong>{{ cartSummary.total | currency:'EUR':'symbol' }}</strong></div>
+        <div>Articles: <strong>{{ cartSummary.itemCount }}</strong></div>
+      </div>
+    </div>
+
+    <!-- Adresse de livraison -->
+    <div class="card">
+      <h3>Adresse de livraison</h3>
+      @if (addresses.length > 0) {
+        <div class="addresses">
+          @for (addr of addresses; track addr.id) {
+            <label class="address">
+              <input type="radio" name="address" [value]="addr.id" [(ngModel)]="selectedAddressId" />
+              <div>
+                <div class="name">{{ addr.nom }} @if (addr.default) { <span class="badge">par défaut</span> }</div>
+                <div>{{ addr.rue }}, {{ addr.ville }}, {{ addr.codePostal }}, {{ addr.pays }}</div>
+              </div>
+            </label>
+          }
+        </div>
+      } @else {
+        <p>Aucune adresse trouvée. Ajoutez une adresse depuis votre profil.</p>
+      }
+    </div>
+
+    <!-- Mode de livraison -->
+    <div class="card">
+      <h3>Mode de livraison</h3>
+      <div class="shipping">
+        @for (opt of shippingOptions; track opt.id) {
+          <label class="shipping-option">
+            <input type="radio" name="shipping" [value]="opt.id" [(ngModel)]="selectedShippingId" (change)="onShippingChange()" />
+            <span>{{ opt.label }}</span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- Paiement (mock) -->
+    <div class="card">
+      <h3>Paiement</h3>
+      <form (ngSubmit)="confirmOrder()" novalidate>
+        <div class="form-row">
+          <label>Nom sur la carte</label>
+          <input type="text" [(ngModel)]="payment.name" name="name" required />
+        </div>
+        <div class="form-row">
+          <label>Numéro de carte</label>
+          <input type="text" [(ngModel)]="payment.cardNumber" name="cardNumber" placeholder="4111 1111 1111 1111" required />
+        </div>
+        <div class="form-row two">
+          <div>
+            <label>Expiration</label>
+            <input type="text" [(ngModel)]="payment.expiry" name="expiry" placeholder="MM/YY" required />
+          </div>
+          <div>
+            <label>CVV</label>
+            <input type="text" [(ngModel)]="payment.cvv" name="cvv" placeholder="123" required />
+          </div>
+        </div>
+        <button class="confirm" type="submit" [disabled]="placingOrder">Confirmer la commande</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>

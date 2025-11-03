@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { CartItem, CartSummary } from '../../Models/cart-item.model';
 import { Header } from '../header/header';
@@ -23,7 +23,7 @@ export class CartComponent implements OnInit {
     itemCount: 0
   };
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadCartItems();
@@ -104,13 +104,14 @@ export class CartComponent implements OnInit {
     }
   }
 
+
   proceedToCheckout(): void {
     const currentItems = this.cartItems$.value;
     if (currentItems.length === 0) {
       alert('Votre panier est vide');
       return;
     }
-    alert('Redirection vers la page de paiement...');
+    this.router.navigate(['/checkout']);
   }
 
   getTotalItems(): number {

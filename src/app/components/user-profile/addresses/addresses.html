@@ -2,86 +2,104 @@
   <div class="addresses-card">
     <h2>Mes adresses</h2>
     
-    <div *ngIf="successMessage" class="alert alert-success">
-      {{ successMessage }}
-    </div>
+    @if (successMessage) {
+      <div class="alert alert-success">
+        {{ successMessage }}
+      </div>
+    }
     
-    <div *ngIf="error" class="alert alert-danger">
-      {{ error }}
-    </div>
+    @if (error) {
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    }
     
-    <div *ngIf="loading" class="loading">
-      Chargement des adresses...
-    </div>
+    @if (loading) {
+      <div class="loading">
+        Chargement des adresses...
+      </div>
+    }
     
-    <div *ngIf="!loading && !addresses.length && !showAddForm" class="no-addresses">
-      <p>Vous n'avez pas encore enregistré d'adresse.</p>
-      <button class="btn btn-primary" (click)="toggleAddForm()">Ajouter une adresse</button>
-    </div>
-    
-    <div *ngIf="!loading && addresses.length > 0 && !showAddForm" class="address-list">
-      <div class="address-actions">
+    @if (!loading && !addresses.length && !showAddForm) {
+      <div class="no-addresses">
+        <p>Vous n'avez pas encore enregistré d'adresse.</p>
         <button class="btn btn-primary" (click)="toggleAddForm()">Ajouter une adresse</button>
       </div>
-      
-      <div class="address-item" *ngFor="let address of addresses">
-        <div class="address-content">
-          <div class="address-header">
-            <h3>{{ address.nom }}</h3>
-            <span *ngIf="address.default" class="default-badge">Par défaut</span>
-          </div>
-          <div class="address-details">
-            <p>{{ address.rue }}</p>
-            <p>{{ address.codePostal }} {{ address.ville }}</p>
-            <p>{{ address.pays }}</p>
-          </div>
-        </div>
-        <div class="address-buttons">
-          <button class="btn btn-sm btn-info" (click)="editAddress(address)">Modifier</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteAddress(address.id!)">Supprimer</button>
-          <button *ngIf="!address.default" class="btn btn-sm btn-secondary" (click)="setAsDefault(address.id!)">
-            Définir par défaut
-          </button>
-        </div>
-      </div>
-    </div>
+    }
     
-    <div *ngIf="showAddForm" class="address-form">
-      <h3>{{ editingAddress ? 'Modifier l\'adresse' : 'Ajouter une adresse' }}</h3>
-      
-      <form (ngSubmit)="editingAddress ? updateAddress() : saveAddress()">
-        <div class="form-group">
-          <label for="nom">Nom de l'adresse</label>
-          <input type="text" id="nom" name="nom" class="form-control" [(ngModel)]="newAddress.nom" required>
+    @if (!loading && addresses.length > 0 && !showAddForm) {
+      <div class="address-list">
+        <div class="address-actions">
+          <button class="btn btn-primary" (click)="toggleAddForm()">Ajouter une adresse</button>
         </div>
         
-        <div class="form-group">
-          <label for="rue">Rue</label>
-          <input type="text" id="rue" name="rue" class="form-control" [(ngModel)]="newAddress.rue" required>
-        </div>
+        @for (address of addresses; track address.id) {
+          <div class="address-item">
+            <div class="address-content">
+              <div class="address-header">
+                <h3>{{ address.nom }}</h3>
+                @if (address.default) {
+                  <span class="default-badge">Par défaut</span>
+                }
+              </div>
+              <div class="address-details">
+                <p>{{ address.rue }}</p>
+                <p>{{ address.codePostal }} {{ address.ville }}</p>
+                <p>{{ address.pays }}</p>
+              </div>
+            </div>
+            <div class="address-buttons">
+              <button class="btn btn-sm btn-info" (click)="editAddress(address)">Modifier</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteAddress(address.id!)">Supprimer</button>
+              @if (!address.default) {
+                <button class="btn btn-sm btn-secondary" (click)="setAsDefault(address.id!)">
+                  Définir par défaut
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+    
+    @if (showAddForm) {
+      <div class="address-form">
+        <h3>{{ editingAddress ? 'Modifier l\'adresse' : 'Ajouter une adresse' }}</h3>
         
-        <div class="form-row">
+        <form (ngSubmit)="editingAddress ? updateAddress() : saveAddress()">
           <div class="form-group">
-            <label for="codePostal">Code postal</label>
-            <input type="text" id="codePostal" name="codePostal" class="form-control" [(ngModel)]="newAddress.codePostal" required>
+            <label for="nom">Nom de l'adresse</label>
+            <input type="text" id="nom" name="nom" class="form-control" [(ngModel)]="newAddress.nom" required>
           </div>
           
           <div class="form-group">
-            <label for="ville">Ville</label>
-            <input type="text" id="ville" name="ville" class="form-control" [(ngModel)]="newAddress.ville" required>
+            <label for="rue">Rue</label>
+            <input type="text" id="rue" name="rue" class="form-control" [(ngModel)]="newAddress.rue" required>
           </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="pays">Pays</label>
-          <input type="text" id="pays" name="pays" class="form-control" [(ngModel)]="newAddress.pays" required>
-        </div>
-        
-        <div class="form-buttons">
-          <button type="submit" class="btn btn-success">{{ editingAddress ? 'Mettre à jour' : 'Enregistrer' }}</button>
-          <button type="button" class="btn btn-secondary" (click)="toggleAddForm()">Annuler</button>
-        </div>
-      </form>
-    </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="codePostal">Code postal</label>
+              <input type="text" id="codePostal" name="codePostal" class="form-control" [(ngModel)]="newAddress.codePostal" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="ville">Ville</label>
+              <input type="text" id="ville" name="ville" class="form-control" [(ngModel)]="newAddress.ville" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="pays">Pays</label>
+            <input type="text" id="pays" name="pays" class="form-control" [(ngModel)]="newAddress.pays" required>
+          </div>
+          
+          <div class="form-buttons">
+            <button type="submit" class="btn btn-success">{{ editingAddress ? 'Mettre à jour' : 'Enregistrer' }}</button>
+            <button type="button" class="btn btn-secondary" (click)="toggleAddForm()">Annuler</button>
+          </div>
+        </form>
+      </div>
+    }
   </div>
 </div>

@@ -11,10 +11,16 @@
           formControlName="email" 
           placeholder="Votre email"
         >
-        <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors">
-          <span *ngIf="loginForm.get('email')?.errors?.['required']">L'email est requis</span>
-          <span *ngIf="loginForm.get('email')?.errors?.['email']">Format d'email invalide</span>
-        </div>
+        @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
+          <div class="error-message">
+            @if (loginForm.get('email')?.errors?.['required']) {
+              <span>L'email est requis</span>
+            }
+            @if (loginForm.get('email')?.errors?.['email']) {
+              <span>Format d'email invalide</span>
+            }
+          </div>
+        }
       </div>
       
       <div class="form-group">
@@ -25,19 +31,31 @@
           formControlName="password" 
           placeholder="Votre mot de passe"
         >
-        <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors">
-          <span *ngIf="loginForm.get('password')?.errors?.['required']">Le mot de passe est requis</span>
-          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</span>
-        </div>
+        @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
+          <div class="error-message">
+            @if (loginForm.get('password')?.errors?.['required']) {
+              <span>Le mot de passe est requis</span>
+            }
+            @if (loginForm.get('password')?.errors?.['minlength']) {
+              <span>Le mot de passe doit contenir au moins 6 caractères</span>
+            }
+          </div>
+        }
       </div>
       
-      <div class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
       
       <button type="submit" [disabled]="isSubmitting">
-        <span *ngIf="!isSubmitting">Se connecter</span>
-        <span *ngIf="isSubmitting">Connexion en cours...</span>
+        @if (!isSubmitting) {
+          <span>Se connecter</span>
+        }
+        @if (isSubmitting) {
+          <span>Connexion en cours...</span>
+        }
       </button>
     </form>
     

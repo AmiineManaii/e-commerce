@@ -3,12 +3,14 @@
   <div class="sidebar">
     <h2>Mon Espace</h2>
     <nav class="profile-nav">
-      <a *ngFor="let item of navItems" 
-         [routerLink]="[item.path]" 
-         routerLinkActive="active"
-         class="nav-item">
-        {{ item.label }}
-      </a>
+      @for (item of navItems; track item.path) {
+        <a 
+          [routerLink]="[item.path]" 
+          routerLinkActive="active"
+          class="nav-item">
+          {{ item.label }}
+        </a>
+      }
     </nav>
   </div>
   

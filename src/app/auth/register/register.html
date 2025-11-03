@@ -7,62 +7,92 @@
         <div class="form-group">
           <label for="nom">Nom</label>
           <input type="text" id="nom" formControlName="nom" placeholder="Votre nom">
-          <div class="error-message" *ngIf="registerForm.get('nom')?.touched && registerForm.get('nom')?.errors?.['required']">
-            Le nom est requis
-          </div>
+          @if (registerForm.get('nom')?.touched && registerForm.get('nom')?.errors?.['required']) {
+            <div class="error-message">
+              Le nom est requis
+            </div>
+          }
         </div>
         
         <div class="form-group">
           <label for="prenom">Prénom</label>
           <input type="text" id="prenom" formControlName="prenom" placeholder="Votre prénom">
-          <div class="error-message" *ngIf="registerForm.get('prenom')?.touched && registerForm.get('prenom')?.errors?.['required']">
-            Le prénom est requis
-          </div>
+          @if (registerForm.get('prenom')?.touched && registerForm.get('prenom')?.errors?.['required']) {
+            <div class="error-message">
+              Le prénom est requis
+            </div>
+          }
         </div>
       </div>
       
       <div class="form-group">
         <label for="email">Email</label>
         <input type="email" id="email" formControlName="email" placeholder="Votre email">
-        <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
-          <span *ngIf="registerForm.get('email')?.errors?.['required']">L'email est requis</span>
-          <span *ngIf="registerForm.get('email')?.errors?.['email']">Format d'email invalide</span>
-        </div>
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
+          <div class="error-message">
+            @if (registerForm.get('email')?.errors?.['required']) {
+              <span>L'email est requis</span>
+            }
+            @if (registerForm.get('email')?.errors?.['email']) {
+              <span>Format d'email invalide</span>
+            }
+          </div>
+        }
       </div>
       
       <div class="form-group">
         <label for="password">Mot de passe</label>
         <input type="password" id="password" formControlName="password" placeholder="Votre mot de passe">
-        <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
-          <span *ngIf="registerForm.get('password')?.errors?.['required']">Le mot de passe est requis</span>
-          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</span>
-        </div>
+        @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
+          <div class="error-message">
+            @if (registerForm.get('password')?.errors?.['required']) {
+              <span>Le mot de passe est requis</span>
+            }
+            @if (registerForm.get('password')?.errors?.['minlength']) {
+              <span>Le mot de passe doit contenir au moins 6 caractères</span>
+            }
+          </div>
+        }
       </div>
       
       <div class="form-group">
         <label for="confirmPassword">Confirmer le mot de passe</label>
         <input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirmez votre mot de passe">
-        <div class="error-message" *ngIf="registerForm.get('confirmPassword')?.touched">
-          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">La confirmation du mot de passe est requise</span>
-          <span *ngIf="registerForm.errors?.['passwordMismatch']">Les mots de passe ne correspondent pas</span>
-        </div>
+        @if (registerForm.get('confirmPassword')?.touched) {
+          <div class="error-message">
+            @if (registerForm.get('confirmPassword')?.errors?.['required']) {
+              <span>La confirmation du mot de passe est requise</span>
+            }
+            @if (registerForm.errors?.['passwordMismatch']) {
+              <span>Les mots de passe ne correspondent pas</span>
+            }
+          </div>
+        }
       </div>
       
       <div class="form-group">
         <label for="adresse">Adresse</label>
         <textarea id="adresse" formControlName="adresse" placeholder="Votre adresse complète"></textarea>
-        <div class="error-message" *ngIf="registerForm.get('adresse')?.touched && registerForm.get('adresse')?.errors?.['required']">
-          L'adresse est requise
-        </div>
+        @if (registerForm.get('adresse')?.touched && registerForm.get('adresse')?.errors?.['required']) {
+          <div class="error-message">
+            L'adresse est requise
+          </div>
+        }
       </div>
       
-      <div class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
       
       <button type="submit" [disabled]="isSubmitting">
-        <span *ngIf="!isSubmitting">S'inscrire</span>
-        <span *ngIf="isSubmitting">Inscription en cours...</span>
+        @if (!isSubmitting) {
+          <span>S'inscrire</span>
+        }
+        @if (isSubmitting) {
+          <span>Inscription en cours...</span>
+        }
       </button>
     </form>
     
