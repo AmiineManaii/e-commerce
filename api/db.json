@@ -1127,10 +1127,7 @@
       "name": "Amine",
       "email": "amine@example.com",
       "password": "123456",
-      "wishlist": [
-        "1",
-        "15"
-      ],
+      "wishlist": [],
       "nom": "Manai",
       "prenom": "Mohamed Amine",
       "adresse": "Mornaguia"
@@ -1216,6 +1213,26 @@
       "status": "completed",
       "addressId": "c2f1",
       "id": 2
+    },
+    {
+      "userId": "1",
+      "date": "2025-11-04T11:49:43.864Z",
+      "items": [
+        {
+          "gameId": "2",
+          "quantity": 1,
+          "price": 49.99
+        },
+        {
+          "gameId": "32",
+          "quantity": 1,
+          "price": 39.99
+        }
+      ],
+      "total": 104.98,
+      "status": "completed",
+      "addressId": "c2f1",
+      "id": 3
     }
   ],
   "cart": []

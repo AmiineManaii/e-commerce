@@ -6,7 +6,7 @@ export interface User {
   password?: string;
   adresse: string;
   adresses?: Address[];
-  wishlist?: number[]; // IDs des jeux favoris
+  wishlist?: number[];
 }
 
 export interface Address {

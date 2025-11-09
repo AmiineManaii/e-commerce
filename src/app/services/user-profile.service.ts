@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { User, Address, Order } from '../Models/user.model';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserProfileService {
   private apiUrl = 'http://localhost:3000';
+  private wishlistChanged = new Subject<void>();
 
-  constructor(private http: HttpClient,private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
 
   getUserProfile(userId: number): Observable<User> {
@@ -113,6 +113,7 @@ export class UserProfileService {
           if (currentWishlist.includes(gameId)) {
             observer.next({} as User);
             observer.complete();
+
             return;
           }
 
@@ -126,6 +127,7 @@ export class UserProfileService {
             next: (user) => {
               observer.next(user);
               observer.complete();
+              this.wishlistChanged.next();
             },
             error: (error) => {
               observer.error(error);
@@ -154,6 +156,7 @@ export class UserProfileService {
             next: (user) => {
               observer.next(user);
               observer.complete();
+              this.wishlistChanged.next();
             },
             error: (error) => {
               observer.error(error);
@@ -180,4 +183,8 @@ export class UserProfileService {
       });
     });
   }
+  getWishlistChanges(): Observable<void> {
+  return this.wishlistChanged.asObservable();
+}
+
 }

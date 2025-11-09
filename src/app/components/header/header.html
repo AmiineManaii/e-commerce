@@ -1,59 +1,84 @@
-<header class="navbar navbar-expand-lg navbar-dark bg-dark modern-header">
+<header class="navbar navbar-expand-xxl navbar-dark bg-dark modern-header">
   <div class="container-fluid">
     <h4 class="navbar-brand gradient-text">GameMart</h4>
-    <button class="navbar-toggler modern-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler modern-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse modern-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" aria-current="page"><i class="fas fa-home me-1"></i>Home</a>
+          <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" aria-current="page">
+            <i class="fas fa-home me-1"></i>
+            <span class="nav-text">Home</span>
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/produits']" routerLinkActive="active"><i class="fas fa-box me-1"></i>Products</a>
+          <a class="nav-link" [routerLink]="['/produits']" routerLinkActive="active">
+            <i class="fas fa-box me-1"></i>
+            <span class="nav-text">Products</span>
+          </a>
         </li>
       </ul>
+      
       <div class="navbar-actions">
         <div class="search-container">
           <div class="input-group modern-search">
-            <input type="text" class="form-control" placeholder="Rechercher..." aria-label="Rechercher" #searchBox>
+            <input type="text" class="form-control" placeholder="Rechercher..."
+              (keydown.enter)="onSearch(searchBox.value)" aria-label="Rechercher" #searchBox>
             <button class="btn btn-outline-secondary search-btn" type="button" (click)="onSearch(searchBox.value)">
               <i class="fas fa-search"></i>
             </button>
           </div>
         </div>
+        
         <div class="user-actions">
           @if (currentUser) {
-            <div class="dropdown">
-              <a class="nav-link user-icon dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Profil">
-                <i class="fas fa-user-circle"></i>
-                <span class="user-name">{{ currentUser.prenom }}</span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" [routerLink]="['/user/profile']">Mon profil</a></li>
-                <li><a class="dropdown-item" [routerLink]="['/user/orders']">Mes commandes</a></li>
-                <li><a class="dropdown-item" [routerLink]="['/user/wishlist']">Liste de souhaits</a></li>
-                <li><a class="dropdown-item" [routerLink]="['/user/addresses']">Mes adresses</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#" (click)="logout()">Déconnexion</a></li>
-              </ul>
-            </div>
+          <div class="dropdown">
+            <a class="nav-link user-icon dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false" title="Profil">
+              <i class="fas fa-user-circle"></i>
+              <span class="user-name">{{ currentUser.prenom }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" [routerLink]="['/user/profile']">Mon profil</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/user/orders']">Mes commandes</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/user/wishlist']">Liste de souhaits</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/user/addresses']">Mes adresses</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#" (click)="logout()">Déconnexion</a></li>
+            </ul>
+          </div>
+          
+          <a class="nav-link wishlist-icon position-relative" [routerLink]="['/user/wishlist']" title="Wishlist">
+            <i class="fas fa-heart"></i>
+            @if (wishlistItemCount | async ;as count) {
+              @if (count > 0) {
+                <span class="wishlist-badge badge rounded-pill bg-danger">
+                  {{ count }}
+                  <span class="visually-hidden">articles dans la wishlist</span>
+                </span>
+              }
+            }
+          </a>
+
           } @else {
-            <a class="nav-link auth-link" [routerLink]="['/login']" title="Connexion">
-              <i class="fas fa-sign-in-alt"></i>
-              <span>Connexion</span>
-            </a>
-            <a class="nav-link auth-link" [routerLink]="['/register']" title="Inscription">
-              <i class="fas fa-user-plus"></i>
-              <span>Inscription</span>
-            </a>
+          <a class="nav-link auth-link" [routerLink]="['/login']" title="Connexion">
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="auth-text">Connexion</span>
+          </a>
+          <a class="nav-link auth-link" [routerLink]="['/register']" title="Inscription">
+            <i class="fas fa-user-plus"></i>
+            <span class="auth-text">Inscription</span>
+          </a>
           }
+
           <a class="nav-link cart-icon position-relative" [routerLink]="['/cart']" title="Panier">
             <i class="fas fa-shopping-cart"></i>
-            @if (cartItemCount > 0 )  {
-              <span class="cart-badge badge rounded-pill bg-danger">
-                {{ cartItemCount }} <span class="visually-hidden">articles dans le panier</span>
-              </span>
+            @if (cartItemCount > 0 ) {
+            <span class="cart-badge badge rounded-pill bg-danger">
+              {{ cartItemCount }} <span class="visually-hidden">articles dans le panier</span>
+            </span>
             }
           </a>
         </div>
