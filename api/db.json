@@ -518,10 +518,10 @@
       "description": "Incarnez Peter Parker et Miles Morales dans cette aventure arachnéenne épique. Affrontez de nouveaux villains dangereux, explorez New York élargi et maîtrisez de nouvelles capacités dans le combat le plus dynamique de la série.",
       "cover_image": "/assets/games/cover/spiderman2.jpg",
       "images": [
-        "/assets/games/screenshots/spiderman2_1.jpg",
-        "/assets/games/screenshots/spiderman2_2.jpg",
-        "/assets/games/screenshots/spiderman2_3.jpg",
-        "/assets/games/screenshots/spiderman2_4.jpg"
+        "/assets/games/screenshots/spiderman2_1.png",
+        "/assets/games/screenshots/spiderman2_2.png",
+        "/assets/games/screenshots/spiderman2_3.png",
+        "/assets/games/screenshots/spiderman2_4.png"
       ],
       "url_trailer": "https://www.youtube.com/watch?v=qIQ3xNqkVC4",
       "promo": false,
@@ -546,10 +546,10 @@
       "description": "Explorez l'Ouest interdit dans cette suite épique d'Horizon Zero Dawn. Aloy découvre de nouvelles terres, affronte des machines plus dangereuses et révèle des secrets qui pourraient changer le destin du monde.",
       "cover_image": "/assets/games/cover/horizon2.jpg",
       "images": [
-        "/assets/games/screenshots/horizon2_1.jpg",
-        "/assets/games/screenshots/horizon2_2.jpg",
-        "/assets/games/screenshots/horizon2_3.jpg",
-        "/assets/games/screenshots/horizon2_4.jpg"
+        "/assets/games/screenshots/horizon2_1.png",
+        "/assets/games/screenshots/horizon2_2.png",
+        "/assets/games/screenshots/horizon2_3.png",
+        "/assets/games/screenshots/horizon2_4.png"
       ],
       "url_trailer": "https://www.youtube.com/watch?v=Lq594XmpPBg",
       "promo": false,
@@ -579,7 +579,7 @@
         "/assets/games/screenshots/ff16_3.jpg",
         "/assets/games/screenshots/ff16_4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=3ke1cD2rA4k",
+      "url_trailer": "https://www.youtube.com/watch?v=gV5rIW1Qums",
       "promo": false,
       "popular": false,
       "tags": [
@@ -630,12 +630,12 @@
       "description": "Aventure interdimensionnelle avec des graphismes incroyables. Voyagez entre les dimensions, utilisez des armes créatives et sauvez la galaxie dans cette aventure palpitante de Ratchet et Clank.",
       "cover_image": "/assets/games/cover/ratchet.jpg",
       "images": [
-        "/assets/games/screenshots/ratchet1.jpg",
-        "/assets/games/screenshots/ratchet2.jpg",
-        "/assets/games/screenshots/ratchet3.jpg",
-        "/assets/games/screenshots/ratchet4.jpg"
+        "/assets/games/screenshots/ratchet1.png",
+        "/assets/games/screenshots/ratchet2.png",
+        "/assets/games/screenshots/ratchet3.png",
+        "/assets/games/screenshots/ratchet4.png"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=btmN-bWwv0A",
+      "url_trailer": "https://www.youtube.com/watch?v=ai3o0XtrnM8",
       "promo": true,
       "popular": true,
       "tags": [
@@ -658,12 +658,12 @@
       "description": "Jeu de tir roguelike third-person avec une boucle temporelle. Explorez une planète étrangère en constante évolution, où chaque mort vous ramène au début mais avec de nouvelles connaissances et possibilités.",
       "cover_image": "/assets/games/cover/returnal.jpg",
       "images": [
-        "/assets/games/screenshots/returnal1.jpg",
-        "/assets/games/screenshots/returnal2.jpg",
-        "/assets/games/screenshots/returnal3.jpg",
-        "/assets/games/screenshots/returnal4.jpg"
+        "/assets/games/screenshots/returnal1.png",
+        "/assets/games/screenshots/returnal2.png",
+        "/assets/games/screenshots/returnal3.png",
+        "/assets/games/screenshots/returnal4.png"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=J7nJ4Q7_pUU",
+      "url_trailer": "https://www.youtube.com/watch?v=ov4fJmGCsZM",
       "promo": false,
       "popular": false,
       "tags": [
@@ -691,7 +691,7 @@
         "/assets/games/screenshots/gt7_3.jpg",
         "/assets/games/screenshots/gt7_4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=uRVT2lGjhuM",
+      "url_trailer": "https://www.youtube.com/watch?v=1tBUsXIkG1A",
       "promo": false,
       "popular": false,
       "tags": [
@@ -719,7 +719,7 @@
         "/assets/games/screenshots/ghost3.jpg",
         "/assets/games/screenshots/ghost4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=iqysmS4lxCQ",
+      "url_trailer": "https://www.youtube.com/watch?v=A5gVt028Hww",
       "promo": false,
       "popular": true,
       "tags": [
@@ -775,7 +775,7 @@
         "/assets/games/screenshots/sackboy3.jpg",
         "/assets/games/screenshots/sackboy4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=BT46BoEcKxM",
+      "url_trailer": "https://www.youtube.com/watch?v=ZOk3fj5ujNM",
       "promo": false,
       "popular": false,
       "tags": [
@@ -798,12 +798,12 @@
       "description": "Aventure d'action-aventure avec un art magnifique et des esprits mignons. Aidez les esprits à passer dans l'au-delà en utilisant vos pouvoirs magiques et vos compagnons Rot dans ce monde enchanté.",
       "cover_image": "/assets/games/cover/kena.jpg",
       "images": [
-        "/assets/games/screenshots/kena1.jpg",
-        "/assets/games/screenshots/kena2.jpg",
-        "/assets/games/screenshots/kena3.jpg",
-        "/assets/games/screenshots/kena4.jpg"
+        "/assets/games/screenshots/kena1.png",
+        "/assets/games/screenshots/kena2.png",
+        "/assets/games/screenshots/kena3.png",
+        "/assets/games/screenshots/kena4.png"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=pWh538xR3oI",
+      "url_trailer": "https://www.youtube.com/watch?v=pWh5388AEHw",
       "promo": false,
       "popular": false,
       "tags": [
@@ -826,10 +826,10 @@
       "description": "Remake du chef-d'œuvre original avec des graphismes next-gen. Revivez l'histoire émotionnelle de Joel et Ellie dans un monde post-apocalyptique, avec des graphismes repensés et une jouabilité améliorée.",
       "cover_image": "/assets/games/cover/lastofus1.jpg",
       "images": [
-        "/assets/games/screenshots/tlou1_1.jpg",
-        "/assets/games/screenshots/tlou1_2.jpg",
-        "/assets/games/screenshots/tlou1_3.jpg",
-        "/assets/games/screenshots/tlou1_4.jpg"
+        "/assets/games/screenshots/tlou1_1.png",
+        "/assets/games/screenshots/tlou1_2.png",
+        "/assets/games/screenshots/tlou1_3.png",
+        "/assets/games/screenshots/tlou1_4.png"
       ],
       "url_trailer": "https://www.youtube.com/watch?v=R2Ebc_OFeug",
       "promo": false,
@@ -854,10 +854,10 @@
       "description": "Le retour du Master Chief dans une aventure en monde ouvert. Explorez l'anneau Halo, combattez le Banished et découvrez les secrets de l'univers Halo dans cette épique aventure spatiale.",
       "cover_image": "/assets/games/cover/halo.jpg",
       "images": [
-        "/assets/games/screenshots/halo1.jpg",
-        "/assets/games/screenshots/halo2.jpg",
-        "/assets/games/screenshots/halo3.jpg",
-        "/assets/games/screenshots/halo4.jpg"
+        "/assets/games/screenshots/halo1.png",
+        "/assets/games/screenshots/halo2.png",
+        "/assets/games/screenshots/halo3.png",
+        "/assets/games/screenshots/halo4.png"
       ],
       "url_trailer": "https://www.youtube.com/watch?v=PyMlV5_HRWk",
       "promo": false,
@@ -882,12 +882,12 @@
       "description": "Continuez la lutte contre l'Essaim dans cette suite épique. Incarnez Kait Diaz et découvrez les origines du Locust dans cette aventure third-person shooter intense et émotionnelle.",
       "cover_image": "/assets/games/cover/gears5.jpg",
       "images": [
-        "/assets/games/screenshots/gears5_1.jpg",
-        "/assets/games/screenshots/gears5_2.jpg",
-        "/assets/games/screenshots/gears5_3.jpg",
-        "/assets/games/screenshots/gears5_4.jpg"
+        "/assets/games/screenshots/gears5_1.png",
+        "/assets/games/screenshots/gears5_2.png",
+        "/assets/games/screenshots/gears5_3.png",
+        "/assets/games/screenshots/gears5_4.png"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=37KR4yqNDa4",
+      "url_trailer": "https://www.youtube.com/watch?v=APqBWniRQbQ",
       "promo": false,
       "popular": false,
       "tags": [
@@ -971,7 +971,7 @@
         "/assets/games/screenshots/forzamotorsport3.jpg",
         "/assets/games/screenshots/forzamotorsport4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=uRVT2lGjhuM",
+      "url_trailer": "https://www.youtube.com/watch?v=em4gv1Ietko",
       "promo": false,
       "popular": false,
       "tags": [
@@ -994,12 +994,12 @@
       "description": "Aventure psychédélique dans les esprits des personnages. Incarnez Raz et explorez les méandres de l'esprit humain dans cette aventure plateforme unique et créative remplie d'humour et de personnages mémorables.",
       "cover_image": "/assets/games/cover/psychonauts2.jpg",
       "images": [
-        "/assets/games/screenshots/psychonauts1.jpg",
-        "/assets/games/screenshots/psychonauts2.jpg",
-        "/assets/games/screenshots/psychonauts3.jpg",
-        "/assets/games/screenshots/psychonauts4.jpg"
+        "/assets/games/screenshots/psychonauts1.png",
+        "/assets/games/screenshots/psychonauts2.png",
+        "/assets/games/screenshots/psychonauts3.png",
+        "/assets/games/screenshots/psychonauts4.png"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=2_TsK7RkqWI",
+      "url_trailer": "https://www.youtube.com/watch?v=mBi9rqCZ4os",
       "popular": true,
       "promo": false,
       "tags": [
@@ -1027,7 +1027,7 @@
         "/assets/games/screenshots/grounded3.jpg",
         "/assets/games/screenshots/grounded4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=5yf0nvwT-34",
+      "url_trailer": "https://www.youtube.com/watch?v=ciVgq5xO5G0",
       "popular": false,
       "promo": true,
       "tags": [
@@ -1055,7 +1055,7 @@
         "/assets/games/screenshots/stateofdecay3.jpg",
         "/assets/games/screenshots/stateofdecay4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=Z13cODkIE8s",
+      "url_trailer": "https://www.youtube.com/watch?v=fhj5phhsqC0",
       "popular": false,
       "promo": false,
       "tags": [
