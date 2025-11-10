@@ -10,7 +10,6 @@
 - **SCSS** (Glassmorphism, gradients, animations…)
 - **Bootstrap Icons et FontAwesome** (libres)
 - **JSON Server** (API REST mock)
-- **Zone.js**, **Karma/Jasmine** (tests)
 
 ## 📦 Instructions d'installation et de lancement
 
@@ -27,8 +26,7 @@ npm install
 
 3. **Lancer le serveur API simulé** (dans un autre terminal)
 ```bash
-npm install -g json-server
-json-server --watch api/db.json --port 3000 # Données mockées
+npx json-server --watch api/db.json --port 3000
 ```
 
 4. **Démarrer le serveur Angular**
@@ -46,7 +44,7 @@ ng serve
 - `src/app/services/` : gestion des appels HTTP/REST (produits, panier, wishlist, utilisateur…)
 - `src/app/auth/` : pages login et registre
 - `src/app/checkout/` : page de paiement
-- `src/app/order-confirmation/` : confirmation et récapitulatif de commande
+- `src/app/components/order-confirmation/` : confirmation et récapitulatif de commande
 - `src/app/Models/` : modèles de données (Game, User, CartItem…)
 - `src/app/guards/` : contrôle d'accès par routes (authentification)
 - `api/db.json` : données mockées utilisées par json-server
@@ -88,6 +86,9 @@ ng serve
   - Adaptation parfaite (mobile, tablette, desktop).
   - Thème glassmorphism, transitions douces, icônes animées.
 
+- **Templating moderne Angular :**
+  - Utilisation de `@if` et `@for` (au lieu de `*ngIf`/`*ngFor`).
+
 ## 📄 Pages et composants principaux (avec descriptions)
 
 - **Header/Footer** : navigation globale, accès rapide fonctionnalités clés.
@@ -109,13 +110,38 @@ ng serve
 - **État du panier et synchro multi-composants**
   - Solution : service centralisé CartService, BehaviorSubject/Observables pour synchronisation instantanée UI.
 
-- **Gestion de la responsivité avancée et de la modernité du design**
-  - Solution : SCSS avec media queries, animations personnalisées, glassmorphism partout (SCSS).
+### Routes principales
 
-- **Ajout, édition, filtrage dynamique (catégories, wishlist, historique commandes) sur API json-server**
-  - Solution : Organisation centralisée avec services + gestion des query params Angular Router.
+- `/produits` — catalogue
+- `/produitDetails/:id` — détails d’un jeu
+- `/cart` — panier
+- `/checkout` — paiement (protégé)
+- `/order-confirmation/:id` — confirmation (protégée)
+- `/login`, `/register` — auth
+- `/user` — espace utilisateur (protégé), enfants :
+  - `/user/profile`, `/user/orders`, `/user/wishlist`, `/user/addresses`
 
+### API JSON Server
+
+- `GET /games` — catalogue
+- `GET/POST/PATCH/DELETE /cart` — panier
+- `GET/POST/PATCH /users` — utilisateurs, wishlist
+- `GET/POST /orders` — commandes
+- `GET/POST/PATCH/DELETE /addresses` — adresses
+
+### Scripts utiles
+
+- `npm start` — lance le serveur de dev Angular
+- `npm run build` — build de production
+- `npm test` — tests unitaires Karma/Jasmine
+- `npx json-server --watch api/db.json --port 3000` — API mock
+
+### Notes
+
+- Par défaut, l’application démarre sur `http://localhost:4200/`. En cas de port occupé, utilisez l’option `--port` (ex. `4400`).
+- Les données de l’application (panier, commandes, adresses, utilisateurs) sont stockées dans `api/db.json` par JSON Server.
+- ⚠️ Remarque importante : Il est recommandé d’installer une version stable de JSON Server, car certaines versions récentes présentent un bug sur les opérations GET by ID ou DELETE, nécessitant un redémarrage du serveur après chaque opération.
 ## 🙌 Auteur & Contact
 
-Développement par [Votre Nom].
-Pour tout retour ou suggestion : contact [ici/email].
+Développement par [Mohamed Amine Manai].
+Pour tout retour ou suggestion : contact aminemanai222@gmail.com.
