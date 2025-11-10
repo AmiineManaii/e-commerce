@@ -213,7 +213,7 @@
         "/assets/games/screenshots/sf6_3.jpg",
         "/assets/games/screenshots/sf6_4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=Jy2TjXIM0yY",
+      "url_trailer": "https://www.youtube.com/watch?v=1INU3FOJsTw",
       "promo": false,
       "popular": false,
       "tags": [
@@ -269,7 +269,7 @@
         "/assets/games/screenshots/baldurs3.jpg",
         "/assets/games/screenshots/baldurs4.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=W9iHUcnxgq4",
+      "url_trailer": "https://www.youtube.com/watch?v=OcP0WdH7rTs",
       "promo": true,
       "popular": true,
       "tags": [
@@ -491,9 +491,11 @@
         "/assets/games/screenshots/fc25_1.jpg",
         "/assets/games/screenshots/fc25_2.jpg",
         "/assets/games/screenshots/fc25_3.jpg",
-        "/assets/games/screenshots/fc25_4.jpg"
+        "/assets/games/screenshots/fc25_4.jpg",
+        "/assets/games/screenshots/fc25_5.jpg",
+        "/assets/games/screenshots/fc25_6.jpg"
       ],
-      "url_trailer": "https://www.youtube.com/watch?v=J7nJ4Q7_pUU",
+      "url_trailer": "https://www.youtube.com/watch?v=pBM2xyco_Kg",
       "promo": true,
       "popular": false,
       "tags": [
@@ -1127,10 +1129,7 @@
       "name": "Amine",
       "email": "amine@example.com",
       "password": "123456",
-      "wishlist": [
-        "1",
-        "15"
-      ],
+      "wishlist": [],
       "nom": "Manai",
       "prenom": "Mohamed Amine",
       "adresse": "Mornaguia"
@@ -1216,6 +1215,26 @@
       "status": "completed",
       "addressId": "c2f1",
       "id": 2
+    },
+    {
+      "userId": "1",
+      "date": "2025-11-04T11:49:43.864Z",
+      "items": [
+        {
+          "gameId": "2",
+          "quantity": 1,
+          "price": 49.99
+        },
+        {
+          "gameId": "32",
+          "quantity": 1,
+          "price": 39.99
+        }
+      ],
+      "total": 104.98,
+      "status": "completed",
+      "addressId": "c2f1",
+      "id": 3
     }
   ],
   "cart": []
