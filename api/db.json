@@ -1271,6 +1271,74 @@
       "quantity": 1,
       "subtotal": 29.99,
       "createdAt": "2025-11-10T21:42:59.063Z"
+    },
+    {
+      "id": 1762812492316,
+      "game": {
+        "id": "5",
+        "title": "Grand Theft Auto V",
+        "platform": "PC",
+        "genre": "Action",
+        "price": 29.99,
+        "rating": 4.8,
+        "release_date": "2013-09-17",
+        "stock": 15,
+        "description": "Explorez Los Santos, une métropole éclatante dans l'État de San Andreas. Incarnez trois criminels aux histoires entrelacées : Michael, Franklin et Trevor. Une satire mordante de la société américaine moderne avec un mode histoire captivant et GTA Online illimité.",
+        "cover_image": "/assets/games/cover/gtav.jpg",
+        "images": [
+          "/assets/games/screenshots/gtav1.jpg",
+          "/assets/games/screenshots/gtav2.jpg",
+          "/assets/games/screenshots/gtav3.jpg",
+          "/assets/games/screenshots/gtav4.jpg"
+        ],
+        "url_trailer": "https://www.youtube.com/watch?v=QkkoHAzjnUs",
+        "promo": true,
+        "popular": true,
+        "tags": [
+          "Action",
+          "Open World",
+          "Crime",
+          "Multiplayer",
+          "Satire"
+        ]
+      },
+      "quantity": 1,
+      "subtotal": 29.99,
+      "createdAt": "2025-11-10T22:08:12.316Z"
+    },
+    {
+      "id": 1762812500468,
+      "game": {
+        "id": "5",
+        "title": "Grand Theft Auto V",
+        "platform": "PC",
+        "genre": "Action",
+        "price": 29.99,
+        "rating": 4.8,
+        "release_date": "2013-09-17",
+        "stock": 15,
+        "description": "Explorez Los Santos, une métropole éclatante dans l'État de San Andreas. Incarnez trois criminels aux histoires entrelacées : Michael, Franklin et Trevor. Une satire mordante de la société américaine moderne avec un mode histoire captivant et GTA Online illimité.",
+        "cover_image": "/assets/games/cover/gtav.jpg",
+        "images": [
+          "/assets/games/screenshots/gtav1.jpg",
+          "/assets/games/screenshots/gtav2.jpg",
+          "/assets/games/screenshots/gtav3.jpg",
+          "/assets/games/screenshots/gtav4.jpg"
+        ],
+        "url_trailer": "https://www.youtube.com/watch?v=QkkoHAzjnUs",
+        "promo": true,
+        "popular": true,
+        "tags": [
+          "Action",
+          "Open World",
+          "Crime",
+          "Multiplayer",
+          "Satire"
+        ]
+      },
+      "quantity": 1,
+      "subtotal": 29.99,
+      "createdAt": "2025-11-10T22:08:20.468Z"
     }
   ],
   "reviews": [
