@@ -47,7 +47,7 @@ export class Banner implements OnInit {
     
     this.slideInterval = window.setInterval(() => {
       this.nextSlide();
-    }, 5000); // 5 secondes
+    }, 5000); 
   }
 
   

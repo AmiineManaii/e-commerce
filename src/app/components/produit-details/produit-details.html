@@ -3,43 +3,34 @@
 <div class="product-detail-container">
   @if (produit) {
     <div class="product-main">
-      <!-- Image Gallery -->
+
       <div class="product-gallery">
-        @if (produit && trailerUrl) {
+        @if (trailerUrl) {
           <div class="trailer-section">
             <h3>Bande-annonce</h3>
             <div class="trailer-container">
-              <iframe
-                [src]="trailerUrl"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
+              <iframe [src]="trailerUrl" frameborder="0" allowfullscreen></iframe>
             </div>
           </div>
         }
 
-        @if (produit && produit.images && produit.images.length > 0) {
+        @if (produit.images.length) {
           <div class="image-gallery">
             <div class="main-image">
-              <img [src]="produit.images[currentImageIndex]" alt="Product Screenshot" class="gallery-image">
-              <button class="nav-button prev" (click)="changeImage(-1)" aria-label="Image précédente">
+              <img [src]="produit.images[currentImageIndex]" [alt]="produit.title" class="gallery-image">
+              <button class="nav-button prev" (click)="changeImage(-1)">
                 <i class="fas fa-chevron-left"></i>
               </button>
-              <button class="nav-button next" (click)="changeImage(1)" aria-label="Image suivante">
+              <button class="nav-button next" (click)="changeImage(1)">
                 <i class="fas fa-chevron-right"></i>
               </button>
             </div>
             
-            <!-- Image thumbnails -->
             @if (produit.images.length > 1) {
               <div class="image-thumbnails">
                 @for (image of produit.images; track image; let i = $index) {
-                  <div 
-                    class="thumbnail-item" 
-                    [class.active]="i === currentImageIndex"
-                    (click)="currentImageIndex = i">
-                    <img [src]="image" alt="Thumbnail {{ i + 1 }}">
+                  <div class="thumbnail-item" [class.active]="i === currentImageIndex" (click)="currentImageIndex = i">
+                    <img [src]="image" [alt]="'Thumbnail ' + (i + 1)">
                   </div>
                 }
               </div>
@@ -48,7 +39,7 @@
         }
       </div>
 
-      <!-- Product Info -->
+
       <div class="product-info">
         <div class="product-header">
           <h1>{{ produit.title }}</h1>
@@ -78,7 +69,7 @@
             <i class="fas fa-box"></i>
             <div>
               <span class="label">Disponibilité</span>
-              <span class="value" [class.in-stock]="produit.stock > 0" [class.out-of-stock]="produit.stock === 0">
+              <span class="value" [class]="produit.stock > 0 ? 'in-stock' : 'out-of-stock'">
                 {{ produit.stock > 0 ? 'En stock (' + produit.stock + ')' : 'Rupture de stock' }}
               </span>
             </div>
@@ -94,54 +85,42 @@
           }
         </div>
 
-        <div class="rating-stars">
-          <span class="stars-label">Note:</span>
+        <div class="rating">
+          <span class="rating-label">Note:</span>
           <div class="stars">
-            @for (star of getStarArray(produit.rating); track star; let index = $index) {
-              @if (getStarType(index + 1, produit.rating) === 'full') {
-                <i class="fas fa-star"></i>
-              } @else if (getStarType(index + 1, produit.rating) === 'half') {
-                <i class="fas fa-star-half-alt"></i>
-              } @else {
-                <i class="far fa-star"></i>
-              }
+            @for (star of [1,2,3,4,5]; track star) {
+              <i class="fas" [class]="getStarClass(star, produit.rating)"></i>
             }
             <span class="rating-text">({{ produit.rating }}/5)</span>
           </div>
         </div>
 
         <div class="purchase-section">
-          <div class="price-section">
-            <span class="price">{{ produit.price }} DT</span>
+          <div class="price">
+            <span class="price-value">{{ produit.price }} DT</span>
             @if (produit.promo) {
               <div class="promo-tag">Promo</div>
             }
           </div>
 
           @if (produit.stock > 0) {
-            <div class="quantity-section">
-              <label for="quantity">Quantité:</label>
+            <div class="quantity">
+              <label>Quantité:</label>
               <div class="quantity-controls">
-                <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">
+                <button (click)="decreaseQuantity()" [disabled]="quantity <= 1">
                   <i class="fas fa-minus"></i>
                 </button>
-                <input 
-                  type="number" 
-                  id="quantity" 
-                  [(ngModel)]="quantity" 
-                  min="1" 
-                  [max]="produit.stock"
-                  (change)="validateQuantity()">
-                <button class="quantity-btn" (click)="increaseQuantity()" [disabled]="quantity >= produit.stock">
+                <input type="number" [(ngModel)]="quantity" min="1" [max]="produit.stock" (change)="validateQuantity()">
+                <button (click)="increaseQuantity()" [disabled]="quantity >= produit.stock">
                   <i class="fas fa-plus"></i>
                 </button>
               </div>
             </div>
           }
 
-          <div class="action-buttons">
+          <div class="actions">
             @if (produit.stock > 0) {
-              <button class="btn-primary" (click)="addToCart(quantity)">
+              <button class="btn-primary" (click)="addToCart()">
                 <i class="fas fa-shopping-cart"></i>
                 Ajouter au panier
               </button>
@@ -151,72 +130,64 @@
                 Rupture de stock
               </button>
             }
-            <button 
-              class="btn-secondary" 
-              (click)="addToWishlist()" >
+            <button class="btn-secondary" (click)="addToWishlist()">
               <i class="fas fa-heart"></i>
             </button>
           </div>
-
         </div>
       </div>
     </div>
   } @else if (error) {
-    <div class="error-state">
+    <div class="error">
       <i class="fas fa-exclamation-triangle"></i>
       <h3>Produit non trouvé</h3>
       <p>{{ error }}</p>
       <button class="btn-primary" routerLink="/">Retour à l'accueil</button>
     </div>
   } @else {
-    <div class="loading-state">
-      <div class="loading-spinner"></div>
-      <p>Chargement des détails du produit...</p>
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Chargement...</p>
     </div>
   }
 </div>
 
-@if (produit && similarProducts.length > 0) {
-  <div class="similar-products-section">
+
+@if (produit && similarProducts.length) {
+  <div class="similar-products">
     <div class="section-header">
       <h2>Produits similaires</h2>
-      <p>Découvrez des jeux similaires</p>
     </div>
     
-    <div class="similar-products-container">
-      <button class="scroll-btn prev" (click)="scrollSimilar(-1)">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      
-      <div class="similar-products-scroll" #similarProductsScroll>
-        <div class="similar-products-grid">
-          @for (similarProduct of similarProducts; track similarProduct.id) {
-            <div class="similar-product-card">
+    <div class="products-scroll-container">
+      <div class="products-scroll">
+        <div class="products-grid">
+          @for (product of similarProducts; track product.id) {
+            <div class="product-card">
               <div class="card-image">
-                <img [src]="similarProduct.cover_image" alt="{{ similarProduct.title }}">
+                <img [src]="product.cover_image" [alt]="product.title">
                 <div class="card-overlay">
-                  <button class="quick-view-btn" [routerLink]="['/produitDetails', similarProduct.id]">
+                  <a [routerLink]="['/produitDetails', product.id]">
                     <i class="fas fa-eye"></i>
-                  </button>
+                  </a>
                 </div>
-                @if (similarProduct.promo) {
+                @if (product.promo) {
                   <div class="promo-badge">Promo</div>
                 }
               </div>
               <div class="card-content">
-                <h3>{{ similarProduct.title }}</h3>
-                <div class="product-meta">
+                <h3>{{ product.title }}</h3>
+                <div class="card-meta">
                   <span class="platform">
-                    <i [class]="getPlatformIcon(similarProduct.platform)"></i>
-                    {{ similarProduct.platform }}
+                    <i [class]="getPlatformIcon(product.platform)"></i>
+                    {{ product.platform }}
                   </span>
-                  <span class="genre">{{ similarProduct.genre }}</span>
+                  <span class="genre">{{ product.genre }}</span>
                 </div>
                 <div class="card-footer">
-                  <span class="price">{{ similarProduct.price }} DT</span>
-                  <button class="btn-add-cart" (click)="addSimilarToCart(similarProduct, 1)" 
-                          [disabled]="similarProduct.stock === 0">
-                    <i class="fas" [class]="similarProduct.stock > 0 ? 'fa-plus' : 'fa-times'"></i>
+                  <span class="price">{{ product.price }} DT</span>
+                  <button (click)="addToCart(product)" [disabled]="product.stock === 0">
+                    <i class="fas" [class]="product.stock > 0 ? 'fa-plus' : 'fa-times'"></i>
                   </button>
                 </div>
               </div>
@@ -224,10 +195,116 @@
           }
         </div>
       </div>
+    </div>
+  </div>
+}
+
+@if (produit) {
+  <div class="reviews-section">
+    <div class="section-header">
+      <h2>Avis des joueurs</h2>
+      <div class="reviews-stats">
+        <div class="average-rating">
+          <span class="rating-value">{{ averageRating }}/5</span>
+          <div class="stars">
+            @for (star of [1,2,3,4,5]; track star) {
+              <i class="fas" [class]="getStarClass(star, averageRating)"></i>
+            }
+          </div>
+          <span class="reviews-count">{{ reviews.length }} avis</span>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="reviews-list">
+      @if (reviews.length) {
+        @for (review of reviews; track review.id) {
+          <div class="review-card">
+            <div class="review-header">
+              <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span class="user-name">{{ getDisplayName(review.userId) }}</span>
+                @if (review.verified) {
+                  <span class="verified">
+                    <i class="fas fa-check-circle"></i>
+                    Achat vérifié
+                  </span>
+                }
+              </div>
+              <span class="review-date">{{ formatDate(review.date) }}</span>
+            </div>
+            
+            <div class="review-rating">
+              <div class="stars">
+                @for (star of [1,2,3,4,5]; track star) {
+                  <i class="fas fa-star" [class.filled]="star <= review.note"></i>
+                }
+                <span>{{ review.note }}/5</span>
+              </div>
+            </div>
+            
+            <p class="review-text">{{ review.msg }}</p>
+          </div>
+        }
+      } @else {
+        <div class="no-reviews">
+          <i class="fas fa-comment-slash"></i>
+          <h3>Aucun avis</h3>
+          <p>Soyez le premier à donner votre avis !</p>
+        </div>
+      }
+    </div>
+
+
+    <div class="add-review">
+      <h3>Donnez votre avis</h3>
       
-      <button class="scroll-btn next" (click)="scrollSimilar(1)">
-        <i class="fas fa-chevron-right"></i>
-      </button>
+      @if (currentUser) {
+
+        <form (ngSubmit)="submitReview(reviewForm)" #reviewForm="ngForm">
+          <div class="form-group">
+            <label>Votre note</label>
+            <div class="rating-input">
+              @for (star of [1,2,3,4,5]; track star) {
+                <button type="button" (click)="setRating(star)" [class.active]="star <= newReview.note">
+                  <i class="fas fa-star"></i>
+                </button>
+              }
+              <span>{{ newReview.note }}/5</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Votre message</label>
+            <textarea 
+              [(ngModel)]="newReview.msg"
+              name="reviewMessage"
+              placeholder="Partagez votre expérience..."
+              rows="4"
+              required
+              maxlength="500">
+            </textarea>
+            <div class="char-count">{{ newReview.msg.length }}/500</div>
+          </div>
+
+          <button type="submit" [disabled]="!reviewForm.valid || isSubmitting">
+            @if (isSubmitting) {
+              <i class="fas fa-spinner fa-spin"></i>
+              Publication...
+            } @else {
+              <i class="fas fa-paper-plane"></i>
+              Publier
+            }
+          </button>
+        </form>
+      } @else {
+        <div class="login-required">
+          <i class="fas fa-user-lock"></i>
+          <p>Connectez-vous pour donner votre avis</p>
+          <button class="btn-secondary" routerLink="/login">Se connecter</button>
+        </div>
+      }
     </div>
   </div>
 }

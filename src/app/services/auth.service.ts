@@ -119,4 +119,9 @@ export class AuthService {
       map(users => users.length > 0)
     );
   }
+  getUsername(userId: number): Observable<{prenom: string, nom: string}> {
+    return this.http.get<User>(`${this.apiUrl}/${userId}`).pipe(
+      map(user => ({prenom: user.prenom, nom: user.nom}))
+    );
+  }
 }

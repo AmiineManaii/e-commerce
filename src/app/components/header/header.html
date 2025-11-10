@@ -20,7 +20,7 @@
           </a>
         </li>
       </ul>
-      
+
       <div class="navbar-actions">
         <div class="search-container">
           <div class="input-group modern-search">
@@ -31,7 +31,7 @@
             </button>
           </div>
         </div>
-        
+
         <div class="user-actions">
           @if (currentUser) {
           <div class="dropdown">
@@ -41,23 +41,33 @@
               <span class="user-name">{{ currentUser.prenom }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" [routerLink]="['/user/profile']">Mon profil</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/user/orders']">Mes commandes</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/user/addresses']">Mes adresses</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#" (click)="logout()">Déconnexion</a></li>
+              <li>
+                <a class="dropdown-item" [routerLink]="['/user/profile']">
+                  <i class="fas fa-user me-2"></i>
+                  <span>Mon profil</span>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item logout-item" href="#" (click)="logout()">
+                  <i class="fas fa-sign-out-alt me-2"></i>
+                  <span>Déconnexion</span>
+                </a>
+              </li>
             </ul>
           </div>
-          
+
           <a class="nav-link wishlist-icon position-relative" [routerLink]="['/user/wishlist']" title="Wishlist">
             <i class="fas fa-heart"></i>
             @if (wishlistItemCount | async ;as count) {
-              @if (count > 0) {
-                <span class="wishlist-badge badge rounded-pill bg-danger">
-                  {{ count }}
-                  <span class="visually-hidden">articles dans la wishlist</span>
-                </span>
-              }
+            @if (count > 0) {
+            <span class="wishlist-badge badge rounded-pill bg-danger">
+              {{ count }}
+              <span class="visually-hidden">articles dans la wishlist</span>
+            </span>
+            }
             }
           </a>
 
