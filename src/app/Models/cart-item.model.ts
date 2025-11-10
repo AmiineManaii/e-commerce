@@ -2,6 +2,7 @@ import { Game } from './game.model';
 
 export interface CartItem {
   id: number;
+  userId: number;
   game: Game;
   quantity: number;
   subtotal: number;

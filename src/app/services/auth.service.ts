@@ -9,20 +9,17 @@ import { API_BASE_URL } from '../app.config';
 })
 export class AuthService {
   private apiUrl = API_BASE_URL + '/users';
+  
   constructor(private http: HttpClient) { }
-
-
 
   register(user: User): Observable<User> {
     return new Observable(observer => {
-      
       this.http.get<User[]>(`${this.apiUrl}?email=${user.email}`).subscribe({
         next: (users) => {
           if (users.length > 0) {
             observer.error({message: 'Cet email est deja existe'});
             return;
           }
-          
 
           this.http.post<User>(this.apiUrl, user).subscribe({
             next: (createdUser) => {
@@ -43,10 +40,8 @@ export class AuthService {
     });
   }
 
- 
   login(email: string, password: string): Observable<User> {
     return new Observable(observer => {
-
       this.http.get<User[]>(`${this.apiUrl}?email=${email}`).subscribe({
         next: (users) => {
           const user = users[0];
@@ -60,7 +55,6 @@ export class AuthService {
             return;
           }
 
-          
           const { password: _, ...userWithoutPassword } = user;
           localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
           observer.next(userWithoutPassword);
@@ -73,17 +67,14 @@ export class AuthService {
     });
   }
 
- 
   logout(): void {
     localStorage.removeItem('currentUser');
   }
 
-  
   isLoggedIn(): boolean {
     return !!localStorage.getItem('currentUser');
   }
 
-  
   getCurrentUser(): User | null {
     const userJson = localStorage.getItem('currentUser');
     if (userJson) {
@@ -96,7 +87,6 @@ export class AuthService {
     }
     return null;
   }
-
 
   updateUser(userId: number, userData: Partial<User>): Observable<User> {
     return this.http.patch<User>(`${this.apiUrl}/${userId}`, userData).pipe(
@@ -112,13 +102,12 @@ export class AuthService {
     );
   }
 
-  
-  
   checkEmailExists(email: string): Observable<boolean> {
     return this.http.get<User[]>(`${this.apiUrl}?email=${email}`).pipe(
       map(users => users.length > 0)
     );
   }
+
   getUsername(userId: number): Observable<{prenom: string, nom: string}> {
     return this.http.get<User>(`${this.apiUrl}/${userId}`).pipe(
       map(user => ({prenom: user.prenom, nom: user.nom}))

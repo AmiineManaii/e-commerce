@@ -6,7 +6,8 @@ export interface User {
   password?: string;
   adresse: string;
   adresses?: Address[];
-  wishlist?: number[]; // IDs des jeux favoris
+  wishlist?: number[];
+  cart?: number[];
 }
 
 export interface Address {
