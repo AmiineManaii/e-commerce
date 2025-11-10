@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, of, Subject, takeUntil } from 'rxjs';
 import { User } from '../../Models/user.model';
+import { UserProfileService } from '../../services/user-profile.service';
 
 @Component({
   selector: 'app-header',
@@ -17,26 +18,37 @@ import { User } from '../../Models/user.model';
 export class Header implements OnInit {
   cartItemCount: number = 0;
   currentUser: User | null = null;
+  wishlistItemCount: Observable<number> = new Observable<number>();
  
 
   constructor(
     private router: Router,
     private cartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userProfileService: UserProfileService
   ) { }
 
   ngOnInit(): void {
     this.loadCart();
     this.cartService.getCartChanges().subscribe(() => this.loadCart());
     this.currentUser = this.authService.getCurrentUser();
+    this.loadWishlist();
+    this.userProfileService.getWishlistChanges().subscribe(() => this.loadWishlist());
+    
   }
   loadCart() {
   this.cartService.getCartItems().subscribe(items => {
     this.cartItemCount = items.length;
   });
-  
+  }
+  loadWishlist() {
+    if (this.currentUser?.id) {
+      this.userProfileService.getWishlist(this.currentUser.id).subscribe(items => {
+        this.wishlistItemCount = of(items.length);
+      });
+    }
+  }
 
-}
 
 
   onSearch(searchTerm: string) {

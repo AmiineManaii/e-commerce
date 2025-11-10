@@ -1,150 +1,239 @@
 <app-header></app-header>
 
 <div class="product-detail-container">
-
-
   @if (produit) {
-
-
-    <div class="product-header">
-
-      <h1>{{ produit.title }}</h1>
-
-      <p class="genre">{{ produit.genre }}</p>
-
-    </div>
-
-    <div class="product-media">
-
-      <div class="media-section">
-
-         @if (produit && trailerUrl) {
-
-          <div class="trailer-container">
-
-            <iframe
-              [src]="trailerUrl"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-
-
+    <div class="product-main">
+      <!-- Image Gallery -->
+      <div class="product-gallery">
+        @if (produit && trailerUrl) {
+          <div class="trailer-section">
+            <h3>Bande-annonce</h3>
+            <div class="trailer-container">
+              <iframe
+                [src]="trailerUrl"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
           </div>
         }
 
         @if (produit && produit.images && produit.images.length > 0) {
-
-
-          <div class="carousel-container">
-            <img [src]="produit.images[currentImageIndex]" alt="Product Screenshot" class="carousel-image">
-            <button class="carousel-button prev" (click)="changeImage(-1)">&#10094;</button>
-            <button class="carousel-button next" (click)="changeImage(1)">&#10095;</button>
-          </div>
-        }
-
-       
-      </div>
-    </div>
-
-    <div class="product-info">
-      <p class="description">{{ produit.description }}</p>
-
-      <div class="price-section">
-        <span class="price-label">Prix</span>
-        <span class="price">{{ produit.price }} DT</span>
-      </div>
-
-      <div class="rating-section">
-        @for (star of [1,2,3,4,5]; track star; let idx = $index) {
-          <i class="fa-star" [ngClass]="idx < (produit.rating || 0) ? 'fas text-warning' : 'far'"></i>
-        }
-        <span class="rating-value">{{ produit.rating != null ? produit.rating.toFixed(1) : 'N/A' }}</span>
-      </div>
-
-      <p class="release-date">Date de sortie: {{ produit.release_date | date:'dd/MM/yyyy' }}</p>
-
-      <p class="stock-availability" [ngClass]="{'out-of-stock': produit.stock <= 0}">
-        @if (produit.stock > 0) { 
-          En stock ({{ produit.stock }} disponibles)
-        } @else { 
-          Rupture de stock 
-        }
-      </p>
-
-      <div class="quantity-selector">
-        <label for="quantity">Quantité:</label>
-        <input type="number" id="quantity" value="1" min="1" [max]="produit.stock" #quantityInput>
-      </div>
-
-      <div class="actions-group">
-        <button class="add-to-cart-button" (click)="addToCart(quantityInput.valueAsNumber)">
-          <i class="fas fa-shopping-cart"></i>
-          Ajouter au panier
-        </button>
-        <button class="add-to-cart-button btn-wishlist" (click)="addToWishlist()" [disabled]="wishlistLoading">
-          <i class="fas fa-heart"></i>
-          {{ wishlistLoading ? 'Ajout...' : 'Ajouter à la liste de souhaits' }}
-        </button>
-      </div>
-
-      @if (wishlistSuccess) {
-        <div class="alert alert-success">
-          <i class="fas fa-check-circle"></i>
-          {{ wishlistSuccess }}
-        </div>
-      }
-      @if (wishlistError) {
-        <div class="alert alert-danger">
-          <i class="fas fa-exclamation-circle"></i>
-          {{ wishlistError }}
-        </div>
-      }
-    </div>
-
-
-  } @else if (error) {
-    <div class="alert alert-danger" role="alert">
-      <i class="fas fa-exclamation-circle"></i>
-      {{ error }}
-    </div>
-  } @else {
-    <div class="loading-message">
-      Chargement des détails du produit...
-    </div>
-  }
-</div>
-
-
-
-<div class="similar-products-section">
-  <h2>Produits similaires</h2>
-
-  @if (similarProducts.length > 0) {
-
-
-    <div class="similar-products-scroll-container">
-
-      <div class="similar-products-grid">
-
-        @for (similarProduct of similarProducts; track similarProduct.id) {
-
-          <div class="similar-product-card">
-
-            <img [src]="similarProduct.cover_image" alt="{{ similarProduct.title }}">
-
-            <h3>{{ similarProduct.title }}</h3>
-
-            <p>{{ similarProduct.price }} DT</p>
+          <div class="image-gallery">
+            <div class="main-image">
+              <img [src]="produit.images[currentImageIndex]" alt="Product Screenshot" class="gallery-image">
+              <button class="nav-button prev" (click)="changeImage(-1)" aria-label="Image précédente">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="nav-button next" (click)="changeImage(1)" aria-label="Image suivante">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
             
-            <a [routerLink]="['/produitDetails', similarProduct.id]">Voir les détails</a>
+            <!-- Image thumbnails -->
+            @if (produit.images.length > 1) {
+              <div class="image-thumbnails">
+                @for (image of produit.images; track image; let i = $index) {
+                  <div 
+                    class="thumbnail-item" 
+                    [class.active]="i === currentImageIndex"
+                    (click)="currentImageIndex = i">
+                    <img [src]="image" alt="Thumbnail {{ i + 1 }}">
+                  </div>
+                }
+              </div>
+            }
           </div>
         }
       </div>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <div class="product-header">
+          <h1>{{ produit.title }}</h1>
+          <div class="product-meta">
+            <span class="genre">{{ produit.genre }}</span>
+            <span class="platform">
+              <i [class]="getPlatformIcon(produit.platform)"></i>
+              {{ produit.platform }}
+            </span>
+            <span class="rating">
+              <i class="fas fa-star"></i>
+              {{ produit.rating }} / 5
+            </span>
+          </div>
+        </div>
+
+        <div class="description-section">
+          <h3>Description</h3>
+          <p class="description">{{ produit.description }}</p>
+        </div>
+
+        <div class="details-grid">
+          <div class="detail-item">
+            <i class="fas fa-calendar-alt"></i>
+            <div>
+              <span class="label">Date de sortie</span>
+              <span class="value">{{ produit.release_date }}</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-box"></i>
+            <div>
+              <span class="label">Disponibilité</span>
+              <span class="value" [class.in-stock]="produit.stock > 0" [class.out-of-stock]="produit.stock === 0">
+                {{ produit.stock > 0 ? 'En stock (' + produit.stock + ')' : 'Rupture de stock' }}
+              </span>
+            </div>
+          </div>
+          @if (produit.promo) {
+            <div class="detail-item promo-badge">
+              <i class="fas fa-tag"></i>
+              <div>
+                <span class="label">Promotion</span>
+                <span class="value">En promotion</span>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="rating-stars">
+          <span class="stars-label">Note:</span>
+          <div class="stars">
+            @for (star of getStarArray(produit.rating); track star; let index = $index) {
+              @if (getStarType(index + 1, produit.rating) === 'full') {
+                <i class="fas fa-star"></i>
+              } @else if (getStarType(index + 1, produit.rating) === 'half') {
+                <i class="fas fa-star-half-alt"></i>
+              } @else {
+                <i class="far fa-star"></i>
+              }
+            }
+            <span class="rating-text">({{ produit.rating }}/5)</span>
+          </div>
+        </div>
+
+        <div class="purchase-section">
+          <div class="price-section">
+            <span class="price">{{ produit.price }} DT</span>
+            @if (produit.promo) {
+              <div class="promo-tag">Promo</div>
+            }
+          </div>
+
+          @if (produit.stock > 0) {
+            <div class="quantity-section">
+              <label for="quantity">Quantité:</label>
+              <div class="quantity-controls">
+                <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <input 
+                  type="number" 
+                  id="quantity" 
+                  [(ngModel)]="quantity" 
+                  min="1" 
+                  [max]="produit.stock"
+                  (change)="validateQuantity()">
+                <button class="quantity-btn" (click)="increaseQuantity()" [disabled]="quantity >= produit.stock">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          }
+
+          <div class="action-buttons">
+            @if (produit.stock > 0) {
+              <button class="btn-primary" (click)="addToCart(quantity)">
+                <i class="fas fa-shopping-cart"></i>
+                Ajouter au panier
+              </button>
+            } @else {
+              <button class="btn-primary" disabled>
+                <i class="fas fa-times-circle"></i>
+                Rupture de stock
+              </button>
+            }
+            <button 
+              class="btn-secondary" 
+              (click)="addToWishlist()" >
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  } @else if (error) {
+    <div class="error-state">
+      <i class="fas fa-exclamation-triangle"></i>
+      <h3>Produit non trouvé</h3>
+      <p>{{ error }}</p>
+      <button class="btn-primary" routerLink="/">Retour à l'accueil</button>
     </div>
   } @else {
-    <p>Aucun produit similaire trouvé.</p>
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Chargement des détails du produit...</p>
+    </div>
   }
 </div>
+
+@if (produit && similarProducts.length > 0) {
+  <div class="similar-products-section">
+    <div class="section-header">
+      <h2>Produits similaires</h2>
+      <p>Découvrez des jeux similaires</p>
+    </div>
+    
+    <div class="similar-products-container">
+      <button class="scroll-btn prev" (click)="scrollSimilar(-1)">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      
+      <div class="similar-products-scroll" #similarProductsScroll>
+        <div class="similar-products-grid">
+          @for (similarProduct of similarProducts; track similarProduct.id) {
+            <div class="similar-product-card">
+              <div class="card-image">
+                <img [src]="similarProduct.cover_image" alt="{{ similarProduct.title }}">
+                <div class="card-overlay">
+                  <button class="quick-view-btn" [routerLink]="['/produitDetails', similarProduct.id]">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+                @if (similarProduct.promo) {
+                  <div class="promo-badge">Promo</div>
+                }
+              </div>
+              <div class="card-content">
+                <h3>{{ similarProduct.title }}</h3>
+                <div class="product-meta">
+                  <span class="platform">
+                    <i [class]="getPlatformIcon(similarProduct.platform)"></i>
+                    {{ similarProduct.platform }}
+                  </span>
+                  <span class="genre">{{ similarProduct.genre }}</span>
+                </div>
+                <div class="card-footer">
+                  <span class="price">{{ similarProduct.price }} DT</span>
+                  <button class="btn-add-cart" (click)="addSimilarToCart(similarProduct, 1)" 
+                          [disabled]="similarProduct.stock === 0">
+                    <i class="fas" [class]="similarProduct.stock > 0 ? 'fa-plus' : 'fa-times'"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <button class="scroll-btn next" (click)="scrollSimilar(1)">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+}
 
 <app-footer></app-footer>
