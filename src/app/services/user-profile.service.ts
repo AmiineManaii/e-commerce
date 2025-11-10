@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { User, Address, Order } from '../Models/user.model';
+import { API_BASE_URL } from '../app.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserProfileService {
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = API_BASE_URL;
   private wishlistChanged = new Subject<void>();
 
   constructor(private http: HttpClient) { }

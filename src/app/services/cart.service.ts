@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, tap } from 'rxjs';
 import { CartItem, CartSummary } from '../Models/cart-item.model';
 import { Game } from '../Models/game.model';
+import { API_BASE_URL } from '../app.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private apiUrl = 'http://localhost:3000/cart';
+  private apiUrl = API_BASE_URL + '/cart';
   private cartChanged = new Subject<void>()
 
   constructor(private http: HttpClient) { }
