@@ -1237,5 +1237,40 @@
       "id": 3
     }
   ],
-  "cart": []
+  "cart": [
+    {
+      "id": 1762796510498,
+      "game": {
+        "id": "1",
+        "title": "Cyberpunk 2077",
+        "platform": "PC",
+        "genre": "RPG",
+        "price": 59.99,
+        "rating": 4.5,
+        "release_date": "2020-12-10",
+        "stock": 12,
+        "description": "Incarnez V, un mercenaire dans la mégalopole futuriste de Night City. Personnalisez votre cyberware, vos compétences et votre style de jeu pour survivre dans une ville obsédée par le pouvoir et la technologie. Avec Keanu Reeves dans le rôle de Johnny Silverhand.",
+        "cover_image": "/assets/games/cover/cyberpunk.jpg",
+        "images": [
+          "/assets/games/screenshots/cyberpunk1.jpg",
+          "/assets/games/screenshots/cyberpunk2.jpg",
+          "/assets/games/screenshots/cyberpunk3.jpg",
+          "/assets/games/screenshots/cyberpunk4.jpg"
+        ],
+        "url_trailer": "https://www.youtube.com/watch?v=8X2kIfS6fb8",
+        "promo": true,
+        "popular": false,
+        "tags": [
+          "RPG",
+          "Cyberpunk",
+          "Open World",
+          "Futuriste",
+          "Action"
+        ]
+      },
+      "quantity": 12,
+      "subtotal": 719.88,
+      "createdAt": "2025-11-10T17:41:50.498Z"
+    }
+  ]
 }
