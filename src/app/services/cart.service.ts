@@ -43,50 +43,7 @@ export class CartService {
     return `${this.apiUrl}/${itemId}`;
   }
 
-  migrateGuestCartToUser(userId: number): Observable<any> {
-    return new Observable(subscriber => {
-      const guestCartUrl = `${this.apiUrl}?sessionId=${this.guestSessionId}`;
-      
-      this.http.get<CartItem[]>(guestCartUrl).subscribe({
-        next: (guestItems) => {
-          if (guestItems.length === 0) {
-            subscriber.next(null);
-            subscriber.complete();
-            return;
-          }
-
-          const updateObservables = guestItems.map(item => 
-            this.http.patch<CartItem>(`${this.apiUrl}/${item.id}`, { 
-              userId: userId,
-              sessionId: null 
-            })
-          );
-
-          let completedCount = 0;
-          updateObservables.forEach(observable => {
-            observable.subscribe({
-              next: () => {
-                completedCount++;
-                if (completedCount === updateObservables.length) {
-                  this.guestSessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                  localStorage.setItem('guestSessionId', this.guestSessionId);
-                  this.cartChanged.next();
-                  subscriber.next(null);
-                  subscriber.complete();
-                }
-              },
-              error: (error) => {
-                subscriber.error(error);
-              }
-            });
-          });
-        },
-        error: (error) => {
-          subscriber.error(error);
-        }
-      });
-    });
-  }
+  
 
   getCartChanges(): Observable<void> {
     return this.cartChanged.asObservable();
