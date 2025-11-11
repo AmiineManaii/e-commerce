@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
-import { Observable, of, Subject, takeUntil } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { User } from '../../Models/user.model';
 import { UserProfileService } from '../../services/user-profile.service';
 

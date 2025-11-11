@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject, tap, switchMap, map, forkJoin, of, throwError } from 'rxjs';
+import { Observable, Subject, map, tap } from 'rxjs';
 import { CartItem, CartSummary } from '../Models/cart-item.model';
 import { Game } from '../Models/game.model';
 import { API_BASE_URL } from '../app.config';
@@ -21,7 +21,6 @@ export class CartService {
     this.guestSessionId = this.getOrCreateGuestSessionId();
   }
 
-  // Générer un ID de session pour les utilisateurs non connectés
   private getOrCreateGuestSessionId(): string {
     let sessionId = localStorage.getItem('guestSessionId');
     if (!sessionId) {
@@ -33,11 +32,9 @@ export class CartService {
 
   private getCurrentUserCartUrl(): string {
     const user = this.authService.getCurrentUser();
-    if (user && user.id) {
-      // Utilisateur connecté : filtrer par userId
+    if (user?.id) {
       return `${this.apiUrl}?userId=${user.id}`;
     } else {
-      // Utilisateur non connecté : filtrer par sessionId
       return `${this.apiUrl}?sessionId=${this.guestSessionId}`;
     }
   }
@@ -46,34 +43,49 @@ export class CartService {
     return `${this.apiUrl}/${itemId}`;
   }
 
-  // Migrer le panier guest vers l'utilisateur après connexion
   migrateGuestCartToUser(userId: number): Observable<any> {
-    const guestCartUrl = `${this.apiUrl}?sessionId=${this.guestSessionId}`;
-    
-    return this.http.get<CartItem[]>(guestCartUrl).pipe(
-      switchMap(guestItems => {
-        if (guestItems.length === 0) {
-          return of(null);
+    return new Observable(subscriber => {
+      const guestCartUrl = `${this.apiUrl}?sessionId=${this.guestSessionId}`;
+      
+      this.http.get<CartItem[]>(guestCartUrl).subscribe({
+        next: (guestItems) => {
+          if (guestItems.length === 0) {
+            subscriber.next(null);
+            subscriber.complete();
+            return;
+          }
+
+          const updateObservables = guestItems.map(item => 
+            this.http.patch<CartItem>(`${this.apiUrl}/${item.id}`, { 
+              userId: userId,
+              sessionId: null 
+            })
+          );
+
+          let completedCount = 0;
+          updateObservables.forEach(observable => {
+            observable.subscribe({
+              next: () => {
+                completedCount++;
+                if (completedCount === updateObservables.length) {
+                  this.guestSessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                  localStorage.setItem('guestSessionId', this.guestSessionId);
+                  this.cartChanged.next();
+                  subscriber.next(null);
+                  subscriber.complete();
+                }
+              },
+              error: (error) => {
+                subscriber.error(error);
+              }
+            });
+          });
+        },
+        error: (error) => {
+          subscriber.error(error);
         }
-
-        // Mettre à jour tous les items du panier guest avec le nouveau userId
-        const updateRequests = guestItems.map(item => 
-          this.http.patch<CartItem>(`${this.apiUrl}/${item.id}`, { 
-            userId: userId,
-            sessionId: null 
-          })
-        );
-
-        return forkJoin(updateRequests).pipe(
-          tap(() => {
-            // Créer une nouvelle session guest après migration
-            this.guestSessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('guestSessionId', this.guestSessionId);
-            this.cartChanged.next();
-          })
-        );
-      })
-    );
+      });
+    });
   }
 
   getCartChanges(): Observable<void> {
@@ -82,119 +94,154 @@ export class CartService {
 
   getCartItems(): Observable<CartItem[]> {
     return this.http.get<CartItem[]>(this.getCurrentUserCartUrl()).pipe(
-      map(items => items || []),
-     
-      switchMap(items => of(items)),
-     
-      switchMap(items => of(items))
+      map(items => items || [])
     );
   }
 
   addToCart(game: Game, quantity: number = 1): Observable<CartItem> {
-    const user = this.authService.getCurrentUser();
-    
-    const newItem: CartItem = {
-      id: Date.now(),
-      userId: user?.id || 0,
-      sessionId: user ? undefined : this.guestSessionId, 
-      game: game,
-      quantity: quantity,
-      subtotal: game.price * quantity,
-      createdAt: new Date().toISOString()
-    };
+    return new Observable(subscriber => {
+      const user = this.authService.getCurrentUser();
+      
+      const newItem: CartItem = {
+        id: Date.now(),
+        userId: user?.id || 0,
+        sessionId: user ? undefined : this.guestSessionId,
+        game: game,
+        quantity: quantity,
+        subtotal: game.price * quantity,
+        createdAt: new Date().toISOString()
+      };
 
-    return this.getCartItems().pipe(
-      switchMap(items => {
-        const existingItem = items.find(item => 
-          item.game.id === game.id && 
-          ((user && item.userId === user.id) || (!user && item.sessionId === this.guestSessionId))
-        );
-        
-        if (existingItem) {
-          newItem.id = existingItem.id;
-          newItem.quantity += existingItem.quantity;
-          newItem.subtotal = game.price * newItem.quantity;
+      this.getCartItems().subscribe({
+        next: (items) => {
+          const existingItem = items.find(item => 
+            item.game.id === game.id && 
+            ((user && item.userId === user.id) || (!user && item.sessionId === this.guestSessionId))
+          );
           
-          return this.http.put<CartItem>(
-            this.getCartItemUrl(existingItem.id), 
-            newItem
-          ).pipe(
-            tap(() => this.cartChanged.next())
-          );
-        } else {
-          return this.http.post<CartItem>(this.apiUrl, newItem).pipe(
-            tap(() => this.cartChanged.next())
-          );
-        }
-      })
-    );
+          if (existingItem) {
+            newItem.id = existingItem.id;
+            newItem.quantity += existingItem.quantity;
+            newItem.subtotal = game.price * newItem.quantity;
+            
+            this.http.put<CartItem>(this.getCartItemUrl(existingItem.id), newItem).subscribe({
+              next: (result) => {
+                this.cartChanged.next();
+                subscriber.next(result);
+                subscriber.complete();
+              },
+              error: (error) => subscriber.error(error)
+            });
+          } else {
+            this.http.post<CartItem>(this.apiUrl, newItem).subscribe({
+              next: (result) => {
+                this.cartChanged.next();
+                subscriber.next(result);
+                subscriber.complete();
+              },
+              error: (error) => subscriber.error(error)
+            });
+          }
+        },
+        error: (error) => subscriber.error(error)
+      });
+    });
   }
 
   updateQuantity(itemId: number, quantity: number): Observable<CartItem> {
-    const user = this.authService.getCurrentUser();
-    
-    return this.http.get<CartItem>(this.getCartItemUrl(itemId)).pipe(
-      switchMap(currentItem => {
-        const isOwner = (user && currentItem.userId === user.id) || 
-                       (!user && currentItem.sessionId === this.guestSessionId);
-        
-        if (!isOwner) {
-          return throwError(() => new Error('Non autorisé à modifier ce panier'));
-        }
+    return new Observable(subscriber => {
+      const user = this.authService.getCurrentUser();
+      
+      this.http.get<CartItem>(this.getCartItemUrl(itemId)).subscribe({
+        next: (currentItem) => {
+          const isOwner = (user && currentItem.userId === user.id) || 
+                         (!user && currentItem.sessionId === this.guestSessionId);
+          
+          if (!isOwner) {
+            subscriber.error(new Error('Non autorisé à modifier ce panier'));
+            return;
+          }
 
-        const updatedItem: CartItem = {
-          ...currentItem,
-          quantity: quantity,
-          subtotal: currentItem.game.price * quantity
-        };
+          const updatedItem: CartItem = {
+            ...currentItem,
+            quantity: quantity,
+            subtotal: currentItem.game.price * quantity
+          };
 
-        return this.http.patch<CartItem>(
-          this.getCartItemUrl(itemId), 
-          updatedItem
-        ).pipe(
-          tap(() => this.cartChanged.next())
-        );
-      })
-    );
+          this.http.patch<CartItem>(this.getCartItemUrl(itemId), updatedItem).subscribe({
+            next: (result) => {
+              this.cartChanged.next();
+              subscriber.next(result);
+              subscriber.complete();
+            },
+            error: (error) => subscriber.error(error)
+          });
+        },
+        error: (error) => subscriber.error(error)
+      });
+    });
   }
 
   removeFromCart(itemId: number): Observable<CartItem> {
-    const user = this.authService.getCurrentUser();
-    
-    return this.http.get<CartItem>(this.getCartItemUrl(itemId)).pipe(
-      switchMap(item => {
-
-        const isOwner = (user && item.userId === user.id) || 
-                       (!user && item.sessionId === this.guestSessionId);
-        
-        if (!isOwner) {
-          return throwError(() => new Error('Non autorisé à supprimer ce panier'));
-        }
-        
-        return this.http.delete<CartItem>(this.getCartItemUrl(itemId)).pipe(
-          tap(() => this.cartChanged.next())
-        );
-      })
-    );
+    return new Observable(subscriber => {
+      const user = this.authService.getCurrentUser();
+      
+      this.http.get<CartItem>(this.getCartItemUrl(itemId)).subscribe({
+        next: (item) => {
+          const isOwner = (user && item.userId === user.id) || 
+                         (!user && item.sessionId === this.guestSessionId);
+          
+          if (!isOwner) {
+            subscriber.error(new Error('Non autorisé à supprimer ce panier'));
+            return;
+          }
+          
+          this.http.delete<CartItem>(this.getCartItemUrl(itemId)).subscribe({
+            next: (result) => {
+              this.cartChanged.next();
+              subscriber.next(result);
+              subscriber.complete();
+            },
+            error: (error) => subscriber.error(error)
+          });
+        },
+        error: (error) => subscriber.error(error)
+      });
+    });
   }
 
   clearCart(): Observable<void> {
-    return this.getCartItems().pipe(
-      switchMap(items => {
-        if (items.length === 0) {
-          return of(undefined);
-        }
+    return new Observable(subscriber => {
+      this.getCartItems().subscribe({
+        next: (items) => {
+          if (items.length === 0) {
+            subscriber.next();
+            subscriber.complete();
+            return;
+          }
 
-        const deleteRequests = items.map(item => 
-          this.http.delete(this.getCartItemUrl(item.id))
-        );
-        
-        return forkJoin(deleteRequests).pipe(
-          tap(() => this.cartChanged.next()),
-          map(() => {})
-        );
-      })
-    );
+          const deleteObservables = items.map(item => 
+            this.http.delete(this.getCartItemUrl(item.id))
+          );
+
+          let completedCount = 0;
+          deleteObservables.forEach(observable => {
+            observable.subscribe({
+              next: () => {
+                completedCount++;
+                if (completedCount === deleteObservables.length) {
+                  this.cartChanged.next();
+                  subscriber.next();
+                  subscriber.complete();
+                }
+              },
+              error: (error) => subscriber.error(error)
+            });
+          });
+        },
+        error: (error) => subscriber.error(error)
+      });
+    });
   }
 
   getCartSummary(): Observable<CartSummary> {
@@ -220,7 +267,6 @@ export class CartService {
       map(items => items.reduce((sum, item) => sum + item.quantity, 0))
     );
   }
-
 
   clearGuestSession(): void {
     this.guestSessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
