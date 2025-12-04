@@ -35,8 +35,8 @@
         @for (game of wishlistItems; track game.id) {
           <div class="game-card">
             <div class="game-image-wrapper" [routerLink]="['/produitDetails', game.id]">
-              @if (game.cover_image) {
-                <img [src]="game.cover_image" [alt]="game.title" class="game-image">
+              @if (game.coverImage) {
+                <img [src]="game.coverImage" [alt]="game.title" class="game-image">
               } @else {
                 <div class="no-image">
                   <i class="fas fa-image"></i>

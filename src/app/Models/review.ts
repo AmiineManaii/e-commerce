@@ -1,7 +1,10 @@
+import { Game } from "./game.model";
+import { User } from "./user.model";
+
 export interface Review {
   id: string;
-  gameId: string;
-  userId: string;
+  game: Game;
+  user: User;
   msg: string;
   note: number;
   date: string;

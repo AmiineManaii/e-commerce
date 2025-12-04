@@ -33,7 +33,7 @@ export class OrdersComponent implements OnInit {
       return;
     }
     
-    this.userProfileService.getOrders(this.currentUser.id).subscribe({
+    this.userProfileService.getOrders(this.currentUser.id.toString()).subscribe({
       next: (orders) => {
         this.orders = orders;
         this.loading = false;

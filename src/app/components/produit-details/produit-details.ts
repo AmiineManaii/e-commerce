@@ -68,7 +68,7 @@ export class ProduitDetailsComponent implements OnInit {
         return;
       }
 
-      this.gameService.getGameById(id).subscribe({
+      this.gameService.getGameById(id.toString()).subscribe({
         next: (game) => this.handleProductLoad(game),
         error: (err) => this.handleProductError(err)
       });
@@ -112,11 +112,14 @@ export class ProduitDetailsComponent implements OnInit {
 
 
   private loadUserNames(): void {
-    const uniqueUserIds = [...new Set(this.reviews.map(review => review.userId))];
+    const uniqueUserIds = [...new Set(this.reviews.map(review => review.user.id!!.toString()))];
+    //console.log("uniqueUserIds", uniqueUserIds)
     
     uniqueUserIds.forEach(userId => {
-      this.authService.getUsername(Number(userId)).subscribe({
-        next: (user) => this.userNames.set(userId, `${user.prenom} ${user.nom}`),
+      
+      this.authService.getUsername(userId).subscribe({
+        next: (user) => 
+          this.userNames.set(userId, `${user.prenom} ${user.nom}`),
         error: () => this.userNames.set(userId, 'Utilisateur inconnu')
       });
     });
@@ -151,8 +154,8 @@ export class ProduitDetailsComponent implements OnInit {
 
     this.isSubmitting = true;
     const reviewData: Omit<Review, 'id'> = {
-      gameId: this.produit.id.toString(),
-      userId: this.currentUser.id.toString(),
+      game: this.produit,
+      user: this.currentUser,
       msg: this.newReview.msg,
       note: this.newReview.note,
       date: new Date().toISOString(),
@@ -163,7 +166,7 @@ export class ProduitDetailsComponent implements OnInit {
       next: (newReview) => {
         this.reviews.unshift(newReview);
         this.calculateAverageRating();
-        this.userNames.set(newReview.userId, `${this.currentUser!.prenom} ${this.currentUser!.nom}`);
+        this.userNames.set(newReview.user.id!!.toString(), `${this.currentUser!.prenom} ${this.currentUser!.nom}`);
         this.newReview = { note: 5, msg: '' };
         form.resetForm();
         this.isSubmitting = false;
@@ -310,7 +313,7 @@ export class ProduitDetailsComponent implements OnInit {
     
     if (!this.produit) return;
 
-    this.userProfileService.addToWishlist(this.currentUser.id, this.produit.id).subscribe({
+    this.userProfileService.addToWishlist(this.currentUser.id!!.toString(), this.produit.id!!.toString()).subscribe({
       next: () => alert('Ajouté aux favoris !'),
       error: (err) => {
         console.error('Wishlist error:', err);

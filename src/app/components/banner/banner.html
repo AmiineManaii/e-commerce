@@ -8,7 +8,7 @@
         @for (game of promoGames; track game.id; let i = $index) {
           <div class="slide" [class.active]="i === currentSlide">
             <div class="slide-image-wrapper">
-              <img [src]="'.'+game.cover_image" [alt]="game.title" class="slide-image" />
+              <img [src]="'.'+game.coverImage" [alt]="game.title" class="slide-image" />
               <div class="image-overlay"></div>
             </div>
             <div class="slide-content-wrapper">

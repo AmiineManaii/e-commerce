@@ -10,7 +10,6 @@ export const authGuard = () => {
     return true;
   }
 
-  // Rediriger vers la page de connexion
   return router.parseUrl('/login');
 };
 
@@ -22,6 +21,5 @@ export const nonAuthGuard = () => {
     return true;
   }
 
-  // Si l'utilisateur est déjà connecté, rediriger vers la page d'accueil
   return router.parseUrl('/');
 };

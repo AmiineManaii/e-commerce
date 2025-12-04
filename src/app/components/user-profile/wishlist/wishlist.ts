@@ -40,7 +40,7 @@ export class WishlistComponent implements OnInit {
       return;
     }
 
-    this.userProfileService.getWishlist(this.user.id).subscribe({
+    this.userProfileService.getWishlist(this.user.id.toString()).subscribe({
       next: (gameIds) => {
         if (gameIds.length === 0) {
           this.wishlistItems = [];
@@ -48,7 +48,7 @@ export class WishlistComponent implements OnInit {
           return;
         }
 
-        this.loadGameDetails(gameIds);
+        this.loadGameDetails(gameIds.map(id => Number(id)));
       },
       error: (err) => {
         this.error = 'Erreur lors du chargement de la liste de souhaits';
@@ -63,7 +63,7 @@ export class WishlistComponent implements OnInit {
     let completedRequests = 0;
 
     gameIds.forEach(gameId => {
-      this.gameService.getGameById(gameId).subscribe({
+      this.gameService.getGameById(gameId.toString()).subscribe({
         next: (game) => {
           if (game) {
             games.push(game);
@@ -99,7 +99,7 @@ export class WishlistComponent implements OnInit {
       this.error = 'Utilisateur non authentifié';
       return;
     }
-    this.userProfileService.removeFromWishlist(this.user.id,gameId).subscribe({
+    this.userProfileService.removeFromWishlist(this.user.id.toString(),gameId.toString()).subscribe({
       next: () => {
         this.wishlistItems = this.wishlistItems.filter(game => game.id !== gameId);
       },

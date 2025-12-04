@@ -31,6 +31,7 @@ export class Banner implements OnInit {
   loadPromoGames(): void {
     this.gameService.getPromoGames().subscribe({
       next: (games) => {
+        //console.log('Jeux en promotion reçus:', games);
         this.promoGames = games;
         if (this.promoGames.length > 1) {
           this.startAutoSlide();

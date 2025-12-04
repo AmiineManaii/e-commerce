@@ -10,7 +10,7 @@
         @for (game of filteredGames; track game.id) {
           <div class="game-card">
             <div class="card-image-wrapper" (click)="viewGameDetails(game.id)">
-              <img [src]="game.cover_image" class="card-img-top" [alt]="game.title">
+              <img [src]="game.coverImage" class="card-img-top" [alt]="game.title">
               <div class="image-overlay"></div>
             </div>
             <div class="card-body">

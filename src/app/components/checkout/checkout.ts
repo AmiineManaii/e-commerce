@@ -81,7 +81,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   loadAddresses(userId: number): void {
-    this.userProfileService.getAddresses(userId).subscribe({
+    this.userProfileService.getAddresses(userId.toString()).subscribe({
       next: (addresses) => {
         this.addresses = addresses;
         this.selectedAddressId = addresses.find(a => a.default)?.id || addresses[0]?.id || null;

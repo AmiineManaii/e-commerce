@@ -16,7 +16,7 @@
           @if (game) {
             <div class="col">
               <div class="card h-100 shadow-sm game-card">
-                <img [src]="'.'+game.cover_image" class="card-img-top" [alt]="game.title">
+                <img [src]="'.'+game.coverImage" class="card-img-top" [alt]="game.title">
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">{{ game.title }}</h5>
                   <p class="card-text text-muted">{{ game.genre }} - {{ game.platform }}</p>

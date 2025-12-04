@@ -47,7 +47,7 @@ export class ProfileComponent implements OnInit {
   saveProfile(): void {
     if (!this.user || !this.user.id) return;
 
-    this.userProfileService.updateUserProfile(this.user.id, this.userForm).subscribe({
+    this.userProfileService.updateUserProfile(this.user.id.toString(), this.userForm).subscribe({
 
       next: (updatedUser) => {
         this.successMessage = 'Profil mis à jour avec succès';

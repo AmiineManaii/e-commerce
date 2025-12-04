@@ -43,7 +43,7 @@ export class Header implements OnInit {
   }
   loadWishlist() {
     if (this.currentUser?.id) {
-      this.userProfileService.getWishlist(this.currentUser.id).subscribe(items => {
+      this.userProfileService.getWishlist(this.currentUser.id.toString()).subscribe(items => {
         this.wishlistItemCount = of(items.length);
       });
     }

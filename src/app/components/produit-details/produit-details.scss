@@ -420,10 +420,7 @@ $border-radius: 12px;
               @include flex-center;
               transition: all 0.3s ease;
 
-              &:hover {
-                background: lighten($primary-color, 10%);
-                transform: scale(1.1);
-              }
+              
             }
           }
 

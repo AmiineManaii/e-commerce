@@ -13,89 +13,168 @@ export class UserProfileService {
 
   constructor(private http: HttpClient) { }
 
-
-  getUserProfile(userId: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/${userId}`);
-  }
-
-  updateUserProfile(userId: number, userData: Partial<User>): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/users/${userId}`, userData);
-  }
-
-
-  getAddresses(userId: number): Observable<Address[]> {
-    return this.http.get<Address[]>(`${this.apiUrl}/addresses?userId=${userId}`);
-  }
-
-
-  addAddress(address: Address): Observable<Address> {
-    return this.http.post<Address>(`${this.apiUrl}/addresses`, address);
-  }
-
-
-  updateAddress(addressId: number, addressData: Partial<Address>): Observable<Address> {
-    return this.http.patch<Address>(`${this.apiUrl}/addresses/${addressId}`, addressData);
-  }
-
-  deleteAddress(addressId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/addresses/${addressId}`);
-  }
-
-  setDefaultAddress(userId: number, addressId: number): Observable<Address> {
+  getUserProfile(userId: string): Observable<User> {
     return new Observable(observer => {
-      
-      this.getAddresses(userId).subscribe({
-        next: (addresses) => {
-          
-          const updatePromises = addresses.map(address => {
-            if (address.default && address.id !== addressId) {
-              return this.updateAddress(address.id!, { default: false }).toPromise();
-            }
-            return Promise.resolve();
-          });
+      this.http.get<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
 
-          // Attendre que toutes les mises à jour soient terminées
-          Promise.all(updatePromises).then(() => {
-            // Définir la nouvelle adresse par défaut
-            this.updateAddress(addressId, { default: true }).subscribe({
-              next: (updatedAddress) => {
-                observer.next(updatedAddress);
+  updateUserProfile(userId: string, userData: Partial<User>): Observable<User> {
+    return new Observable(observer => {
+      // Récupérer d'abord l'utilisateur existant
+      this.getUserProfile(userId).subscribe({
+        next: (existingUser) => {
+          // Fusionner les modifications
+          const updatedUser = {
+            ...existingUser,
+            ...userData
+          };
+          
+          this.http.put<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`, updatedUser)
+            .subscribe({
+              next: (response) => {
+                observer.next(response.data);
                 observer.complete();
               },
-              error: (error) => {
-                observer.error(error);
-              }
+              error: (error) => observer.error(error)
             });
-          });
         },
-        error: (error) => {
-          observer.error(error);
-        }
+        error: (error) => observer.error(error)
       });
     });
   }
 
- 
-  getOrders(userId: number): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/orders?userId=${userId}`);
+  getAddresses(userId: string): Observable<Address[]> {
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Address[]}>(`${this.apiUrl}/addresses/user/${userId}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
+
+  addAddress(address: Address): Observable<Address> {
+    return new Observable(observer => {
+      this.http.post<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses`, address)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
+
+  updateAddress(addressId: string, addressData: Partial<Address>): Observable<Address> {
+    return new Observable(observer => {
+      // D'abord récupérer l'adresse existante
+      this.http.get<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}`)
+        .subscribe({
+          next: (response) => {
+            const existingAddress = response.data;
+            // Fusionner les modifications
+            const updatedAddress = {
+              ...existingAddress,
+              ...addressData
+            };
+            
+            this.http.put<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}`, updatedAddress)
+              .subscribe({
+                next: (response) => {
+                  observer.next(response.data);
+                  observer.complete();
+                },
+                error: (error) => observer.error(error)
+              });
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
+
+  deleteAddress(addressId: string): Observable<void> {
+    return new Observable(observer => {
+      this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/addresses/${addressId}`)
+        .subscribe({
+          next: () => {
+            observer.next();
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
+
+  setDefaultAddress(userId: string, addressId: string): Observable<Address> {
+    return new Observable(observer => {
+      // Votre API Spring Boot a un endpoint spécifique pour définir une adresse par défaut
+      this.http.patch<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}/default`, {})
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
+
+  getOrders(userId: string): Observable<Order[]> {
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Order[]}>(`${this.apiUrl}/orders/user/${userId}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 
   getOrderDetails(orderId: string): Observable<Order> {
-    return this.http.get<Order>(`${this.apiUrl}/orders/${orderId}`);
-  }
-
- 
-  createOrder(order: Order): Observable<Order> {
-    return this.http.post<Order>(`${this.apiUrl}/orders`, order);
-  }
-
-
-  getWishlist(userId: number): Observable<number[]> {
     return new Observable(observer => {
-      
-      this.http.get<User>(`${this.apiUrl}/users/${userId}`).subscribe({
+      this.http.get<{status: string, message: string, data: Order}>(`${this.apiUrl}/orders/${orderId}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
+
+  createOrder(order: Order): Observable<Order> {
+    return new Observable(observer => {
+      this.http.post<{status: string, message: string, data: Order}>(`${this.apiUrl}/orders`, order)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
+
+  getWishlist(userId: string): Observable<string[]> {
+    return new Observable(observer => {
+      this.getUserProfile(userId).subscribe({
         next: (user) => {
-          observer.next(user.wishlist || []);
+          observer.next(user.wishlist?.map(item => item.toString()) || []);
           observer.complete();
         },
         error: (error) => {
@@ -105,73 +184,35 @@ export class UserProfileService {
     });
   }
 
-  addToWishlist(userId: number, gameId: number): Observable<User> {
+  addToWishlist(userId: string, gameId: string): Observable<User> {
     return new Observable(observer => {
-    
-      this.getWishlist(userId).subscribe({
-        next: (currentWishlist) => {
-          
-          if (currentWishlist.includes(gameId)) {
-            observer.next({} as User);
+      this.http.post<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}/wishlist/${gameId}`, {})
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
             observer.complete();
-
-            return;
-          }
-
-         
-          const updatedWishlist = [...currentWishlist, gameId];
-          
-
-          this.http.patch<User>(`${this.apiUrl}/users/${userId}`, {
-            wishlist: updatedWishlist
-          }).subscribe({
-            next: (user) => {
-              observer.next(user);
-              observer.complete();
-              this.wishlistChanged.next();
-            },
-            error: (error) => {
-              observer.error(error);
-            }
-          });
-        },
-        error: (error) => {
-          observer.error(error);
-        }
-      });
+            this.wishlistChanged.next();
+          },
+          error: (error) => observer.error(error)
+        });
     });
   }
 
-  removeFromWishlist(userId: number, gameId: number): Observable<User> {
+  removeFromWishlist(userId: string, gameId: string): Observable<User> {
     return new Observable(observer => {
-    
-      this.getWishlist(userId).subscribe({
-        next: (currentWishlist) => {
-       
-          const updatedWishlist = currentWishlist.filter(id => id !== gameId);
-          
-         
-          this.http.patch<User>(`${this.apiUrl}/users/${userId}`, {
-            wishlist: updatedWishlist
-          }).subscribe({
-            next: (user) => {
-              observer.next(user);
-              observer.complete();
-              this.wishlistChanged.next();
-            },
-            error: (error) => {
-              observer.error(error);
-            }
-          });
-        },
-        error: (error) => {
-          observer.error(error);
-        }
-      });
+      this.http.delete<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}/wishlist/${gameId}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+            this.wishlistChanged.next();
+          },
+          error: (error) => observer.error(error)
+        });
     });
   }
 
-  isInWishlist(userId: number, gameId: number): Observable<boolean> {
+  isInWishlist(userId: string, gameId: string): Observable<boolean> {
     return new Observable(observer => {
       this.getWishlist(userId).subscribe({
         next: (wishlist) => {
@@ -184,8 +225,8 @@ export class UserProfileService {
       });
     });
   }
-  getWishlistChanges(): Observable<void> {
-  return this.wishlistChanged.asObservable();
-}
 
+  getWishlistChanges(): Observable<void> {
+    return this.wishlistChanged.asObservable();
+  }
 }

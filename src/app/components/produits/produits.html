@@ -85,7 +85,7 @@
         @for (produit of displayedProduits; track produit.id) {
         <div class="produit-card">
             <div class="card-image-wrapper" (click)="viewProductDetails(produit.id)">
-                <img [src]="produit.cover_image" [alt]="produit.title" class="produit-image">
+                <img [src]="produit.coverImage" [alt]="produit.title" class="produit-image">
                 <div class="image-overlay"></div>
                 <div class="card-badge">
                     <span class="badge-platform">

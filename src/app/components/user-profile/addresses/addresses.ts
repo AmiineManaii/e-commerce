@@ -86,7 +86,7 @@ export class AddressesComponent implements OnInit {
   updateAddress(): void {
     if (!this.editingAddress || !this.editingAddress.id) return;
     
-    this.userProfileService.updateAddress(this.editingAddress.id, this.newAddress).subscribe({
+    this.userProfileService.updateAddress(this.editingAddress.id.toString(), this.newAddress).subscribe({
       next: () => {
         this.showAddForm = false;
         this.editingAddress = null;
@@ -105,7 +105,7 @@ export class AddressesComponent implements OnInit {
   deleteAddress(addressId: number): void {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette adresse ?')) return;
     
-    this.userProfileService.deleteAddress(addressId).subscribe({
+    this.userProfileService.deleteAddress(addressId.toString()).subscribe({
       next: () => {
         this.successMessage = 'Adresse supprimée avec succès';
         this.loadAddresses();
@@ -121,7 +121,7 @@ export class AddressesComponent implements OnInit {
   setAsDefault(addressId: number): void {
     if (!this.currentUser || !this.currentUser.id) return;
     
-    this.userProfileService.setDefaultAddress(this.currentUser.id, addressId).subscribe({
+    this.userProfileService.setDefaultAddress(this.currentUser.id.toString(), addressId.toString()).subscribe({
       next: () => {
         this.successMessage = 'Adresse définie par défaut';
         this.loadAddresses();
@@ -139,7 +139,7 @@ export class AddressesComponent implements OnInit {
     
     this.loading = true;
     this.error = '';
-    this.userProfileService.getAddresses(this.currentUser.id).subscribe({
+    this.userProfileService.getAddresses(this.currentUser.id.toString()).subscribe({
       next: (addresses) => {
         this.addresses = addresses;
         this.loading = false;

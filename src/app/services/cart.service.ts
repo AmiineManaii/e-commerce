@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject, map, tap } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { CartItem, CartSummary } from '../Models/cart-item.model';
 import { Game } from '../Models/game.model';
 import { API_BASE_URL } from '../app.config';
@@ -30,199 +30,222 @@ export class CartService {
     return sessionId;
   }
 
-  private getCurrentUserCartUrl(): string {
-    const user = this.authService.getCurrentUser();
-    if (user?.id) {
-      return `${this.apiUrl}?userId=${user.id}`;
-    } else {
-      return `${this.apiUrl}?sessionId=${this.guestSessionId}`;
-    }
-  }
-
-  private getCartItemUrl(itemId: number): string {
-    return `${this.apiUrl}/${itemId}`;
-  }
-
-  
-
   getCartChanges(): Observable<void> {
     return this.cartChanged.asObservable();
   }
 
   getCartItems(): Observable<CartItem[]> {
-    return this.http.get<CartItem[]>(this.getCurrentUserCartUrl()).pipe(
-      map(items => items || [])
-    );
+    const user = this.authService.getCurrentUser();
+    
+    return new Observable(observer => {
+      if (user?.id) {
+        // Utilisateur connecté
+        this.http.get<{status: string, message: string, data: any[]}>(`${this.apiUrl}/user/${user.id}`).subscribe({
+          next: (response) => {
+            const items = response.data.map(item => ({
+              id: item.id,
+              userId: user.id,
+              game: item.game,
+              quantity: item.quantity,
+              subtotal: item.subtotal,
+              createdAt: item.createdAt
+            }));
+            observer.next(items);
+            observer.complete();
+          },
+          error: (error) => {
+            observer.error(error);
+          }
+        });
+      } else {
+        // Invité
+        this.http.get<{status: string, message: string, data: any[]}>(`${this.apiUrl}/session/${this.guestSessionId}`).subscribe({
+          next: (response) => {
+            const items = response.data.map(item => ({
+              id: item.id,
+              sessionId: this.guestSessionId,
+              game: item.game,
+              quantity: item.quantity,
+              subtotal: item.subtotal,
+              createdAt: item.createdAt
+            }));
+            observer.next(items);
+            observer.complete();
+          },
+          error: (error) => {
+            observer.error(error);
+          }
+        });
+      }
+    });
   }
 
   addToCart(game: Game, quantity: number = 1): Observable<CartItem> {
-    return new Observable(subscriber => {
+    return new Observable(observer => {
       const user = this.authService.getCurrentUser();
       
-      const newItem: CartItem = {
-        id: Date.now(),
-        userId: user?.id || 0,
-        sessionId: user ? undefined : this.guestSessionId,
-        game: game,
-        quantity: quantity,
-        subtotal: game.price * quantity,
-        createdAt: new Date().toISOString()
-      };
-
+      // D'abord, récupérer le panier actuel pour vérifier si l'article existe déjà
       this.getCartItems().subscribe({
         next: (items) => {
-          const existingItem = items.find(item => 
-            item.game.id === game.id && 
-            ((user && item.userId === user.id) || (!user && item.sessionId === this.guestSessionId))
-          );
+          const existingItem = items.find(item => item.game.id === game.id);
           
           if (existingItem) {
-            newItem.id = existingItem.id;
-            newItem.quantity += existingItem.quantity;
-            newItem.subtotal = game.price * newItem.quantity;
-            
-            this.http.put<CartItem>(this.getCartItemUrl(existingItem.id), newItem).subscribe({
+            // Mettre à jour la quantité
+            const updatedQuantity = existingItem.quantity + quantity;
+            this.updateQuantity(existingItem.id, updatedQuantity).subscribe({
               next: (result) => {
-                this.cartChanged.next();
-                subscriber.next(result);
-                subscriber.complete();
+                observer.next(result);
+                observer.complete();
               },
-              error: (error) => subscriber.error(error)
+              error: (error) => observer.error(error)
             });
           } else {
-            this.http.post<CartItem>(this.apiUrl, newItem).subscribe({
-              next: (result) => {
+            // Créer un nouvel élément de panier
+            const newItem = {
+              game: game,
+              quantity: quantity,
+              subtotal: game.price * quantity,
+              createdAt: new Date().toISOString()
+            };
+
+            this.http.post<{status: string, message: string, data: any}>(this.apiUrl, newItem).subscribe({
+              next: (response) => {
+                const result = {
+                  id: response.data.id,
+                  userId: user?.id || 0,
+                  sessionId: user ? undefined : this.guestSessionId,
+                  game: response.data.game,
+                  quantity: response.data.quantity,
+                  subtotal: response.data.subtotal,
+                  createdAt: response.data.createdAt
+                };
                 this.cartChanged.next();
-                subscriber.next(result);
-                subscriber.complete();
+                observer.next(result);
+                observer.complete();
               },
-              error: (error) => subscriber.error(error)
+              error: (error) => {
+                observer.error(error);
+              }
             });
           }
         },
-        error: (error) => subscriber.error(error)
+        error: (error) => observer.error(error)
       });
     });
   }
 
   updateQuantity(itemId: number, quantity: number): Observable<CartItem> {
-    return new Observable(subscriber => {
-      const user = this.authService.getCurrentUser();
-      
-      this.http.get<CartItem>(this.getCartItemUrl(itemId)).subscribe({
-        next: (currentItem) => {
-          const isOwner = (user && currentItem.userId === user.id) || 
-                         (!user && currentItem.sessionId === this.guestSessionId);
-          
-          if (!isOwner) {
-            subscriber.error(new Error('Non autorisé à modifier ce panier'));
-            return;
-          }
-
-          const updatedItem: CartItem = {
-            ...currentItem,
+    return new Observable(observer => {
+      // D'abord, récupérer l'élément actuel
+      this.http.get<{status: string, message: string, data: any}>(`${this.apiUrl}/${itemId}`).subscribe({
+        next: (response) => {
+          const currentItem = response.data;
+          const updatedItem = {
+            id: currentItem.id,
+            game: currentItem.game,
             quantity: quantity,
-            subtotal: currentItem.game.price * quantity
+            subtotal: currentItem.game.price * quantity,
+            createdAt: currentItem.createdAt
           };
 
-          this.http.patch<CartItem>(this.getCartItemUrl(itemId), updatedItem).subscribe({
-            next: (result) => {
+          // Mettre à jour l'élément
+          this.http.put<{status: string, message: string, data: any}>(`${this.apiUrl}/${itemId}`, updatedItem).subscribe({
+            next: (response) => {
+              const result = {
+                id: response.data.id,
+                userId: currentItem.userId || 0,
+                sessionId: currentItem.sessionId || this.guestSessionId,
+                game: response.data.game,
+                quantity: response.data.quantity,
+                subtotal: response.data.subtotal,
+                createdAt: response.data.createdAt
+              };
               this.cartChanged.next();
-              subscriber.next(result);
-              subscriber.complete();
+              observer.next(result);
+              observer.complete();
             },
-            error: (error) => subscriber.error(error)
+            error: (error) => observer.error(error)
           });
         },
-        error: (error) => subscriber.error(error)
+        error: (error) => observer.error(error)
       });
     });
   }
 
-  removeFromCart(itemId: number): Observable<CartItem> {
-    return new Observable(subscriber => {
-      const user = this.authService.getCurrentUser();
-      
-      this.http.get<CartItem>(this.getCartItemUrl(itemId)).subscribe({
-        next: (item) => {
-          const isOwner = (user && item.userId === user.id) || 
-                         (!user && item.sessionId === this.guestSessionId);
-          
-          if (!isOwner) {
-            subscriber.error(new Error('Non autorisé à supprimer ce panier'));
-            return;
-          }
-          
-          this.http.delete<CartItem>(this.getCartItemUrl(itemId)).subscribe({
-            next: (result) => {
-              this.cartChanged.next();
-              subscriber.next(result);
-              subscriber.complete();
-            },
-            error: (error) => subscriber.error(error)
-          });
+  removeFromCart(itemId: number): Observable<void> {
+    return new Observable(observer => {
+      this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/${itemId}`).subscribe({
+        next: () => {
+          this.cartChanged.next();
+          observer.next();
+          observer.complete();
         },
-        error: (error) => subscriber.error(error)
+        error: (error) => observer.error(error)
       });
     });
   }
 
   clearCart(): Observable<void> {
-    return new Observable(subscriber => {
-      this.getCartItems().subscribe({
-        next: (items) => {
-          if (items.length === 0) {
-            subscriber.next();
-            subscriber.complete();
-            return;
-          }
-
-          const deleteObservables = items.map(item => 
-            this.http.delete(this.getCartItemUrl(item.id))
-          );
-
-          let completedCount = 0;
-          deleteObservables.forEach(observable => {
-            observable.subscribe({
-              next: () => {
-                completedCount++;
-                if (completedCount === deleteObservables.length) {
-                  this.cartChanged.next();
-                  subscriber.next();
-                  subscriber.complete();
-                }
-              },
-              error: (error) => subscriber.error(error)
-            });
-          });
-        },
-        error: (error) => subscriber.error(error)
-      });
+    return new Observable(observer => {
+      const user = this.authService.getCurrentUser();
+      
+      if (user?.id) {
+        // Utilisateur connecté
+        this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/user/${user.id}`).subscribe({
+          next: () => {
+            this.cartChanged.next();
+            observer.next();
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+      } else {
+        // Invité
+        this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/session/${this.guestSessionId}`).subscribe({
+          next: () => {
+            this.cartChanged.next();
+            observer.next();
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+      }
     });
   }
 
   getCartSummary(): Observable<CartSummary> {
-    return this.getCartItems().pipe(
-      map(items => {
-        const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-        const shippingFee = subtotal > 100 ? 15 : 0;
-        const total = subtotal + shippingFee;
-        const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+    return new Observable(observer => {
+      this.getCartItems().subscribe({
+        next: (items) => {
+          const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+          const shippingFee = subtotal > 100 ? 15 : 0;
+          const total = subtotal + shippingFee;
+          const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-        return {
-          subtotal,
-          shippingFee,
-          total,
-          itemCount
-        };
-      })
-    );
+          observer.next({
+            subtotal,
+            shippingFee,
+            total,
+            itemCount
+          });
+          observer.complete();
+        },
+        error: (error) => observer.error(error)
+      });
+    });
   }
 
   getTotalItems(): Observable<number> {
-    return this.getCartItems().pipe(
-      map(items => items.reduce((sum, item) => sum + item.quantity, 0))
-    );
+    return new Observable(observer => {
+      this.getCartItems().subscribe({
+        next: (items) => {
+          const total = items.reduce((sum, item) => sum + item.quantity, 0);
+          observer.next(total);
+          observer.complete();
+        },
+        error: (error) => observer.error(error)
+      });
+    });
   }
 
   clearGuestSession(): void {

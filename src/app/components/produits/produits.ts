@@ -171,7 +171,7 @@ export class Produits implements OnInit {
       return;
     }
 
-    this.userProfileService.addToWishlist(this.currentUser.id, produit.id).subscribe({
+    this.userProfileService.addToWishlist(this.currentUser.id.toString(), produit.id.toString()).subscribe({
       next: () => {
         
         alert('Ajouté à la liste de souhaits: ' + produit.title);

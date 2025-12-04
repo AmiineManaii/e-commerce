@@ -8,7 +8,7 @@ export interface Game {
   release_date: string;   
   stock: number;          
   description: string;
-  cover_image: string;    
+  coverImage: string;    
   images: string[];       
   promo?: boolean;        
   tags?: string[];

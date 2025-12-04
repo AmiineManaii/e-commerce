@@ -13,64 +13,180 @@ export class GameService {
   constructor(private http: HttpClient) { }
 
   getAllGames(): Observable<Game[]> {
-    return this.http.get<Game[]>(this.apiUrl);
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Game[]}>(this.apiUrl)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 
-  getGameById(id: number): Observable<Game> {
-    return this.http.get<Game>(`${this.apiUrl}/${id}`);
+  getGameById(id: string): Observable<Game> {
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Game}>(`${this.apiUrl}/${id}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 
   getGamesByPlatform(platform: string): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?platform=${platform}`);
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Game[]}>(`${this.apiUrl}/platform/${platform}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 
   getGamesByGenre(genre: string): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?genre=${genre}`);
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Game[]}>(`${this.apiUrl}/genre/${genre}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 
   getGamesOnPromo(): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?promo=true`);
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Game[]}>(`${this.apiUrl}/promo`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 
+  getPopularGames(): Observable<Game[]> {
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Game[]}>(`${this.apiUrl}/popular`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
+  }
 
   searchGames(query: string): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?title_like=${query}`);
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Game[]}>(`${this.apiUrl}/search?q=${query}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
-
 
   addGame(game: Game): Observable<Game> {
-    return this.http.post<Game>(this.apiUrl, game);
+    return new Observable(observer => {
+      this.http.post<{status: string, message: string, data: Game}>(this.apiUrl, game)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 
-
-  updateGame(id: number, game: Game): Observable<Game> {
-    return this.http.put<Game>(`${this.apiUrl}/${id}`, game);
+  updateGame(id: string, game: Game): Observable<Game> {
+    return new Observable(observer => {
+      this.http.put<{status: string, message: string, data: Game}>(`${this.apiUrl}/${id}`, game)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 
- 
-  deleteGame(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deleteGame(id: string): Observable<void> {
+    return new Observable(observer => {
+      this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/${id}`)
+        .subscribe({
+          next: () => {
+            observer.next();
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
-
 
   getGamesByRating(minRating: number = 0): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?rating_gte=${minRating}&_sort=rating&_order=desc`);
+    return new Observable(observer => {
+      this.getAllGames().subscribe({
+        next: (games) => {
+          const filteredGames = games.filter(game => game.rating >= minRating)
+            .sort((a, b) => b.rating - a.rating);
+          observer.next(filteredGames);
+          observer.complete();
+        },
+        error: (error) => observer.error(error)
+      });
+    });
   }
-
 
   getGamesByPrice(maxPrice?: number): Observable<Game[]> {
-    let url = this.apiUrl;
-    if (maxPrice !== undefined) {
-      url += `?price_lte=${maxPrice}`;
-    }
-    return this.http.get<Game[]>(url);
-  }
- 
-  getPopularGames(): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?popular=true&_sort=-rating`);
+    return new Observable(observer => {
+      this.getAllGames().subscribe({
+        next: (games) => {
+          let filteredGames = games;
+          if (maxPrice !== undefined) {
+            filteredGames = games.filter(game => game.price <= maxPrice);
+          }
+          observer.next(filteredGames);
+          observer.complete();
+        },
+        error: (error) => observer.error(error)
+      });
+    });
   }
 
   getPromoGames(): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}?promo=true&_sort=-rating`);
+    return this.getGamesOnPromo();
+  }
+
+  // Méthode supplémentaire pour les tags (si vous en avez besoin)
+  getGamesByTag(tag: string): Observable<Game[]> {
+    return new Observable(observer => {
+      this.http.get<{status: string, message: string, data: Game[]}>(`${this.apiUrl}/tag/${tag}`)
+        .subscribe({
+          next: (response) => {
+            observer.next(response.data);
+            observer.complete();
+          },
+          error: (error) => observer.error(error)
+        });
+    });
   }
 }
