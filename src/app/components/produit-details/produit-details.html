@@ -14,7 +14,7 @@
           </div>
         }
 
-        @if (produit.images.length) {
+        @if (produit.images) {
           <div class="image-gallery">
             <div class="main-image">
               <img [src]="produit.images[currentImageIndex]" [alt]="produit.title" class="gallery-image">
@@ -26,7 +26,7 @@
               </button>
             </div>
             
-            @if (produit.images.length > 1) {
+            @if (produit.images) {
               <div class="image-thumbnails">
                 @for (image of produit.images; track image; let i = $index) {
                   <div class="thumbnail-item" [class.active]="i === currentImageIndex" (click)="currentImageIndex = i">
@@ -224,7 +224,7 @@
             <div class="review-header">
               <div class="user-info">
                 <i class="fas fa-user-circle"></i>
-                <span class="user-name">{{ getDisplayName(review.user.id!!.toString()) }}</span>
+                <span class="user-name">{{ getDisplayName(review.userId) }}</span>
                 @if (review.verified) {
                   <span class="verified">
                     <i class="fas fa-check-circle"></i>
@@ -232,7 +232,7 @@
                   </span>
                 }
               </div>
-              <span class="review-date">{{ formatDate(review.date) }}</span>
+              <span class="review-date">{{ formatDate(review.date!) }}</span>
             </div>
             
             <div class="review-rating">
@@ -288,14 +288,10 @@
             <div class="char-count">{{ newReview.msg.length }}/500</div>
           </div>
 
-          <button type="submit" [disabled]="!reviewForm.valid || isSubmitting">
-            @if (isSubmitting) {
-              <i class="fas fa-spinner fa-spin"></i>
-              Publication...
-            } @else {
-              <i class="fas fa-paper-plane"></i>
+          <button type="submit" class="btn-primary">
+            
               Publier
-            }
+            
           </button>
         </form>
       } @else {

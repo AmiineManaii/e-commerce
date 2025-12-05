@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { CartItem, CartSummary } from '../../Models/cart-item.model';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -14,7 +14,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './cart.html',
   styleUrl: './cart.scss'
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
   cartItems$ = new BehaviorSubject<CartItem[]>([]);
   cartSummary: CartSummary = {
     subtotal: 0,
@@ -22,6 +22,7 @@ export class CartComponent implements OnInit {
     total: 0,
     itemCount: 0
   };
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private cartService: CartService, private router: Router) {}
 
@@ -29,10 +30,13 @@ export class CartComponent implements OnInit {
     this.loadCartItems();
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   loadCartItems(): void {
-    this.cartService.getCartItems().subscribe({
+    const subscription = this.cartService.getCartItems().subscribe({
       next: (items) => {
-        //console.log('items',items);
         this.cartItems$.next(items);
         this.updateSummary(items);
       },
@@ -40,6 +44,7 @@ export class CartComponent implements OnInit {
         console.error('Erreur lors de la récupération des articles du panier :', error);
       }
     });
+    this.subscriptions.add(subscription);
   }
 
   updateSummary(items: CartItem[]): void {
@@ -47,7 +52,6 @@ export class CartComponent implements OnInit {
     const shippingFee = subtotal > 0 ? 15 : 0;
     const total = subtotal + shippingFee;
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-
     this.cartSummary = {
       subtotal,
       shippingFee,
@@ -58,10 +62,10 @@ export class CartComponent implements OnInit {
 
   updateQuantity(itemId: string, quantity: number): void {
     if (quantity > 0) {
-      this.cartService.updateQuantity(itemId, quantity).subscribe({
+      const subscription = this.cartService.updateQuantity(itemId, quantity).subscribe({
         next: (updatedItem) => {
           const currentItems = this.cartItems$.value;
-          const updatedItems = currentItems.map(item => 
+          const updatedItems = currentItems.map(item =>
             item.id === updatedItem.id ? updatedItem : item
           );
           this.cartItems$.next(updatedItems);
@@ -71,14 +75,14 @@ export class CartComponent implements OnInit {
           console.error('Erreur lors de la mise à jour de la quantité :', error);
         }
       });
+      this.subscriptions.add(subscription);
     }
   }
 
   removeItem(itemId: string): void {
     if (confirm('Vous etes sur de supprimer cet article du panier ?')) {
-      this.cartService.removeFromCart(itemId).subscribe({
+      const subscription = this.cartService.removeFromCart(itemId).subscribe({
         next: () => {
-
           const currentItems = this.cartItems$.value;
           const updatedItems = currentItems.filter(item => item.id !== itemId);
           this.cartItems$.next(updatedItems);
@@ -88,12 +92,13 @@ export class CartComponent implements OnInit {
           console.error('Erreur lors de la suppression de larticle :', error);
         }
       });
+      this.subscriptions.add(subscription);
     }
   }
 
   clearCart(): void {
     if (confirm('vous etes sur de vider le panier ?')) {
-      this.cartService.clearCart().subscribe({
+      const subscription = this.cartService.clearCart().subscribe({
         next: () => {
           this.cartItems$.next([]);
           this.updateSummary([]);
@@ -102,9 +107,9 @@ export class CartComponent implements OnInit {
           console.error('Erreur lors du vidage du panier :', error);
         }
       });
+      this.subscriptions.add(subscription);
     }
   }
-
 
   proceedToCheckout(): void {
     const currentItems = this.cartItems$.value;

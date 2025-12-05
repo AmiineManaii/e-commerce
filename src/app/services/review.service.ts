@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Review } from '../Models/review';
 import { API_BASE_URL } from '../app.config';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { API_BASE_URL } from '../app.config';
 export class ReviewService {
   private apiUrl = API_BASE_URL + '/reviews';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   getReviews(): Observable<Review[]> {
     return new Observable(observer => {
@@ -43,6 +44,7 @@ export class ReviewService {
       this.http.get<{status: string, message: string, data: Review[]}>(`${this.apiUrl}/game/${gameId}`)
         .subscribe({
           next: (response) => {
+            console.log("response", response);
             observer.next(response.data);
             observer.complete();
           },
@@ -66,7 +68,12 @@ export class ReviewService {
 
   createReview(review: Omit<Review, 'id'>): Observable<Review> {
     return new Observable(observer => {
-      this.http.post<{status: string, message: string, data: Review}>(this.apiUrl, review)
+      const token = this.authService.getCurrentUser()?.token || null;
+      this.http.post<{status: string, message: string, data: Review}>(this.apiUrl, review, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -87,7 +94,7 @@ export class ReviewService {
             ...existingReview,
             ...review
           };
-          
+
           // Envoyer la mise à jour avec PUT (votre API Spring Boot utilise PUT)
           this.http.put<{status: string, message: string, data: Review}>(`${this.apiUrl}/${id}`, updatedReview)
             .subscribe({

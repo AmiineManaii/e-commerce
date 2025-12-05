@@ -110,9 +110,14 @@ export class AuthService {
     );
   }
 
-  getUsername(userId: string): Observable<{prenom: string, nom: string}> {
+  getUsername(userId: string, token: string): Observable<{prenom: string, nom: string}> {
     //console.log(userId);
-    return this.http.get<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`).pipe(
+    
+    return this.http.get<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`,{
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).pipe(
       map(user => ({prenom: user.data.prenom, nom: user.data.nom}))
     );
   }

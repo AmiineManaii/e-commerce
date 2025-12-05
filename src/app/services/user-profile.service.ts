@@ -206,6 +206,7 @@ export class UserProfileService {
   }
 
   createOrder(order: Order): Observable<Order> {
+    console.log('createOrder', order);
     return new Observable(observer => {
       const token = localStorage.getItem('token');
       this.http.post<{status: string, message: string, data: Order}>(`${this.apiUrl}/orders`, order,{

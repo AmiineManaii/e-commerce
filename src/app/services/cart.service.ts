@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, Subject } from 'rxjs';
+import { forkJoin, map, Observable, Subject, switchMap, of } from 'rxjs';
 import { CartItem, CartSummary } from '../Models/cart-item.model';
 import { Game } from '../Models/game.model';
 import { API_BASE_URL } from '../app.config';
@@ -14,7 +14,6 @@ export class CartService {
   private apiUrl = API_BASE_URL + '/cart';
   private cartChanged = new Subject<void>();
   private guestSessionId: string;
-  private game!:Game;
 
   constructor(
     private http: HttpClient,
@@ -33,265 +32,301 @@ export class CartService {
     return sessionId;
   }
 
+  private getAuthHeaders(): { [header: string]: string } {
+    const currentUser = this.authService.getCurrentUser();
+    const token = currentUser?.token;
+    
+    if (token) {
+      return {
+        'Authorization': `Bearer ${token}`
+      };
+    }
+    return {};
+  }
+
+  private isAuthenticated(): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    return !!currentUser?.user;
+  }
+
   getCartChanges(): Observable<void> {
     return this.cartChanged.asObservable();
   }
 
   getCartItems(): Observable<CartItem[]> {
-    const CurrnetUserwithToken = this.authService.getCurrentUser();
-    const user=CurrnetUserwithToken?.user;
-    const token=CurrnetUserwithToken?.token;
-    
-    return new Observable(observer => {
-      if (user?.id) {
-        // Utilisateur connecté
-        this.http.get<{status: string, message: string, data: any[]}>(`${this.apiUrl}/user/${user.id}`,{
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }).subscribe({
-          next: (response) => {
-            //console.log(`response connecté, userid:${user.id}, response:`,response);
-            const items = response.data.map(item => ({
-              id: item.id,
-              userId: user.id,
-              gameId: item.gameId,
-              game: this.getGameById(item.gameId),
-              quantity: item.quantity,
-              subtotal: item.subtotal,
-              createdAt: item.createdAt
-            }));
-            observer.next(items);
-            observer.complete();
-          },
-          error: (error) => {
-            observer.error(error);
-          }
-        });
-      } else {
-        // Invité
-        this.http.get<{status: string, message: string, data: any[]}>(`${this.apiUrl}/session/${this.guestSessionId}`).subscribe({
-          next: (response) => {
-            //console.log("response invite",response);
-            const items = response.data.map(item => ({
-              id: item.id,
-              sessionId: this.guestSessionId,
-              gameId: item.gameId,
-              game: this.getGameById(item.gameID),
-              quantity: item.quantity,
-              subtotal: item.subtotal,
-              createdAt: item.createdAt
-            }));
-            observer.next(items);
-            observer.complete();
-          },
-          error: (error) => {
-            observer.error(error);
-          }
-        });
-      }
-    });
+    if (this.isAuthenticated()) {
+      // Utilisateur connecté - avec token
+      const currentUser = this.authService.getCurrentUser();
+      const userId = currentUser?.user?.id;
+      
+      return this.http.get<{ status: string, message: string, data: any[] }>(
+        `${this.apiUrl}/user/${userId}`,
+        { headers: this.getAuthHeaders() }
+      ).pipe(
+        switchMap(response => {
+          const gameObservables = response.data.map(item => this.getGameById(item.gameId));
+          return forkJoin(gameObservables).pipe(
+            map(games => {
+              return response.data.map((item, index) => ({
+                id: item.id,
+                userId: userId,
+                gameId: item.gameId,
+                game: games[index],
+                quantity: item.quantity,
+                subtotal: item.subtotal,
+                createdAt: item.createdAt
+              }));
+            })
+          );
+        })
+      );
+    } else {
+      // Invité - sans token
+      return this.http.get<{ status: string, message: string, data: any[] }>(
+        `${this.apiUrl}/session/${this.guestSessionId}`
+      ).pipe(
+        switchMap(response => {
+          const gameObservables = response.data.map(item => this.getGameById(item.gameId));
+          return forkJoin(gameObservables).pipe(
+            map(games => {
+              return response.data.map((item, index) => ({
+                id: item.id,
+                sessionId: this.guestSessionId,
+                gameId: item.gameId,
+                game: games[index],
+                quantity: item.quantity,
+                subtotal: item.subtotal,
+                createdAt: item.createdAt
+              }));
+            })
+          );
+        })
+      );
+    }
   }
 
   addToCart(game: Game, quantity: number = 1): Observable<CartItem> {
-    return new Observable(observer => {
-      const CurrnetUserwithToken = this.authService.getCurrentUser();
-      const user=CurrnetUserwithToken?.user;
-      const token=CurrnetUserwithToken?.token;
+    if (this.isAuthenticated()) {
+      // Utilisateur connecté
+      const currentUser = this.authService.getCurrentUser();
+      const userId = currentUser?.user?.id;
       
-      // D'abord, récupérer le panier actuel pour vérifier si l'article existe déjà
-      this.getCartItems().subscribe({
-        next: (items) => {
-          const existingItem = items.find(item => item.gameId === game.id);
-          
-          if (existingItem) {
-            // Mettre à jour la quantité
-            const updatedQuantity = existingItem.quantity + quantity;
-            this.updateQuantity(existingItem.id, updatedQuantity).subscribe({
-              next: (result) => {
-                observer.next(result);
-                observer.complete();
-              },
-              error: (error) => observer.error(error)
-            });
-          } else {
-            //console.log("game",game.id);
-            // Créer un nouvel élément de panier
-            const newItem = {
-              userId: user?.id || '',
-              gameId: game.id,
-              game:this.getGameById(game.id),
-              quantity: quantity,
-              subtotal: game.price * quantity,
-              createdAt: new Date().toISOString()
-            };
-
-            this.http.post<{status: string, message: string, data: any}>(this.apiUrl, newItem,{
-              headers: {
-                'Authorization': `Bearer ${token}`
-              }
-            }).subscribe({
-              next: (response) => {
-                const result = {
-                  id: response.data.id,
-                  userId: user?.id || '',
-                  sessionId: user ? undefined : this.guestSessionId,
-                  gameId: response.data.gameId,
-                  quantity: response.data.quantity,
-                  subtotal: response.data.subtotal,
-                  createdAt: response.data.createdAt
-                };
-                this.cartChanged.next();
-                observer.next(result);
-                observer.complete();
-              },
-              error: (error) => {
-                observer.error(error);
-              }
-            });
-          }
-        },
-        error: (error) => observer.error(error)
-      });
-    });
-  }
-  
-  updateQuantity(itemId: string, quantity: number): Observable<CartItem> {
-    return new Observable(observer => {
-      const CurrnetUserwithToken = this.authService.getCurrentUser();
-      const token=CurrnetUserwithToken?.token;
-      // D'abord, récupérer l'élément actuel
-      this.http.get<{status: string, message: string, data: any}>(`${this.apiUrl}/${itemId}`,{
-        headers: {
-          'Authorization': `Bearer ${token!!}`
-        }
-      }).subscribe({
-        next: (response) => {
-          const currentItem = response.data;
-          const updatedItem = {
-            id: currentItem.id,
-            gameId: currentItem.gameId,
-            game: this.getGameById(currentItem.gameId),
-            quantity: quantity,
-            subtotal: currentItem.game.price * quantity,
-            createdAt: currentItem.createdAt
+      const newItem = {
+        userId: userId,
+        gameId: game.id,
+        quantity: quantity,
+        subtotal: game.price * quantity,
+        createdAt: new Date().toISOString()
+      };
+      
+      return this.http.post<{ status: string, message: string, data: any }>(
+        `${this.apiUrl}/user`,
+        newItem,
+        { headers: this.getAuthHeaders() }
+      ).pipe(
+        map(response => {
+          const result: CartItem = {
+            id: response.data.id,
+            userId: userId,
+            gameId: response.data.gameId,
+            game: game,
+            quantity: response.data.quantity,
+            subtotal: response.data.subtotal,
+            createdAt: response.data.createdAt
           };
+          this.cartChanged.next();
+          return result;
+        })
+      );
+    } else {
+      // Invité - pas de token
+      const newItem = {
+        sessionId: this.guestSessionId,
+        gameId: game.id,
+        quantity: quantity,
+        subtotal: game.price * quantity,
+        createdAt: new Date().toISOString()
+      };
+      
+      return this.http.post<{ status: string, message: string, data: any }>(
+        `${this.apiUrl}/session/${this.guestSessionId}`,
+        newItem
+      ).pipe(
+        map(response => {
+          const result: CartItem = {
+            id: response.data.id,
+            sessionId: this.guestSessionId,
+            gameId: response.data.gameId,
+            game: game,
+            quantity: response.data.quantity,
+            subtotal: response.data.subtotal,
+            createdAt: response.data.createdAt
+          };
+          this.cartChanged.next();
+          return result;
+        })
+      );
+    }
+  }
 
-          // Mettre à jour l'élément
-          this.http.put<{status: string, message: string, data: any}>(`${this.apiUrl}/${itemId}`, updatedItem).subscribe({
-            next: (response) => {
-              const result = {
+  updateQuantity(itemId: string, quantity: number): Observable<CartItem> {
+    if (this.isAuthenticated()) {
+      // Utilisateur connecté - avec token
+      return this.http.put<{ status: string, message: string, data: any }>(
+        `${this.apiUrl}/item/${itemId}`,
+        { quantity: quantity },
+        { headers: this.getAuthHeaders() }
+      ).pipe(
+        switchMap(response => {
+          return this.getGameById(response.data.gameId).pipe(
+            map(game => {
+              const result: CartItem = {
                 id: response.data.id,
-                userId: currentItem.userId || 0,
-                sessionId: currentItem.sessionId || this.guestSessionId,
+                userId: response.data.userId,
                 gameId: response.data.gameId,
-                game: this.getGameById(response.data.gameId),
+                game: game,
                 quantity: response.data.quantity,
                 subtotal: response.data.subtotal,
                 createdAt: response.data.createdAt
               };
               this.cartChanged.next();
-              observer.next(result);
-              observer.complete();
-            },
-            error: (error) => observer.error(error)
-          });
-        },
-        error: (error) => observer.error(error)
-      });
-    });
+              return result;
+            })
+          );
+        })
+      );
+    } else {
+      // Invité - sans token
+      return this.http.put<{ status: string, message: string, data: any }>(
+        `${this.apiUrl}/session/${this.guestSessionId}/item/${itemId}`,
+        { quantity: quantity }
+      ).pipe(
+        switchMap(response => {
+          return this.getGameById(response.data.gameId).pipe(
+            map(game => {
+              const result: CartItem = {
+                id: response.data.id,
+                sessionId: this.guestSessionId,
+                gameId: response.data.gameId,
+                game: game,
+                quantity: response.data.quantity,
+                subtotal: response.data.subtotal,
+                createdAt: response.data.createdAt
+              };
+              this.cartChanged.next();
+              return result;
+            })
+          );
+        })
+      );
+    }
   }
 
   removeFromCart(itemId: string): Observable<void> {
-    return new Observable(observer => {
-      this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/${itemId}`).subscribe({
-        next: () => {
+    if (this.isAuthenticated()) {
+      // Utilisateur connecté - avec token
+      return this.http.delete<{ status: string, message: string, data: null }>(
+        `${this.apiUrl}/item/${itemId}`,
+        { headers: this.getAuthHeaders() }
+      ).pipe(
+        map(() => {
           this.cartChanged.next();
-          observer.next();
-          observer.complete();
-        },
-        error: (error) => observer.error(error)
-      });
-    });
+          return;
+        })
+      );
+    } else {
+      // Invité - sans token
+      return this.http.delete<{ status: string, message: string, data: null }>(
+        `${this.apiUrl}/session/${this.guestSessionId}/item/${itemId}`
+      ).pipe(
+        map(() => {
+          this.cartChanged.next();
+          return;
+        })
+      );
+    }
   }
 
   clearCart(): Observable<void> {
-    return new Observable(observer => {
-      const CurrnetUserwithToken = this.authService.getCurrentUser();
-      const user=CurrnetUserwithToken?.user;
-      const token=CurrnetUserwithToken?.token;
-
+    if (this.isAuthenticated()) {
+      // Utilisateur connecté
+      const currentUser = this.authService.getCurrentUser();
+      const userId = currentUser?.user?.id;
       
-      if (user?.id) {
-        // Utilisateur connecté
-        this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/user/${user.id}`).subscribe({
-          next: () => {
-            this.cartChanged.next();
-            observer.next();
-            observer.complete();
-          },
-          error: (error) => observer.error(error)
-        });
-      } else {
-        // Invité
-        this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/session/${this.guestSessionId}`).subscribe({
-          next: () => {
-            this.cartChanged.next();
-            observer.next();
-            observer.complete();
-          },
-          error: (error) => observer.error(error)
-        });
-      }
-    });
+      return this.http.delete<{ status: string, message: string, data: null }>(
+        `${this.apiUrl}/user/${userId}`,
+        { headers: this.getAuthHeaders() }
+      ).pipe(
+        map(() => {
+          this.cartChanged.next();
+          return;
+        })
+      );
+    } else {
+      // Invité
+      return this.http.delete<{ status: string, message: string, data: null }>(
+        `${this.apiUrl}/session/${this.guestSessionId}`
+      ).pipe(
+        map(() => {
+          this.cartChanged.next();
+          return;
+        })
+      );
+    }
   }
 
   getCartSummary(): Observable<CartSummary> {
-    return new Observable(observer => {
-      this.getCartItems().subscribe({
-        next: (items) => {
-          const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-          const shippingFee = subtotal > 100 ? 15 : 0;
-          const total = subtotal + shippingFee;
-          const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-
-          observer.next({
-            subtotal,
-            shippingFee,
-            total,
-            itemCount
-          });
-          observer.complete();
-        },
-        error: (error) => observer.error(error)
-      });
-    });
+    return this.getCartItems().pipe(
+      map(items => {
+        const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+        const shippingFee = subtotal > 100 ? 15 : 0;
+        const total = subtotal + shippingFee;
+        const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+        return {
+          subtotal,
+          shippingFee,
+          total,
+          itemCount
+        };
+      })
+    );
   }
 
   getTotalItems(): Observable<number> {
-    return new Observable(observer => {
-      this.getCartItems().subscribe({
-        next: (items) => {
-          const total = items.reduce((sum, item) => sum + item.quantity, 0);
-          observer.next(total);
-          observer.complete();
-        },
-        error: (error) => observer.error(error)
-      });
-    });
+    return this.getCartItems().pipe(
+      map(items => items.reduce((sum, item) => sum + item.quantity, 0))
+    );
   }
 
   clearGuestSession(): void {
     this.guestSessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     localStorage.setItem('guestSessionId', this.guestSessionId);
   }
-  getGameById(id: string): Game {
-    
-    const data=this.gameService.getGameById(id);
-    data.subscribe(
-      game => this.game = game
-    );
-    return this.game;
+
+  getGameById(id: string): Observable<Game> {
+    return this.gameService.getGameById(id);
   }
-  
+
+  // Méthode pour migrer le panier de guest vers utilisateur lors de la connexion
+  migrateGuestCartToUser(): Observable<void> {
+    if (!this.isAuthenticated()) {
+      return of(void 0);
+    }
+
+    const currentUser = this.authService.getCurrentUser();
+    const userId = currentUser?.user?.id;
+    
+    return this.http.post<{ status: string, message: string, data: any }>(
+      `${this.apiUrl}/migrate/${this.guestSessionId}/${userId}`,
+      {},
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(() => {
+        // Après migration, on nettoie la session guest
+        this.clearGuestSession();
+        this.cartChanged.next();
+        return;
+      })
+    );
+  }
 }

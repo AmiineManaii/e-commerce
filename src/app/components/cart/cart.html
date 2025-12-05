@@ -28,21 +28,21 @@
             @for (item of cartItems; track item.id) {
               <div class="cart-item-card">
                 <div class="item-image-wrapper">
-                  <img [src]="item.game!!.coverImage" [alt]="item.game!!.title" class="item-image">
+                  <img [src]="item.game?.coverImage" [alt]="item.game?.title || 'Image du jeu'" class="item-image">
                 </div>
 
                 <div class="item-details">
-                  <h3 class="item-title" [routerLink]="['/produitDetails', item.game!!.id]">
-                    {{ item.game!!.title }}
+                  <h3 class="item-title" [routerLink]="['/produitDetails', item.game?.id || 0]">
+                    {{ item.game?.title || 'Nom du jeu non disponible' }}
                   </h3>
                   <div class="item-meta">
                     <span class="badge-platform">
                       <i class="fas fa-gamepad"></i>
-                      {{ item.game!!.platform }}
+                      {{ item.game?.platform || 'Plateforme non disponible' }}
                     </span>
                     <span class="badge-genre">
                       <i class="fas fa-tag"></i>
-                      {{ item.game!!.genre }}
+                      {{ item.game?.genre || 'Genre non disponible' }}  
                     </span>
                   </div>
                   <div class="item-rating">
@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="item-price">
-                  <span class="unit-price">{{ item.game!!.price }} DT</span>
+                  <span class="unit-price">{{ item.game?.price || 'Prix non disponible' }} DT</span>
                   <span class="price-label">Prix unitaire</span>
                 </div>
 

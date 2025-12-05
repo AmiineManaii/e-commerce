@@ -64,13 +64,12 @@ export class ProduitDetailsComponent implements OnInit {
 
   private loadProduct(): void {
     this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
+      const id = params.get('id');
       if (!id) {
         this.error = 'ID du produit non fourni.';
         return;
       }
-
-      this.gameService.getGameById(id.toString()).subscribe({
+      this.gameService.getGameById(id).subscribe({
         next: (game) => this.handleProductLoad(game),
         error: (err) => this.handleProductError(err)
       });
@@ -79,15 +78,15 @@ export class ProduitDetailsComponent implements OnInit {
 
   private handleProductLoad(game: Game): void {
     this.produit = game;
-    
-    if (this.produit.images?.length) {
+
+    if (this.produit?.images?.length) {
       this.startSlideshow();
     }
-    
-    if (this.produit.url_trailer) {
+
+    if (this.produit?.url_trailer) {
       this.trailerUrl = this.getYouTubeEmbedUrl(this.produit.url_trailer);
     }
-    
+
     this.loadSimilarProducts();
     this.loadReviews();
   }
@@ -102,62 +101,67 @@ export class ProduitDetailsComponent implements OnInit {
 
     this.reviewService.getReviewsByGameId(this.produit.id.toString()).subscribe({
       next: (reviews) => {
-        this.reviews = reviews;
+        this.reviews = reviews || [];
         this.calculateAverageRating();
         this.loadUserNames();
       },
-      error: (err) => console.error('Error loading reviews:', err)
+      error: (err) => {
+        console.error('Error loading reviews:', err);
+        this.reviews = [];
+      }
     });
   }
-
-
-
 
   private loadUserNames(): void {
-    const uniqueUserIds = [...new Set(this.reviews.map(review => review.user.id!!.toString()))];
-    //console.log("uniqueUserIds", uniqueUserIds)
-    
+    if (!this.reviews || this.reviews.length === 0) return;
+
+    const uniqueUserIds = [...new Set(
+      this.reviews
+        .filter(review => review.userId)
+        .map(review => review.userId.toString())
+    )];
+
+    const token = this.authService.getCurrentUser()?.token || null;
+
     uniqueUserIds.forEach(userId => {
-      
-      this.authService.getUsername(userId).subscribe({
-        next: (user) => 
-          this.userNames.set(userId, `${user.prenom} ${user.nom}`),
-        error: () => this.userNames.set(userId, 'Utilisateur inconnu')
-      });
+      if (!this.userNames.has(userId)) {
+        this.authService.getUsername(userId, token!!).subscribe({
+          next: (user) => {
+            if (user) {
+              this.userNames.set(userId, `${user.prenom} ${user.nom}`);
+            }
+          },
+          error: () => {
+            this.userNames.set(userId, 'Utilisateur inconnu');
+          }
+        });
+      }
     });
   }
 
-
-
   getDisplayName(userId: string): string {
-    return this.userNames.get(userId) || 'Chargement...';
+    return this.userNames.get(userId) || 'Utilisateur inconnu';
   }
 
-
-
-
   private calculateAverageRating(): void {
-    if (!this.reviews.length) {
+    if (!this.reviews || this.reviews.length === 0) {
       this.averageRating = 0;
       return;
     }
-    
+
     const total = this.reviews.reduce((sum, review) => sum + review.note, 0);
     this.averageRating = Math.round((total / this.reviews.length) * 10) / 10;
   }
 
-
-
-
-
-
   submitReview(form: NgForm): void {
-    if (!this.currentUser?.id || !this.produit || this.isSubmitting) return;
+    if (!this.currentUser?.id || !this.produit || this.isSubmitting) {
+      return;
+    }
 
     this.isSubmitting = true;
     const reviewData: Omit<Review, 'id'> = {
-      game: this.produit,
-      user: this.currentUser,
+      gameId: this.produit.id,
+      userId: this.currentUser.id,
       msg: this.newReview.msg,
       note: this.newReview.note,
       date: new Date().toISOString(),
@@ -166,9 +170,19 @@ export class ProduitDetailsComponent implements OnInit {
 
     this.reviewService.createReview(reviewData).subscribe({
       next: (newReview) => {
-        this.reviews.unshift(newReview);
+        // Mettre à jour la liste des reviews
+        this.reviews = [newReview, ...this.reviews];
         this.calculateAverageRating();
-        this.userNames.set(newReview.user.id!!.toString(), `${this.currentUser!.prenom} ${this.currentUser!.nom}`);
+
+        // Mettre à jour le nom d'utilisateur
+        if (newReview.userId) {
+          this.userNames.set(
+            newReview.userId.toString(),
+            `${this.currentUser!.prenom} ${this.currentUser!.nom}`
+          );
+        }
+
+        // Réinitialiser le formulaire
         this.newReview = { note: 5, msg: '' };
         form.resetForm();
         this.isSubmitting = false;
@@ -180,9 +194,6 @@ export class ProduitDetailsComponent implements OnInit {
       }
     });
   }
-
-
-
 
   private loadSimilarProducts(): void {
     if (!this.produit) return;
@@ -197,34 +208,24 @@ export class ProduitDetailsComponent implements OnInit {
     });
   }
 
-
-
-
   private isSimilarGame(game: Game): boolean {
-    return game.id !== this.produit!.id && 
-          (game.genre === this.produit!.genre || 
+    if (!this.produit) return false;
+    return game.id !== this.produit.id &&
+          (game.genre === this.produit.genre ||
            this.hasCommonTags(game));
   }
 
-
-
-
   private hasCommonTags(game: Game): boolean {
-    return !!(game.tags && this.produit!.tags && 
-             game.tags.some(tag => this.produit!.tags!.includes(tag)));
+    if (!this.produit || !this.produit.tags) return false;
+    return !!(game.tags && this.produit.tags &&
+             game.tags.some(tag => this.produit!!.tags!.includes(tag)));
   }
-
-
 
   changeImage(direction: number): void {
     if (!this.produit?.images?.length) return;
-
     this.currentImageIndex = (this.currentImageIndex + direction + this.produit.images.length) % this.produit.images.length;
     this.restartSlideshow();
   }
-
-
-
 
   private startSlideshow(): void {
     this.stopSlideshow();
@@ -233,15 +234,10 @@ export class ProduitDetailsComponent implements OnInit {
     }
   }
 
-
-
   private restartSlideshow(): void {
     this.stopSlideshow();
     this.startSlideshow();
   }
-
-
-
 
   private stopSlideshow(): void {
     if (this.slideshowInterval) {
@@ -249,22 +245,15 @@ export class ProduitDetailsComponent implements OnInit {
     }
   }
 
-
-
-
   private getYouTubeEmbedUrl(url: string): SafeResourceUrl {
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
     const videoId = match?.[1];
-    
+
     if (!videoId) return this.sanitizer.bypassSecurityTrustResourceUrl('');
-    
-    const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`
+    );
   }
-
-
-
-
 
   increaseQuantity(): void {
     if (this.produit && this.quantity < this.produit.stock) {
@@ -272,25 +261,17 @@ export class ProduitDetailsComponent implements OnInit {
     }
   }
 
-
-
   decreaseQuantity(): void {
     if (this.quantity > 1) {
       this.quantity--;
     }
   }
 
-
-
   validateQuantity(): void {
     if (!this.produit) return;
-
     if (this.quantity < 1) this.quantity = 1;
     if (this.quantity > this.produit.stock) this.quantity = this.produit.stock;
   }
-
-
-
 
   addToCart(product?: Game): void {
     const targetProduct = product || this.produit;
@@ -305,17 +286,18 @@ export class ProduitDetailsComponent implements OnInit {
     });
   }
 
-
-
   addToWishlist(): void {
     if (!this.currentUser?.id) {
       alert('Connectez-vous pour ajouter aux favoris');
       return;
     }
-    
+
     if (!this.produit) return;
 
-    this.userProfileService.addToWishlist(this.currentUser.id!!.toString(), this.produit.id!!.toString()).subscribe({
+    this.userProfileService.addToWishlist(
+      this.currentUser.id.toString(),
+      this.produit.id.toString()
+    ).subscribe({
       next: () => alert('Ajouté aux favoris !'),
       error: (err) => {
         console.error('Wishlist error:', err);
@@ -324,14 +306,9 @@ export class ProduitDetailsComponent implements OnInit {
     });
   }
 
-
-  
-
-
   setRating(rating: number): void {
     this.newReview.note = rating;
   }
-
 
   formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('fr-FR', {
@@ -341,15 +318,12 @@ export class ProduitDetailsComponent implements OnInit {
     });
   }
 
-
-
   getStarClass(starIndex: number, rating: number): string {
     if (starIndex <= Math.floor(rating)) return 'fa-star';
     if (starIndex === Math.ceil(rating) && rating % 1 >= 0.5) return 'fa-star-half-alt';
     return 'far fa-star';
   }
 
-  
   getPlatformIcon(platform: string): string {
     return this.platformIcons[platform] || 'fas fa-gamepad';
   }
