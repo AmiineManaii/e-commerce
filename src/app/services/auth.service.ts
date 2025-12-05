@@ -12,15 +12,20 @@ export class AuthService {
   
   constructor(private http: HttpClient) { }
 
-  register(user: User): Observable<User> {
+  register(user: User): Observable<string> {
     return new Observable(observer => {
       
-          this.http.post<{status: string, message: string, data: User}>(this.apiUrl+'/users', user).subscribe({
+          this.http.post<{status: string, message: string, data: {user: User, token: string}}>(this.apiUrl+'/auth/register', user).subscribe({
             next: (response) => {
               console.log(response);
-              const { password, ...userWithoutPassword } = response.data;
+              if (response.message !== 'Utilisateur créé avec succès') {
+                observer.error(response.message);
+                return;
+              }
+              const { password, ...userWithoutPassword } = response.data.user;
               localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-              observer.next(userWithoutPassword);
+              localStorage.setItem('token', response.data.token);
+              observer.next(response.message);
               observer.complete();
             },
             error: (error) => {
@@ -34,24 +39,21 @@ export class AuthService {
 
   login(email: string, password: string): Observable<User> {
     return new Observable(observer => {
-      this.http.get<{status: string, message: string, data: User}>(`${this.apiUrl}/users/email/${email}`).subscribe({
+      this.http.post<{status: string, message: string, data: {user: User, token: string}}>(`${this.apiUrl}/auth/login`, {email, password}).subscribe({
         next: (response) => {
-          console.log(response.data);
-          const user = response.data;
+          //console.log(response);
+          const user = response.data.user;
+          const token = response.data.token;
 
-          console.log(!user);
-          if (!user) {
-            observer.error('Utilisateur non trouvé');
-            return;
-          }
-
-          if (user.password !== password) {
-            observer.error('Mot de passe incorrect');
+          
+          if (response.message !== 'Connexion réussie') {
+            observer.error(response.message);
             return;
           }
 
           const { password: _, ...userWithoutPassword } = user;
           localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+          localStorage.setItem('token', token);
           observer.next(userWithoutPassword);
           observer.complete();
         },
@@ -70,11 +72,12 @@ export class AuthService {
     return !!localStorage.getItem('currentUser');
   }
 
-  getCurrentUser(): User | null {
+  getCurrentUser(): {user: User, token: string} | null {
     const userJson = localStorage.getItem('currentUser');
+    const token = localStorage.getItem('token');
     if (userJson) {
       try {
-        return JSON.parse(userJson);
+        return {user: JSON.parse(userJson), token: token || ''};
       } catch (error) {
         console.error('Erreur lors du parsing de l\'utilisateur:', error);
         return null;
@@ -83,8 +86,12 @@ export class AuthService {
     return null;
   }
 
-  updateUser(userId: number, userData: Partial<User>): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${userId}`, userData).pipe(
+  updateUser(userId: string, userData: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/${userId}`, userData,{
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    }).pipe(
       tap(() => {
         const userJson = localStorage.getItem('currentUser');
         if (userJson) {

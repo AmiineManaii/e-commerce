@@ -1,10 +1,11 @@
 import { Game } from './game.model';
 
 export interface CartItem {
-  id: number;
-  userId?: number | undefined ;
+  id: string;
+  userId?: string | undefined ;
   sessionId?: string;
-  game: Game;
+  gameId: string;
+  game?: Game;
   quantity: number;
   subtotal: number;
   createdAt: string;

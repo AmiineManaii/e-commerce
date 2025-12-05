@@ -32,6 +32,7 @@ export class CartComponent implements OnInit {
   loadCartItems(): void {
     this.cartService.getCartItems().subscribe({
       next: (items) => {
+        //console.log('items',items);
         this.cartItems$.next(items);
         this.updateSummary(items);
       },
@@ -55,7 +56,7 @@ export class CartComponent implements OnInit {
     };
   }
 
-  updateQuantity(itemId: number, quantity: number): void {
+  updateQuantity(itemId: string, quantity: number): void {
     if (quantity > 0) {
       this.cartService.updateQuantity(itemId, quantity).subscribe({
         next: (updatedItem) => {
@@ -73,7 +74,7 @@ export class CartComponent implements OnInit {
     }
   }
 
-  removeItem(itemId: number): void {
+  removeItem(itemId: string): void {
     if (confirm('Vous etes sur de supprimer cet article du panier ?')) {
       this.cartService.removeFromCart(itemId).subscribe({
         next: () => {

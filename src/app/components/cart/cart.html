@@ -28,33 +28,33 @@
             @for (item of cartItems; track item.id) {
               <div class="cart-item-card">
                 <div class="item-image-wrapper">
-                  <img [src]="item.game.coverImage" [alt]="item.game.title" class="item-image">
+                  <img [src]="item.game!!.coverImage" [alt]="item.game!!.title" class="item-image">
                 </div>
 
                 <div class="item-details">
-                  <h3 class="item-title" [routerLink]="['/produitDetails', item.game.id]">
-                    {{ item.game.title }}
+                  <h3 class="item-title" [routerLink]="['/produitDetails', item.game!!.id]">
+                    {{ item.game!!.title }}
                   </h3>
                   <div class="item-meta">
                     <span class="badge-platform">
                       <i class="fas fa-gamepad"></i>
-                      {{ item.game.platform }}
+                      {{ item.game!!.platform }}
                     </span>
                     <span class="badge-genre">
                       <i class="fas fa-tag"></i>
-                      {{ item.game.genre }}
+                      {{ item.game!!.genre }}
                     </span>
                   </div>
                   <div class="item-rating">
                     @for (star of [1,2,3,4,5]; track star; let idx = $index) {
-                      <i class="fa-star" [ngClass]="idx < (item.game.rating || 0) ? 'fas text-warning' : 'far'"></i>
+                      <i class="fa-star" [ngClass]="idx < (item.game?.rating || 0) ? 'fas text-warning' : 'far'"></i>
                     }
-                    <span class="rating-value">{{ item.game.rating.toFixed(1) || 'N/A' }}</span>
+                    <span class="rating-value">{{ item.game?.rating?.toFixed(1) || 'N/A' }}</span>
                   </div>
                 </div>
 
                 <div class="item-price">
-                  <span class="unit-price">{{ item.game.price }} DT</span>
+                  <span class="unit-price">{{ item.game!!.price }} DT</span>
                   <span class="price-label">Prix unitaire</span>
                 </div>
 

@@ -15,7 +15,12 @@ export class UserProfileService {
 
   getUserProfile(userId: string): Observable<User> {
     return new Observable(observer => {
-      this.http.get<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`)
+      const token = localStorage.getItem('token');
+      this.http.get<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -36,8 +41,12 @@ export class UserProfileService {
             ...existingUser,
             ...userData
           };
-          
-          this.http.put<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`, updatedUser)
+          const token = localStorage.getItem('token');
+          this.http.put<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`, updatedUser,{
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
             .subscribe({
               next: (response) => {
                 observer.next(response.data);
@@ -53,7 +62,12 @@ export class UserProfileService {
 
   getAddresses(userId: string): Observable<Address[]> {
     return new Observable(observer => {
-      this.http.get<{status: string, message: string, data: Address[]}>(`${this.apiUrl}/addresses/user/${userId}`)
+      const token = localStorage.getItem('token');
+      this.http.get<{status: string, message: string, data: Address[]}>(`${this.apiUrl}/addresses/user/${userId}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -66,7 +80,12 @@ export class UserProfileService {
 
   addAddress(address: Address): Observable<Address> {
     return new Observable(observer => {
-      this.http.post<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses`, address)
+      const token = localStorage.getItem('token');
+      this.http.post<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses`, address,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -80,7 +99,12 @@ export class UserProfileService {
   updateAddress(addressId: string, addressData: Partial<Address>): Observable<Address> {
     return new Observable(observer => {
       // D'abord récupérer l'adresse existante
-      this.http.get<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}`)
+      const token = localStorage.getItem('token');
+      this.http.get<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             const existingAddress = response.data;
@@ -90,7 +114,11 @@ export class UserProfileService {
               ...addressData
             };
             
-            this.http.put<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}`, updatedAddress)
+            this.http.put<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}`, updatedAddress,{
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            })
               .subscribe({
                 next: (response) => {
                   observer.next(response.data);
@@ -106,7 +134,12 @@ export class UserProfileService {
 
   deleteAddress(addressId: string): Observable<void> {
     return new Observable(observer => {
-      this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/addresses/${addressId}`)
+      const token = localStorage.getItem('token');
+      this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/addresses/${addressId}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: () => {
             observer.next();
@@ -120,7 +153,12 @@ export class UserProfileService {
   setDefaultAddress(userId: string, addressId: string): Observable<Address> {
     return new Observable(observer => {
       // Votre API Spring Boot a un endpoint spécifique pour définir une adresse par défaut
-      this.http.patch<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}/default`, {})
+      const token = localStorage.getItem('token');
+      this.http.patch<{status: string, message: string, data: Address}>(`${this.apiUrl}/addresses/${addressId}/default`, {},{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -133,7 +171,12 @@ export class UserProfileService {
 
   getOrders(userId: string): Observable<Order[]> {
     return new Observable(observer => {
-      this.http.get<{status: string, message: string, data: Order[]}>(`${this.apiUrl}/orders/user/${userId}`)
+      const token = localStorage.getItem('token');
+      this.http.get<{status: string, message: string, data: Order[]}>(`${this.apiUrl}/orders/user/${userId}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -146,7 +189,12 @@ export class UserProfileService {
 
   getOrderDetails(orderId: string): Observable<Order> {
     return new Observable(observer => {
-      this.http.get<{status: string, message: string, data: Order}>(`${this.apiUrl}/orders/${orderId}`)
+      const token = localStorage.getItem('token');
+      this.http.get<{status: string, message: string, data: Order}>(`${this.apiUrl}/orders/${orderId}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -159,7 +207,12 @@ export class UserProfileService {
 
   createOrder(order: Order): Observable<Order> {
     return new Observable(observer => {
-      this.http.post<{status: string, message: string, data: Order}>(`${this.apiUrl}/orders`, order)
+      const token = localStorage.getItem('token');
+      this.http.post<{status: string, message: string, data: Order}>(`${this.apiUrl}/orders`, order,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -186,7 +239,12 @@ export class UserProfileService {
 
   addToWishlist(userId: string, gameId: string): Observable<User> {
     return new Observable(observer => {
-      this.http.post<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}/wishlist/${gameId}`, {})
+      const token = localStorage.getItem('token');
+      this.http.post<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}/wishlist/${gameId}`, {},{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);
@@ -200,7 +258,12 @@ export class UserProfileService {
 
   removeFromWishlist(userId: string, gameId: string): Observable<User> {
     return new Observable(observer => {
-      this.http.delete<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}/wishlist/${gameId}`)
+      const token = localStorage.getItem('token');
+      this.http.delete<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}/wishlist/${gameId}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .subscribe({
           next: (response) => {
             observer.next(response.data);

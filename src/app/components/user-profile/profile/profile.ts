@@ -14,6 +14,7 @@ import { UserProfileService } from '../../../services/user-profile.service';
 })
 export class ProfileComponent implements OnInit {
   user: User | null = null;
+  token: string | null = null;
   editMode = false;
   userForm: Partial<User> = {};
   successMessage = '';
@@ -27,7 +28,8 @@ export class ProfileComponent implements OnInit {
     
   }
   loadUserProfile(): void {
-    this.user = this.authService.getCurrentUser();
+    this.user = this.authService.getCurrentUser()?.user || null;
+    this.token = this.authService.getCurrentUser()?.token || null;
     
     this.userForm = {
           nom: this.user?.nom,

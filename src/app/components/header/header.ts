@@ -18,6 +18,7 @@ import { UserProfileService } from '../../services/user-profile.service';
 export class Header implements OnInit {
   cartItemCount: number = 0;
   currentUser: User | null = null;
+  token: string | null = null;
   wishlistItemCount: Observable<number> = new Observable<number>();
  
 
@@ -31,7 +32,9 @@ export class Header implements OnInit {
   ngOnInit(): void {
     this.loadCart();
     this.cartService.getCartChanges().subscribe(() => this.loadCart());
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser = this.authService.getCurrentUser()?.user || null;
+    this.token = this.authService.getCurrentUser()?.token || null;
+
     this.loadWishlist();
     this.userProfileService.getWishlistChanges().subscribe(() => this.loadWishlist());
     

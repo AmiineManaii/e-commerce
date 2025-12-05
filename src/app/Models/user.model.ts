@@ -1,5 +1,5 @@
 export interface User {
-  id?: number;
+  id?: string;
   nom: string;
   prenom: string;
   email: string;
@@ -11,8 +11,8 @@ export interface User {
 }
 
 export interface Address {
-  id?: number;
-  userId?: number;
+  id?: string;
+  userId?: string;
   nom: string;
   rue: string;
   ville: string;
@@ -22,17 +22,17 @@ export interface Address {
 }
 
 export interface Order {
-  id?: number;
-  userId: number;
+  id?: string;
+  userId: string;
   date: string;
   items: OrderItem[];
   total: number;
   status: 'pending' | 'completed' | 'cancelled';
-  addressId: number;
+  addressId: string;
 }
 
 export interface OrderItem {
-  gameId: number;
+  gameId: string;
   quantity: number;
   price: number;
 }

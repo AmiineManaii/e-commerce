@@ -18,6 +18,7 @@ import { Game } from '../../../Models/game.model';
 export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   currentUser: User | null = null;
+  token: string | null = null;
   games: Game[] = [];
   loading = true;
   error = '';
@@ -26,7 +27,8 @@ export class OrdersComponent implements OnInit {
   constructor(private userProfileService: UserProfileService, private authService: AuthService,private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser = this.authService.getCurrentUser()?.user || null;
+    this.token = this.authService.getCurrentUser()?.token || null;
     if (!this.currentUser || !this.currentUser.id) {
       this.error = 'Utilisateur non authentifié';
       this.loading = false;
@@ -77,7 +79,7 @@ export class OrdersComponent implements OnInit {
       }
     });
   }
-  getGameTitle(gameId: number) {
+  getGameTitle(gameId: string) {
     return this.games.find(game => game.id === gameId)?.title || '';
   }
 }

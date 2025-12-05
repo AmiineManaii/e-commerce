@@ -24,6 +24,7 @@ import { Review } from '../../Models/review';
 export class ProduitDetailsComponent implements OnInit {
   produit?: Game;
   currentUser: User | null = null;
+  token: string | null = null;
   similarProducts: Game[] = [];
   reviews: Review[] = [];
   error = '';
@@ -56,7 +57,8 @@ export class ProduitDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser = this.authService.getCurrentUser()?.user || null;
+    this.token = this.authService.getCurrentUser()?.token || null;
     this.loadProduct();
   }
 

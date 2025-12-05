@@ -52,7 +52,7 @@ export class SearchComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  viewGameDetails(id: number): void {
+   viewGameDetails(id: string): void {
     this.router.navigate(['/produitDetails', id]);
   }
 }

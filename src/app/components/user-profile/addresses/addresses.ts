@@ -31,7 +31,7 @@ export class AddressesComponent implements OnInit {
   constructor(private userProfileService: UserProfileService,private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser = this.authService.getCurrentUser()?.user || null;
     if (!this.currentUser || !this.currentUser.id){
       this.error = 'Utilisateur non connecté';
       this.loading = false;
@@ -57,7 +57,8 @@ export class AddressesComponent implements OnInit {
   }
 
   saveAddress(): void {
-    const currentUser = this.authService.getCurrentUser();
+    const currentUser = this.authService.getCurrentUser()?.user || null;
+    const token = this.authService.getCurrentUser()?.token || null;
     if (!currentUser || !currentUser.id) return;
 
     const addressToSave = { ...this.newAddress, userId: currentUser.id };
@@ -102,10 +103,10 @@ export class AddressesComponent implements OnInit {
     });
   }
 
-  deleteAddress(addressId: number): void {
+  deleteAddress(addressId: string): void {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette adresse ?')) return;
     
-    this.userProfileService.deleteAddress(addressId.toString()).subscribe({
+    this.userProfileService.deleteAddress(addressId).subscribe({
       next: () => {
         this.successMessage = 'Adresse supprimée avec succès';
         this.loadAddresses();
@@ -118,10 +119,10 @@ export class AddressesComponent implements OnInit {
     });
   }
 
-  setAsDefault(addressId: number): void {
+  setAsDefault(addressId: string): void {
     if (!this.currentUser || !this.currentUser.id) return;
     
-    this.userProfileService.setDefaultAddress(this.currentUser.id.toString(), addressId.toString()).subscribe({
+    this.userProfileService.setDefaultAddress(this.currentUser.id, addressId).subscribe({
       next: () => {
         this.successMessage = 'Adresse définie par défaut';
         this.loadAddresses();

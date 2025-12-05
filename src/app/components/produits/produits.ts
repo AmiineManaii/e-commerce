@@ -35,6 +35,7 @@ export class Produits implements OnInit {
   Math: any;
   Number: any;
   currentUser:User|null=null;
+  token:string|null=null;
 
   constructor(
     private gameService: GameService,
@@ -46,7 +47,8 @@ export class Produits implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.currentUser=this.authService.getCurrentUser();
+    this.currentUser=this.authService.getCurrentUser()?.user || null;
+    this.token = this.authService.getCurrentUser()?.token || null;
     
     // Read query parameters for category filter
     this.route.queryParams.subscribe(params => {
@@ -161,7 +163,7 @@ export class Produits implements OnInit {
     
   }
 
-  viewProductDetails(id: number): void {
+   viewProductDetails(id: string): void {
     this.router.navigate(['/produitDetails', id]);
   }
 

@@ -49,9 +49,12 @@ export class RegisterComponent {
     const { confirmPassword, ...userData } = this.registerForm.value;
 
     this.authService.register(userData).subscribe({
-      next: (user) => {
-        console.log('Utilisateur inscrit avec succès:', user);
-        this.router.navigate(['/']);
+      next: (message) => {
+        //console.log('Utilisateur inscrit avec succès:', message);
+        alert(message);
+        if (message === 'Utilisateur créé avec succès') {
+          this.router.navigate(['/']);
+        }
       },
       error: (error) => {
         console.log(error.message)

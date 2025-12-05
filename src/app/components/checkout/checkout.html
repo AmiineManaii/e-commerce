@@ -15,10 +15,10 @@
         <ul class="items">
           @for (item of cartItems; track $index) {
             <li class="item">
-              <img [src]="item.game.coverImage" [alt]="item.game.title" />
+              <img [src]="item.game?.coverImage" [alt]="item.game?.title" />
               <div class="details">
-                <div class="title">{{ item.game.title }}</div>
-                <div class="meta">Qté: {{ item.quantity }} • Prix: {{ item.game.price | currency:'EUR':'symbol' }}</div>
+                <div class="title">{{ item.game?.title }}</div>
+                <div class="meta">Qté: {{ item.quantity }} • Prix: {{ item.game?.price | currency:'EUR':'symbol' }}</div>
                 <div class="subtotal">Sous-total: {{ item.subtotal | currency:'EUR':'symbol' }}</div>
               </div>
             </li>

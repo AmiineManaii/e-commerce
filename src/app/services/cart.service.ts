@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { CartItem, CartSummary } from '../Models/cart-item.model';
 import { Game } from '../Models/game.model';
 import { API_BASE_URL } from '../app.config';
 import { AuthService } from './auth.service';
+import { GameService } from './game.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,12 @@ export class CartService {
   private apiUrl = API_BASE_URL + '/cart';
   private cartChanged = new Subject<void>();
   private guestSessionId: string;
+  private game!:Game;
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private gameService: GameService
   ) {
     this.guestSessionId = this.getOrCreateGuestSessionId();
   }
@@ -35,17 +38,25 @@ export class CartService {
   }
 
   getCartItems(): Observable<CartItem[]> {
-    const user = this.authService.getCurrentUser();
+    const CurrnetUserwithToken = this.authService.getCurrentUser();
+    const user=CurrnetUserwithToken?.user;
+    const token=CurrnetUserwithToken?.token;
     
     return new Observable(observer => {
       if (user?.id) {
         // Utilisateur connecté
-        this.http.get<{status: string, message: string, data: any[]}>(`${this.apiUrl}/user/${user.id}`).subscribe({
+        this.http.get<{status: string, message: string, data: any[]}>(`${this.apiUrl}/user/${user.id}`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }).subscribe({
           next: (response) => {
+            //console.log(`response connecté, userid:${user.id}, response:`,response);
             const items = response.data.map(item => ({
               id: item.id,
               userId: user.id,
-              game: item.game,
+              gameId: item.gameId,
+              game: this.getGameById(item.gameId),
               quantity: item.quantity,
               subtotal: item.subtotal,
               createdAt: item.createdAt
@@ -61,10 +72,12 @@ export class CartService {
         // Invité
         this.http.get<{status: string, message: string, data: any[]}>(`${this.apiUrl}/session/${this.guestSessionId}`).subscribe({
           next: (response) => {
+            //console.log("response invite",response);
             const items = response.data.map(item => ({
               id: item.id,
               sessionId: this.guestSessionId,
-              game: item.game,
+              gameId: item.gameId,
+              game: this.getGameById(item.gameID),
               quantity: item.quantity,
               subtotal: item.subtotal,
               createdAt: item.createdAt
@@ -82,12 +95,14 @@ export class CartService {
 
   addToCart(game: Game, quantity: number = 1): Observable<CartItem> {
     return new Observable(observer => {
-      const user = this.authService.getCurrentUser();
+      const CurrnetUserwithToken = this.authService.getCurrentUser();
+      const user=CurrnetUserwithToken?.user;
+      const token=CurrnetUserwithToken?.token;
       
       // D'abord, récupérer le panier actuel pour vérifier si l'article existe déjà
       this.getCartItems().subscribe({
         next: (items) => {
-          const existingItem = items.find(item => item.game.id === game.id);
+          const existingItem = items.find(item => item.gameId === game.id);
           
           if (existingItem) {
             // Mettre à jour la quantité
@@ -100,21 +115,28 @@ export class CartService {
               error: (error) => observer.error(error)
             });
           } else {
+            //console.log("game",game.id);
             // Créer un nouvel élément de panier
             const newItem = {
-              game: game,
+              userId: user?.id || '',
+              gameId: game.id,
+              game:this.getGameById(game.id),
               quantity: quantity,
               subtotal: game.price * quantity,
               createdAt: new Date().toISOString()
             };
 
-            this.http.post<{status: string, message: string, data: any}>(this.apiUrl, newItem).subscribe({
+            this.http.post<{status: string, message: string, data: any}>(this.apiUrl, newItem,{
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            }).subscribe({
               next: (response) => {
                 const result = {
                   id: response.data.id,
-                  userId: user?.id || 0,
+                  userId: user?.id || '',
                   sessionId: user ? undefined : this.guestSessionId,
-                  game: response.data.game,
+                  gameId: response.data.gameId,
                   quantity: response.data.quantity,
                   subtotal: response.data.subtotal,
                   createdAt: response.data.createdAt
@@ -133,16 +155,23 @@ export class CartService {
       });
     });
   }
-
-  updateQuantity(itemId: number, quantity: number): Observable<CartItem> {
+  
+  updateQuantity(itemId: string, quantity: number): Observable<CartItem> {
     return new Observable(observer => {
+      const CurrnetUserwithToken = this.authService.getCurrentUser();
+      const token=CurrnetUserwithToken?.token;
       // D'abord, récupérer l'élément actuel
-      this.http.get<{status: string, message: string, data: any}>(`${this.apiUrl}/${itemId}`).subscribe({
+      this.http.get<{status: string, message: string, data: any}>(`${this.apiUrl}/${itemId}`,{
+        headers: {
+          'Authorization': `Bearer ${token!!}`
+        }
+      }).subscribe({
         next: (response) => {
           const currentItem = response.data;
           const updatedItem = {
             id: currentItem.id,
-            game: currentItem.game,
+            gameId: currentItem.gameId,
+            game: this.getGameById(currentItem.gameId),
             quantity: quantity,
             subtotal: currentItem.game.price * quantity,
             createdAt: currentItem.createdAt
@@ -155,7 +184,8 @@ export class CartService {
                 id: response.data.id,
                 userId: currentItem.userId || 0,
                 sessionId: currentItem.sessionId || this.guestSessionId,
-                game: response.data.game,
+                gameId: response.data.gameId,
+                game: this.getGameById(response.data.gameId),
                 quantity: response.data.quantity,
                 subtotal: response.data.subtotal,
                 createdAt: response.data.createdAt
@@ -172,7 +202,7 @@ export class CartService {
     });
   }
 
-  removeFromCart(itemId: number): Observable<void> {
+  removeFromCart(itemId: string): Observable<void> {
     return new Observable(observer => {
       this.http.delete<{status: string, message: string, data: null}>(`${this.apiUrl}/${itemId}`).subscribe({
         next: () => {
@@ -187,7 +217,10 @@ export class CartService {
 
   clearCart(): Observable<void> {
     return new Observable(observer => {
-      const user = this.authService.getCurrentUser();
+      const CurrnetUserwithToken = this.authService.getCurrentUser();
+      const user=CurrnetUserwithToken?.user;
+      const token=CurrnetUserwithToken?.token;
+
       
       if (user?.id) {
         // Utilisateur connecté
@@ -252,4 +285,13 @@ export class CartService {
     this.guestSessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     localStorage.setItem('guestSessionId', this.guestSessionId);
   }
+  getGameById(id: string): Game {
+    
+    const data=this.gameService.getGameById(id);
+    data.subscribe(
+      game => this.game = game
+    );
+    return this.game;
+  }
+  
 }

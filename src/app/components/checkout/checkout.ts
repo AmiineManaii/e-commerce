@@ -19,10 +19,11 @@ import { Address, Order, OrderItem, User } from '../../Models/user.model';
 })
 export class CheckoutComponent implements OnInit {
   currentUser: User | null = null;
+  token: string | null = null;
   cartItems: CartItem[] = [];
   cartSummary: CartSummary = { subtotal: 0, shippingFee: 0, total: 0, itemCount: 0 };
   addresses: Address[] = [];
-  selectedAddressId: number | null = null;
+  selectedAddressId: string | null = null;
   shippingOptions = [
     { id: 'standard', label: 'Standard (3-5 jours)', fee: 0 },
     { id: 'express', label: 'Express (1-2 jours)', fee: 20 }
@@ -49,7 +50,7 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser = this.authService.getCurrentUser()?.user || null;
     if (!this.currentUser?.id) {
       this.error = 'Vous devez être connecté pour passer commande.';
       this.loading = false;
@@ -80,8 +81,8 @@ export class CheckoutComponent implements OnInit {
     this.cartSummary = { subtotal, shippingFee, total, itemCount };
   }
 
-  loadAddresses(userId: number): void {
-    this.userProfileService.getAddresses(userId.toString()).subscribe({
+  loadAddresses(userId: string): void {
+    this.userProfileService.getAddresses(userId).subscribe({
       next: (addresses) => {
         this.addresses = addresses;
         this.selectedAddressId = addresses.find(a => a.default)?.id || addresses[0]?.id || null;
@@ -115,9 +116,9 @@ export class CheckoutComponent implements OnInit {
     }
 
     const items: OrderItem[] = this.cartItems.map(ci => ({
-      gameId: ci.game.id,
+      gameId: ci.gameId,
       quantity: ci.quantity,
-      price: ci.game.price
+      price: ci.subtotal
     }));
 
     const order: Order = {

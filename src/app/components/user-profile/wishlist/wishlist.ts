@@ -17,6 +17,8 @@ import { User } from '../../../Models/user.model';
 export class WishlistComponent implements OnInit {
   wishlistItems: Game[] = [];
   user:User|null = null;
+  token:string|null = null;
+
   loading = true;
   error = '';
 
@@ -33,7 +35,9 @@ export class WishlistComponent implements OnInit {
   loadWishlist(): void {
     this.loading = true;
     this.error = '';
-    this.user=this.authService.getCurrentUser();
+    this.user=this.authService.getCurrentUser()!!.user;
+    this.token=this.authService.getCurrentUser()!!.token;
+
     if (!this.user || !this.user.id) {
       this.error = 'Utilisateur non authentifié';
       this.loading = false;
@@ -94,14 +98,14 @@ export class WishlistComponent implements OnInit {
     });
   }
 
-  removeFromWishlist(gameId: number): void {
+  removeFromWishlist(gameId: string): void {
     if (!this.user || !this.user.id) {
       this.error = 'Utilisateur non authentifié';
       return;
     }
     this.userProfileService.removeFromWishlist(this.user.id.toString(),gameId.toString()).subscribe({
       next: () => {
-        this.wishlistItems = this.wishlistItems.filter(game => game.id !== gameId);
+        this.wishlistItems = this.wishlistItems.filter(game => game.id !== gameId.toString());
       },
       error: (err) => {
         console.error('Erreur lors de la suppression du jeu de la liste de souhaits:', err);
