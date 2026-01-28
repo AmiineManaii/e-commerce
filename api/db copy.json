@@ -10,12 +10,12 @@
       "release_date": "2020-12-10",
       "stock": 12,
       "description": "Incarnez V, un mercenaire dans la mégalopole futuriste de Night City. Personnalisez votre cyberware, vos compétences et votre style de jeu pour survivre dans une ville obsédée par le pouvoir et la technologie. Avec Keanu Reeves dans le rôle de Johnny Silverhand.",
-      "cover_image": "https://interfaceingame.com/wp-content/uploads/cyberpunk-2077/cyberpunk-2077-cover-375x500.jpg",
+      "cover_image": "/assets/games/cover/cyberpunk.jpg",
       "images": [
-        "https://interfaceingame.com/wp-content/uploads/cyberpunk-2077/cyberpunk-2077-driving.png",
-        "https://interfaceingame.com/wp-content/uploads/cyberpunk-2077/cyberpunk-2077-call.png",
-        "https://interfaceingame.com/wp-content/uploads/cyberpunk-2077/cyberpunk-2077-neural-transmission.png",
-        "https://interfaceingame.com/wp-content/uploads/cyberpunk-2077/cyberpunk-2077-using-consumables.png"
+        "/assets/games/screenshots/cyberpunk1.jpg",
+        "/assets/games/screenshots/cyberpunk2.jpg",
+        "/assets/games/screenshots/cyberpunk3.jpg",
+        "/assets/games/screenshots/cyberpunk4.jpg"
       ],
       "url_trailer": "https://www.youtube.com/watch?v=8X2kIfS6fb8",
       "promo": true,
@@ -38,12 +38,12 @@
       "release_date": "2018-10-26",
       "stock": 18,
       "description": "Vivez l'Amérique à la fin de l'ère du Far West. Incarnez Arthur Morgan, un hors-la-loi en fuite avec sa bande. Chassez, pêchez, braquez des banques et survivez dans un monde ouvert immense et réaliste. Une histoire épique sur la loyauté et la rédemption.",
-      "cover_image": "https://interfaceingame.com/wp-content/uploads/red-dead-redemption-2/red-dead-redemption-2-cover-375x500.png",
+      "cover_image": "/assets/games/cover/rdr2.jpg",
       "images": [
-        "https://interfaceingame.com/wp-content/uploads/red-dead-redemption-2/RDR2_35.jpg",
-        "https://interfaceingame.com/wp-content/uploads/red-dead-redemption-2/RDR2_21.png",
-        "https://interfaceingame.com/wp-content/uploads/red-dead-redemption-2/RDR2_41.png",
-        "https://interfaceingame.com/wp-content/uploads/red-dead-redemption-2/RDR2_133.png"
+        "/assets/games/screenshots/rdr2_1.jpg",
+        "/assets/games/screenshots/rdr2_2.jpg",
+        "/assets/games/screenshots/rdr2_3.jpg",
+        "/assets/games/screenshots/rdr2_4.jpg"
       ],
       "url_trailer": "https://www.youtube.com/watch?v=gmA6MrX81z4",
       "promo": false,
@@ -66,7 +66,7 @@
       "release_date": "2015-05-19",
       "stock": 20,
       "description": "Geralt de Rivia, chasseur de monstres légendaire, part à la recherche de Ciri, l'enfant de la prophétie. Explorez un continent déchiré par la guerre, combattez des créatures redoutables et prenez des décisions qui changeront le cours de l'histoire.",
-      "cover_image": "https://interfaceingame.com/wp-content/uploads/the-witcher-3-wild-hunt/the-witcher-3-wild-hunt-cover-375x500.jpg",
+      "cover_image": "/assets/games/cover/witcher3.jpg",
       "images": [
         "/assets/games/screenshots/witcher3_1.jpg",
         "/assets/games/screenshots/witcher3_2.jpg",
