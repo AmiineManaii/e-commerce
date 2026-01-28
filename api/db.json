@@ -94,7 +94,7 @@
       "release_date": "2020-11-12",
       "stock": 10,
       "description": "Devenez Eivor, un fier guerrier viking élevé dans les légendes de bataille et de gloire. Explorez l'Angleterre médiévale, menez des raids, construisez votre colonie et gagnez votre place au Valhalla dans ce chapitre épique de la saga Assassin's Creed.",
-      "cover_image": "/assets/games/cover/valhalla.jpg",
+      "cover_image": "https://interfaceingame.com/wp-content/uploads/assassins-creed-valhalla/assassins-creed-valhalla-cover-375x500.jpg",
       "images": [
         "/assets/games/screenshots/valhalla1.jpg",
         "/assets/games/screenshots/valhalla2.jpg",
@@ -122,7 +122,7 @@
       "release_date": "2013-09-17",
       "stock": 15,
       "description": "Explorez Los Santos, une métropole éclatante dans l'État de San Andreas. Incarnez trois criminels aux histoires entrelacées : Michael, Franklin et Trevor. Une satire mordante de la société américaine moderne avec un mode histoire captivant et GTA Online illimité.",
-      "cover_image": "/assets/games/cover/gtav.jpg",
+      "cover_image": "https://cdn.lesnumeriques.com/optim/produits/0/14214/grand-theft-auto-v-ps3_1367404112__1200_630__overflow.jpg",
       "images": [
         "/assets/games/screenshots/gtav1.jpg",
         "/assets/games/screenshots/gtav2.jpg",
@@ -150,7 +150,7 @@
       "release_date": "2020-12-22",
       "stock": 10,
       "description": "Battle royale intense dans l'univers de Call of Duty. Affrontez jusqu'à 150 joueurs dans la carte massive de Verdansk. Récupérez des contrats, personnalisez vos armes et soyez le dernier survivant dans cette expérience de combat tactique.",
-      "cover_image": "/assets/games/cover/cod.jpg",
+      "cover_image": "https://image.api.playstation.com/vulcan/ap/rnd/202503/2819/346190abf755e3883d1353fbc8d8ccb7e1acf076f1138d6b.jpg",
       "images": [
         "/assets/games/screenshots/warzone1.jpg",
         "/assets/games/screenshots/warzone2.jpg",
@@ -178,7 +178,7 @@
       "release_date": "2021-05-21",
       "stock": 15,
       "description": "Le combat ultime revient avec des graphismes époustouflants et une violence extrême. Personnalisez vos combattants préférés, découvrez une nouvelle histoire temporelle et maîtrisez des combos dévastateurs dans le jeu de combat le plus sanglant de la planète.",
-      "cover_image": "/assets/games/cover/mk11.jpg",
+      "cover_image": "https://static.wikia.nocookie.net/mkwikia/images/e/e2/Mk11coverart.png/revision/latest/thumbnail/width/360/height/360?cb=20190110191329",
       "images": [
         "/assets/games/screenshots/mk11_1.jpg",
         "/assets/games/screenshots/mk11_2.jpg",
@@ -206,7 +206,7 @@
       "release_date": "2023-09-20",
       "stock": 15,
       "description": "La révolution du combat arrive ! Avec un nouveau système de combat innovant, un mode monde ouvert inédit et des graphismes next-gen. Rejoignez le Fighting Ground, le World Tour et le Battle Hub pour l'expérience Street Fighter ultime.",
-      "cover_image": "/assets/games/cover/sf6.jpg",
+      "cover_image": "https://image.api.playstation.com/vulcan/ap/rnd/202211/1408/l3bg7nmfPpPzam5jOVlaUFww.jpg",
       "images": [
         "/assets/games/screenshots/sf6_1.jpg",
         "/assets/games/screenshots/sf6_2.jpg",
@@ -234,7 +234,7 @@
       "release_date": "2024-09-28",
       "stock": 10,
       "description": "L'ère nouvelle du football vidéo commence. Avec la technologie HyperMotionV, l'Opta optimisée et les styles de jeu PlayStyles, vivez le jeu le plus réaliste jamais créé. Plus de 19,000 joueurs, 700 équipes et 30 ligues.",
-      "cover_image": "/assets/games/cover/fc24.jpg",
+      "cover_image": "https://image.api.playstation.com/vulcan/ap/rnd/202408/0817/e0540d1459386e3197fce626ced734c4a6d56d905d84f833.png",
       "images": [
         "/assets/games/screenshots/fc24_1.jpg",
         "/assets/games/screenshots/fc24_2.jpg",
@@ -262,7 +262,7 @@
       "release_date": "2023-08-03",
       "stock": 8,
       "description": "Plongez dans un RPG épique où chaque choix compte. Créez votre personnage, formez votre groupe et explorez les Royaumes Oubliés dans cette aventure aux possibilités infinies. Basé sur les règles de D&D 5e, avec un système de combat tactique et des milliers de dialogues.",
-      "cover_image": "/assets/games/cover/baldursgate3.jpg",
+      "cover_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/48a2fcbda8565bb45025e98fd8ebde8a7203f6a0/header.jpg?t=1765505948",
       "images": [
         "/assets/games/screenshots/baldurs1.jpg",
         "/assets/games/screenshots/baldurs2.jpg",
