@@ -37,17 +37,6 @@ header a:hover {
   color: lighter($accent-color, 20%);
 }
 
-.banner {
-  background: url('/assets/banner.jpg') no-repeat center center;
-  background-size: cover;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: $text-color;
-  font-size: 2rem;
-  font-weight: bold;
-}
 
 .featured-games {
   display: grid;
@@ -75,3 +64,20 @@ footer {
   text-align: center;
   color: $text-color;
 }
+
+/* Optimization for Full Page Screenshots & Print */
+@media print {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .fade-in {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .home-page::before {
+    position: absolute !important;
+  }
+}

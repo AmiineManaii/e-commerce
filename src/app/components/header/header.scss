@@ -28,6 +28,7 @@
   padding: 0.75rem 1rem;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 198, 255, 0.1);
+  /* En flux normal : le header défile avec la page et ne recouvre jamais la bannière */
   position: relative;
   z-index: 1030;
 }
@@ -356,7 +357,30 @@
   }
 }
 
+/* ===== Mobile / petit écran (< 992px) : burger à gauche, GameMart centré ===== */
 @media (max-width: 991.98px) {
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    min-height: 56px;
+  }
+
+  .header-toggler {
+    order: 0;
+    margin-right: auto;
+    z-index: 2;
+  }
+
+  .header-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 1;
+  }
+
   .modern-collapse {
     margin-top: 1rem;
     padding: 1rem;
@@ -539,15 +563,95 @@
   }
 }
 
-@media (min-width: 1400px) {
-  .navbar-expand-xxl .navbar-collapse {
+@media (min-width: 992px) {
+  .navbar-expand-lg .navbar-collapse {
     display: flex !important;
     flex-basis: auto;
+    flex-grow: 1;
   }
-  
-  .navbar-expand-xxl .navbar-toggler {
+
+  .navbar-expand-lg .navbar-toggler {
     display: none;
-    
+  }
+}
+
+/* ===== Desktop par défaut = rendu "zoom 80%" : tout visible à 100% ===== */
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.header-brand {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+@media (min-width: 992px) {
+  .modern-collapse {
+    display: flex !important;
+    align-items: center;
+    flex: 1;
+    gap: 1rem;
+  }
+
+  .navbar-nav {
+    flex-shrink: 0;
+  }
+
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .search-container {
+    flex: 1 1 auto;
+    min-width: 140px;
+    max-width: 320px;
+  }
+}
+
+/* Écrans intermédiaires (100% sur laptop) : version compacte, tout reste visible */
+@media (min-width: 992px) and (max-width: 1250px) {
+  .modern-header {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .gradient-text {
+    font-size: 1.4rem;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.6rem 0.8rem;
+    margin: 0 0.1rem;
+    font-size: 0.9rem;
+  }
+
+  .navbar-actions {
+    gap: 0.5rem;
+  }
+
+  .search-container {
+    min-width: 120px;
+    max-width: 220px;
+  }
+
+  .user-name,
+  .auth-text {
+    display: none; /* icônes seules pour gagner de la place */
+  }
+
+  .user-icon,
+  .cart-icon,
+  .wishlist-icon,
+  .auth-link {
+    padding: 0.5rem;
+    font-size: 1rem;
   }
 }
 // Ajouter ces styles à votre fichier SCSS existant

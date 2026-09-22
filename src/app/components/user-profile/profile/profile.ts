@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../../Models/user.model';
 import { AuthService } from '../../../services/auth.service';
 import { UserProfileService } from '../../../services/user-profile.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -19,12 +20,15 @@ export class ProfileComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
 
-  constructor(private authService: AuthService,private userProfileService: UserProfileService) {}
+  constructor(private authService: AuthService, private userProfileService: UserProfileService, private router: Router) {}
 
   ngOnInit(): void {
-
+    const current = this.authService.getCurrentUser();
+    if (!current?.id) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/user/profile' } });
+      return;
+    }
     this.loadUserProfile();
-    
   }
   loadUserProfile(): void {
     this.user = this.authService.getCurrentUser();

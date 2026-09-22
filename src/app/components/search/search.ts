@@ -5,12 +5,14 @@ import { Game } from '../../Models/game.model';
 import { GameService } from '../../services/game.service';
 import { Header } from "../header/header";
 import { Footer } from "../footer/footer";
+import { GameImagePipe } from "../../pipes/game-image.pipe";
+import { ImgFallbackDirective } from "../../directives/img-fallback.directive";
 
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, Header, Footer],
+  imports: [CommonModule, Header, Footer, GameImagePipe, ImgFallbackDirective],
   templateUrl: './search.html',
   styleUrl: './search.scss'
 })

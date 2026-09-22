@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserProfileService } from '../../../services/user-profile.service';
 import { GameService } from '../../../services/game.service';
 import { Game } from '../../../Models/game.model';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../Models/user.model';
+import { GameImagePipe } from '../../../pipes/game-image.pipe';
+import { ImgFallbackDirective } from '../../../directives/img-fallback.directive';
 
 @Component({
   selector: 'app-wishlist',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, GameImagePipe, ImgFallbackDirective],
   templateUrl: './wishlist.html',
   styleUrls: ['./wishlist.scss']
 })
@@ -23,10 +25,16 @@ export class WishlistComponent implements OnInit {
   constructor(
     private userProfileService: UserProfileService,
     private gameService: GameService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    const user = this.authService.getCurrentUser();
+    if (!user?.id) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/user/wishlist' } });
+      return;
+    }
     this.loadWishlist();
   }
 
@@ -35,8 +43,7 @@ export class WishlistComponent implements OnInit {
     this.error = '';
     this.user=this.authService.getCurrentUser();
     if (!this.user || !this.user.id) {
-      this.error = 'Utilisateur non authentifié';
-      this.loading = false;
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/user/wishlist' } });
       return;
     }
 

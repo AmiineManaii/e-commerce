@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { User } from '../Models/user.model';
 import { API_BASE_URL } from '../app.config';
 
@@ -9,57 +9,59 @@ import { API_BASE_URL } from '../app.config';
 })
 export class AuthService {
   private apiUrl = API_BASE_URL;
-  
+
   constructor(private http: HttpClient) { }
 
+  private unwrap<T>(response: any): T {
+    if (response && typeof response === 'object' && !Array.isArray(response) && 'data' in response) {
+      return response.data as T;
+    }
+    return response as T;
+  }
+
+  private stripPassword(user: any): User {
+    if (!user) return user;
+    const { password, ...rest } = user;
+    return rest as User;
+  }
+
   register(user: User): Observable<User> {
-    return new Observable(observer => {
-      
-          this.http.post<{status: string, message: string, data: User}>(this.apiUrl+'/users', user).subscribe({
-            next: (response) => {
-              console.log(response);
-              const { password, ...userWithoutPassword } = response.data;
-              localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-              observer.next(userWithoutPassword);
-              observer.complete();
-            },
-            error: (error) => {
-              console.log(error);
-              observer.error(error);
-            }
-          });
-        
-    });
+    return this.http.post<any>(this.apiUrl + '/users', user).pipe(
+      map(response => {
+        const created = this.unwrap<User>(response);
+        const clean = this.stripPassword(created);
+        localStorage.setItem('currentUser', JSON.stringify(clean));
+        return clean;
+      }),
+      catchError(error => {
+        console.error('register:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   login(email: string, password: string): Observable<User> {
-    return new Observable(observer => {
-      this.http.get<{status: string, message: string, data: User}>(`${this.apiUrl}/users/email/${email}`).subscribe({
-        next: (response) => {
-          console.log(response.data);
-          const user = response.data;
+    // json-server : pas de /users/email/:email -> on filtre par ?email=
+    return this.http.get<any>(`${this.apiUrl}/users?email=${encodeURIComponent(email)}`).pipe(
+      switchMap(response => {
+        const users = Array.isArray(response) ? response : [this.unwrap<User>(response)].filter(Boolean);
+        const user = users[0];
 
-          console.log(!user);
-          if (!user) {
-            observer.error('Utilisateur non trouvé');
-            return;
-          }
-
-          if (user.password !== password) {
-            observer.error('Mot de passe incorrect');
-            return;
-          }
-
-          const { password: _, ...userWithoutPassword } = user;
-          localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-          observer.next(userWithoutPassword);
-          observer.complete();
-        },
-        error: (error) => {
-          observer.error(error);
+        if (!user) {
+          return throwError(() => new Error('Utilisateur non trouvé'));
         }
-      });
-    });
+        if (user.password !== password) {
+          return throwError(() => new Error('Mot de passe incorrect'));
+        }
+        const clean = this.stripPassword(user);
+        localStorage.setItem('currentUser', JSON.stringify(clean));
+        return of(clean);
+      }),
+      catchError(error => {
+        console.error('login:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   logout(): void {
@@ -83,30 +85,36 @@ export class AuthService {
     return null;
   }
 
-  updateUser(userId: number, userData: Partial<User>): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${userId}`, userData).pipe(
-      tap(() => {
+  updateUser(userId: number | string, userData: Partial<User>): Observable<User> {
+    return this.http.patch<any>(`${this.apiUrl}/users/${userId}`, userData).pipe(
+      map(response => {
+        const updated = this.unwrap<User>(response);
         const userJson = localStorage.getItem('currentUser');
         if (userJson) {
-          localStorage.removeItem('currentUser');
-          const currentUser = JSON.parse(userJson);
-          const updatedUser = {id: currentUser.id, ...userData};
-          localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+          try {
+            const currentUser = JSON.parse(userJson);
+            const merged = { ...currentUser, ...this.stripPassword(updated), ...this.stripPassword(userData) };
+            localStorage.setItem('currentUser', JSON.stringify(merged));
+          } catch { /* ignore */ }
         }
+        return updated;
       })
     );
   }
 
   checkEmailExists(email: string): Observable<boolean> {
-    return this.http.get<User[]>(`${this.apiUrl}?email=${email}`).pipe(
-      map(users => users.length > 0)
+    return this.http.get<any[]>(`${this.apiUrl}/users?email=${encodeURIComponent(email)}`).pipe(
+      map(users => Array.isArray(users) ? users.length > 0 : !!users),
+      catchError(() => of(false))
     );
   }
 
   getUsername(userId: string): Observable<{prenom: string, nom: string}> {
-    //console.log(userId);
-    return this.http.get<{status: string, message: string, data: User}>(`${this.apiUrl}/users/${userId}`).pipe(
-      map(user => ({prenom: user.data.prenom, nom: user.data.nom}))
+    return this.http.get<any>(`${this.apiUrl}/users/${userId}`).pipe(
+      map(response => {
+        const user = this.unwrap<User>(response);
+        return { prenom: user?.prenom ?? '', nom: user?.nom ?? '' };
+      })
     );
   }
 }

@@ -1,16 +1,19 @@
 export interface Game {
   id: number;
   title: string;
-  platform: string;       
-  genre: string;          
+  platform: string;
+  genre: string;
   price: number;
-  rating: number;         
-  release_date: string;   
-  stock: number;          
+  rating: number;
+  release_date: string;
+  stock: number;
   description: string;
-  coverImage: string;    
-  images: string[];       
-  promo?: boolean;        
+  coverImage: string;
+  /** Alias snake_case venant de json-server / db.json */
+  cover_image?: string;
+  images: string[];
+  promo?: boolean;
+  popular?: boolean;
   tags?: string[];
   url_trailer: string;
 }

@@ -6,11 +6,13 @@ import { CartItem, CartSummary } from '../../Models/cart-item.model';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { BehaviorSubject } from 'rxjs';
+import { GameImagePipe } from '../../pipes/game-image.pipe';
+import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, RouterLink, Header, Footer],
+  imports: [CommonModule, RouterLink, Header, Footer, GameImagePipe, ImgFallbackDirective],
   templateUrl: './cart.html',
   styleUrl: './cart.scss'
 })

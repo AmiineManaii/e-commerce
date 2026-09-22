@@ -13,11 +13,13 @@ import { CartService } from '../../services/cart.service';
 import { Game } from '../../Models/game.model';
 import { User } from '../../Models/user.model';
 import { Review } from '../../Models/review';
+import { GameImagePipe } from '../../pipes/game-image.pipe';
+import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
 
 @Component({
   selector: 'app-produit-details',
   standalone: true,
-  imports: [CommonModule, Header, Footer, FormsModule, RouterLink],
+  imports: [CommonModule, Header, Footer, FormsModule, RouterLink, GameImagePipe, ImgFallbackDirective],
   templateUrl: './produit-details.html',
   styleUrl: './produit-details.scss'
 })
@@ -100,11 +102,14 @@ export class ProduitDetailsComponent implements OnInit {
 
     this.reviewService.getReviewsByGameId(this.produit.id.toString()).subscribe({
       next: (reviews) => {
-        this.reviews = reviews;
+        this.reviews = Array.isArray(reviews) ? reviews : [];
         this.calculateAverageRating();
         this.loadUserNames();
       },
-      error: (err) => console.error('Error loading reviews:', err)
+      error: (err) => {
+        console.error('Error loading reviews:', err);
+        this.reviews = [];
+      }
     });
   }
 
@@ -112,22 +117,33 @@ export class ProduitDetailsComponent implements OnInit {
 
 
   private loadUserNames(): void {
-    const uniqueUserIds = [...new Set(this.reviews.map(review => review.user.id!!.toString()))];
-    //console.log("uniqueUserIds", uniqueUserIds)
-    
+    const uniqueUserIds = [...new Set(
+      (this.reviews || [])
+        .map((review: any) => review?.user?.id?.toString() ?? review?.userId?.toString())
+        .filter((id): id is string => !!id)
+    )];
+    if (uniqueUserIds.length === 0) return;
+
     uniqueUserIds.forEach(userId => {
-      
+      if (this.userNames.has(userId)) return;
+      this.userNames.set(userId, 'Chargement...');
       this.authService.getUsername(userId).subscribe({
-        next: (user) => 
-          this.userNames.set(userId, `${user.prenom} ${user.nom}`),
+        next: (user) => {
+          const label = `${user?.prenom ?? ''} ${user?.nom ?? ''}`.trim() || 'Utilisateur';
+          this.userNames.set(userId, label);
+        },
         error: () => this.userNames.set(userId, 'Utilisateur inconnu')
       });
     });
   }
 
-
+  /** Id utilisateur d'un avis, format plat (userId) OU imbriqué (user.id) */
+  getReviewUserId(review: any): string {
+    return review?.user?.id?.toString() ?? review?.userId?.toString() ?? '';
+  }
 
   getDisplayName(userId: string): string {
+    if (!userId) return 'Utilisateur inconnu';
     return this.userNames.get(userId) || 'Chargement...';
   }
 
@@ -135,12 +151,12 @@ export class ProduitDetailsComponent implements OnInit {
 
 
   private calculateAverageRating(): void {
-    if (!this.reviews.length) {
+    if (!this.reviews?.length) {
       this.averageRating = 0;
       return;
     }
-    
-    const total = this.reviews.reduce((sum, review) => sum + review.note, 0);
+
+    const total = this.reviews.reduce((sum, review) => sum + (Number(review?.note) || 0), 0);
     this.averageRating = Math.round((total / this.reviews.length) * 10) / 10;
   }
 
@@ -150,11 +166,18 @@ export class ProduitDetailsComponent implements OnInit {
 
 
   submitReview(form: NgForm): void {
-    if (!this.currentUser?.id || !this.produit || this.isSubmitting) return;
+    if (!this.currentUser?.id || !this.produit || this.isSubmitting) {
+      if (!this.currentUser?.id) {
+        alert('Connectez-vous pour publier un avis');
+      }
+      return;
+    }
 
     this.isSubmitting = true;
-    const reviewData: Omit<Review, 'id'> = {
+    const reviewData: any = {
+      gameId: this.produit.id.toString(),
       game: this.produit,
+      userId: this.currentUser.id.toString(),
       user: this.currentUser,
       msg: this.newReview.msg,
       note: this.newReview.note,
@@ -163,10 +186,11 @@ export class ProduitDetailsComponent implements OnInit {
     };
 
     this.reviewService.createReview(reviewData).subscribe({
-      next: (newReview) => {
+      next: (newReview: any) => {
         this.reviews.unshift(newReview);
         this.calculateAverageRating();
-        this.userNames.set(newReview.user.id!!.toString(), `${this.currentUser!.prenom} ${this.currentUser!.nom}`);
+        const uid = newReview?.user?.id?.toString() ?? newReview?.userId?.toString() ?? this.currentUser!.id!.toString();
+        this.userNames.set(uid, `${this.currentUser!.prenom} ${this.currentUser!.nom}`);
         this.newReview = { note: 5, msg: '' };
         form.resetForm();
         this.isSubmitting = false;
@@ -332,7 +356,10 @@ export class ProduitDetailsComponent implements OnInit {
 
 
   formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
+    if (!dateString) return '';
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return dateString;
+    return d.toLocaleDateString('fr-FR', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'

@@ -20,14 +20,18 @@ export class CategoryList implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.gameService.getAllGames().subscribe(games => {
-      const uniqueGenres = new Set<string>();
-      games.forEach(game => {
-        if (game.genre && !uniqueGenres.has(game.genre)) {
-          uniqueGenres.add(game.genre);
-        }
-      });
-      this.categories = Array.from(uniqueGenres);
+    this.gameService.getAllGames().subscribe({
+      next: (games) => {
+        const list = Array.isArray(games) ? games : [];
+        const uniqueGenres = new Set<string>();
+        list.forEach(game => {
+          if (game?.genre && !uniqueGenres.has(game.genre)) {
+            uniqueGenres.add(game.genre);
+          }
+        });
+        this.categories = Array.from(uniqueGenres);
+      },
+      error: (err) => console.error('category-list:', err)
     });
   }
 

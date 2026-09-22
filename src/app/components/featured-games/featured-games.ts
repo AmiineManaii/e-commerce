@@ -3,12 +3,14 @@ import { GameService } from '../../services/game.service';
 import { Game } from '../../Models/game.model';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { GameImagePipe } from '../../pipes/game-image.pipe';
+import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
 
 
 @Component({
   selector: 'app-featured-games',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, GameImagePipe, ImgFallbackDirective],
   templateUrl: './featured-games.html',
   styleUrl: './featured-games.scss'
 })

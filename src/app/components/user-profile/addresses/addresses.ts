@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UserProfileService } from '../../../services/user-profile.service';
 import { AuthService } from '../../../services/auth.service';
 import { Address, User } from '../../../Models/user.model';
@@ -28,13 +29,12 @@ export class AddressesComponent implements OnInit {
   successMessage = '';
   currentUser: User | null = null;
 
-  constructor(private userProfileService: UserProfileService,private authService: AuthService) {}
+  constructor(private userProfileService: UserProfileService, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     if (!this.currentUser || !this.currentUser.id){
-      this.error = 'Utilisateur non connecté';
-      this.loading = false;
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/user/addresses' } });
       return;
     }
     this.loadAddresses();

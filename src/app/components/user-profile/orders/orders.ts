@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Order, User } from '../../../Models/user.model';
 import { UserProfileService } from '../../../services/user-profile.service';
 import { AuthService } from '../../../services/auth.service';
@@ -23,13 +23,12 @@ export class OrdersComponent implements OnInit {
   error = '';
 
 
-  constructor(private userProfileService: UserProfileService, private authService: AuthService,private gameService: GameService) {}
+  constructor(private userProfileService: UserProfileService, private authService: AuthService, private gameService: GameService, private router: Router) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     if (!this.currentUser || !this.currentUser.id) {
-      this.error = 'Utilisateur non authentifié';
-      this.loading = false;
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/user/orders' } });
       return;
     }
     

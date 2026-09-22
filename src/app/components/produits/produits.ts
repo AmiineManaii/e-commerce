@@ -10,11 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../../Models/user.model';
 import { AuthService } from '../../services/auth.service';
+import { GameImagePipe } from '../../pipes/game-image.pipe';
+import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
 
 @Component({
   selector: 'app-produits',
   standalone: true,
-  imports: [CommonModule, Header, Footer, FormsModule],
+  imports: [CommonModule, Header, Footer, FormsModule, GameImagePipe, ImgFallbackDirective],
   templateUrl: './produits.html',
   styleUrl: './produits.scss'
 })

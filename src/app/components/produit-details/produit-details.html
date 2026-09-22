@@ -17,7 +17,7 @@
         @if (produit.images.length) {
           <div class="image-gallery">
             <div class="main-image">
-              <img [src]="produit.images[currentImageIndex]" [alt]="produit.title" class="gallery-image">
+              <img [src]="(produit.images[currentImageIndex] || produit.coverImage) | gameImage" appImgFallback [alt]="produit.title" class="gallery-image">
               <button class="nav-button prev" (click)="changeImage(-1)">
                 <i class="fas fa-chevron-left"></i>
               </button>
@@ -30,7 +30,7 @@
               <div class="image-thumbnails">
                 @for (image of produit.images; track image; let i = $index) {
                   <div class="thumbnail-item" [class.active]="i === currentImageIndex" (click)="currentImageIndex = i">
-                    <img [src]="image" [alt]="'Thumbnail ' + (i + 1)">
+                    <img [src]="image | gameImage" appImgFallback [alt]="'Thumbnail ' + (i + 1)">
                   </div>
                 }
               </div>
@@ -165,7 +165,7 @@
           @for (product of similarProducts; track product.id) {
             <div class="product-card">
               <div class="card-image">
-                <img [src]="product.coverImage" [alt]="product.title">
+                <img [src]="product.coverImage | gameImage" appImgFallback [alt]="product.title">
                 <div class="card-overlay">
                   <a [routerLink]="['/produitDetails', product.id]">
                     <i class="fas fa-eye"></i>
@@ -224,7 +224,7 @@
             <div class="review-header">
               <div class="user-info">
                 <i class="fas fa-user-circle"></i>
-                <span class="user-name">{{ getDisplayName(review.user.id!!.toString()) }}</span>
+                <span class="user-name">{{ getDisplayName(getReviewUserId(review)) }}</span>
                 @if (review.verified) {
                   <span class="verified">
                     <i class="fas fa-check-circle"></i>
@@ -238,13 +238,13 @@
             <div class="review-rating">
               <div class="stars">
                 @for (star of [1,2,3,4,5]; track star) {
-                  <i class="fas fa-star" [class.filled]="star <= review.note"></i>
+                  <i class="fas fa-star" [class.filled]="star <= (review.note || 0)"></i>
                 }
-                <span>{{ review.note }}/5</span>
+                <span>{{ review.note || 0 }}/5</span>
               </div>
             </div>
             
-            <p class="review-text">{{ review.msg }}</p>
+            <p class="review-text">{{ review.msg || 'Aucun message' }}</p>
           </div>
         }
       } @else {

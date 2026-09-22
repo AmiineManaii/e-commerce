@@ -4,10 +4,12 @@ import { RouterLink } from '@angular/router';
 import { Game } from '../../Models/game.model';
 import { GameService } from '../../services/game.service';
 import { CartService } from '../../services/cart.service';
+import { GameImagePipe } from '../../pipes/game-image.pipe';
+import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
 
 @Component({
   selector: 'app-banner',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, GameImagePipe, ImgFallbackDirective],
   templateUrl: './banner.html',
   styleUrl: './banner.scss'
 })

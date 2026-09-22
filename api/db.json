@@ -1129,10 +1129,14 @@
       "name": "Amine",
       "email": "amine@example.com",
       "password": "123456",
-      "wishlist": [],
+      "wishlist": [
+        "2",
+        "5",
+        "7"
+      ],
       "nom": "Manai",
       "prenom": "Mohamed Amine",
-      "adresse": "Mornaguia"
+      "adresse": "Tunisie"
     },
     {
       "id": "46a4",
@@ -1162,11 +1166,11 @@
   "addresses": [
     {
       "id": "c2f1",
-      "nom": "mornaguia",
-      "rue": "04",
-      "ville": "mornaguia",
+      "nom": "Tunis",
+      "rue": "04 Tunis",
+      "ville": "Tunis",
       "codePostal": "1110",
-      "pays": "tunisie",
+      "pays": "Tunisie",
       "userId": "1",
       "default": true
     },
@@ -1180,7 +1184,28 @@
       "userId": "1"
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "userId": "1",
+      "date": "2026-09-22T20:21:25.361Z",
+      "items": [
+        {
+          "gameId": "27",
+          "quantity": 1,
+          "price": 59.99
+        },
+        {
+          "gameId": "3",
+          "quantity": 1,
+          "price": 39.99
+        }
+      ],
+      "total": 114.98,
+      "status": "completed",
+      "addressId": "c2f1",
+      "id": 1
+    }
+  ],
   "cart": [],
   "reviews": [
     {

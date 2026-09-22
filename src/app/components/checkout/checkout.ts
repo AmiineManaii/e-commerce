@@ -9,11 +9,13 @@ import { UserProfileService } from '../../services/user-profile.service';
 import { AuthService } from '../../services/auth.service';
 import { CartItem, CartSummary } from '../../Models/cart-item.model';
 import { Address, Order, OrderItem, User } from '../../Models/user.model';
+import { GameImagePipe } from '../../pipes/game-image.pipe';
+import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer],
+  imports: [CommonModule, FormsModule, RouterModule, Header, Footer, GameImagePipe, ImgFallbackDirective],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss'
 })
@@ -51,8 +53,8 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     if (!this.currentUser?.id) {
-      this.error = 'Vous devez être connecté pour passer commande.';
-      this.loading = false;
+      // MODE DEV : aucun utilisateur connecté -> redirection vers login
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' } });
       return;
     }
 

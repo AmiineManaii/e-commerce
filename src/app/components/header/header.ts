@@ -29,24 +29,38 @@ export class Header implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
     this.loadCart();
     this.cartService.getCartChanges().subscribe(() => this.loadCart());
-    this.currentUser = this.authService.getCurrentUser();
     this.loadWishlist();
     this.userProfileService.getWishlistChanges().subscribe(() => this.loadWishlist());
-    
   }
   loadCart() {
-  this.cartService.getCartItems().subscribe(items => {
-    this.cartItemCount = items.length;
-  });
+    this.cartService.getCartItems().subscribe({
+      next: (items) => {
+        this.cartItemCount = Array.isArray(items) ? items.length : 0;
+      },
+      error: (err) => {
+        console.error('header loadCart:', err);
+        this.cartItemCount = 0;
+      }
+    });
   }
   loadWishlist() {
-    if (this.currentUser?.id) {
-      this.userProfileService.getWishlist(this.currentUser.id.toString()).subscribe(items => {
-        this.wishlistItemCount = of(items.length);
-      });
+    this.currentUser = this.authService.getCurrentUser();
+    if (!this.currentUser?.id) {
+      this.wishlistItemCount = of(0);
+      return;
     }
+    this.userProfileService.getWishlist(this.currentUser.id.toString()).subscribe({
+      next: (items) => {
+        this.wishlistItemCount = of(Array.isArray(items) ? items.length : 0);
+      },
+      error: (err) => {
+        console.error('header loadWishlist:', err);
+        this.wishlistItemCount = of(0);
+      }
+    });
   }
 
 
@@ -64,5 +78,7 @@ export class Header implements OnInit {
     this.authService.logout();
     this.router.navigate(['/']);
     this.currentUser = null;
+    this.loadCart();
+    this.loadWishlist();
   }
 }

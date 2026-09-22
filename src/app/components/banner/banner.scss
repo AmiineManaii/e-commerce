@@ -1,12 +1,12 @@
 .banner {
   background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.98) 100%);
-  min-height: 750px;
+  min-height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 4rem 1rem;
+  padding: 1rem 1.5rem 2rem;
   
   // Animated background pattern
   &::before {
@@ -33,14 +33,15 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
 .section-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
   //background: linear-gradient(90deg, #00c6ff, #0070f3, #ff00ff, #ff8c00);
   background: linear-gradient(to right, #4d4e4f, #86aad1, #3cd1e8, #74e6f7);
   -webkit-background-clip: text;
@@ -67,8 +68,8 @@
 .slides {
   display: flex;
   position: relative;
-  min-height: 650px;
-  padding: 2rem 0;
+  min-height: 540px;
+  padding: 1rem 0;
 }
 
 .slide {
@@ -78,7 +79,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 3rem;
+  gap: 2.5rem;
   opacity: 0;
   transform: translateX(30px);
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -99,11 +100,14 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
               0 0 40px rgba(0, 198, 255, 0.2);
   transition: all 0.5s ease;
-  width: 450px;
-  height: 600px;
+  width: 360px;
+  height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 198, 255, 0.15);
 
   &:hover {
     transform: scale(1.03);
@@ -116,7 +120,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 16px;
   transition: filter 0.5s ease;
 
@@ -148,9 +152,9 @@
   backdrop-filter: blur(20px);
   border: 2px solid rgba(0, 198, 255, 0.2);
   border-radius: 20px;
-  padding: 2.5rem;
+  padding: 2rem;
   width: 100%;
-  max-width: 650px;
+  max-width: 560px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
               0 0 40px rgba(0, 198, 255, 0.15);
   animation: contentFadeIn 1s ease-out;
@@ -168,14 +172,14 @@
 }
 
 .content-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .game-title {
-  font-size: 2.25rem;
+  font-size: 1.9rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
   text-shadow: 0 2px 20px rgba(0, 198, 255, 0.5);
   letter-spacing: 0.5px;
   line-height: 1.2;
@@ -216,14 +220,14 @@
 }
 
 .content-body {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .game-description {
   color: rgba(255, 255, 255, 0.85);
-  font-size: 1rem;
-  line-height: 1.7;
-  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
   text-align: left;
 }
 
@@ -276,7 +280,7 @@
 
   .price-value {
     color: #00c6ff;
-    font-size: 2rem;
+    font-size: 1.7rem;
     font-weight: 700;
     text-shadow: 0 0 20px rgba(0, 198, 255, 0.6);
   }
@@ -294,7 +298,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.875rem 2rem;
+  padding: 0.75rem 1.6rem;
   border-radius: 12px;
   font-weight: 600;
   font-size: 1rem;

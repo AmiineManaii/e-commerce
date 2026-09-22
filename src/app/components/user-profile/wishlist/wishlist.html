@@ -36,7 +36,7 @@
           <div class="game-card">
             <div class="game-image-wrapper" [routerLink]="['/produitDetails', game.id]">
               @if (game.coverImage) {
-                <img [src]="game.coverImage" [alt]="game.title" class="game-image">
+                <img [src]="game.coverImage | gameImage" appImgFallback [alt]="game.title" class="game-image">
               } @else {
                 <div class="no-image">
                   <i class="fas fa-image"></i>

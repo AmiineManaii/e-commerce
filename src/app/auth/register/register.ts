@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private cartService: CartService,
     private router: Router
   ) {
     this.registerForm = this.fb.group({
@@ -51,7 +53,11 @@ export class RegisterComponent {
     this.authService.register(userData).subscribe({
       next: (user) => {
         console.log('Utilisateur inscrit avec succès:', user);
-        this.router.navigate(['/']);
+        // Fusionne le panier invité avec le nouveau compte, puis navigue
+        this.cartService.mergeGuestCartOnLogin().subscribe({
+          next: () => this.router.navigate(['/']),
+          error: () => this.router.navigate(['/'])
+        });
       },
       error: (error) => {
         console.log(error.message)
