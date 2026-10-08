@@ -1,0 +1,39 @@
+keyword,intent,persona,target_page,priority,estimated_difficulty,volume,seo_potential,recommended_content,language
+acheter jeux vidéo en ligne,transactionnelle,"P-Yanis; P-Salma",/produits,P0,Forte,À vérifier avec Google Keyword Planner / Semrush,Élevé,Page catalogue optimisée + H1 + textes catégorie,FR
+boutique jeux vidéo en ligne,"transactionnelle; commerciale","P-Yanis; P-Salma",/ puis /produits,P0,Forte,À vérifier avec Google Keyword Planner / Semrush,Élevé,Page d'accueil + maillage vers catalogue,FR
+jeux vidéo pas cher,"transactionnelle; commerciale",P-Yanis,/produits (filtre prix/promo) + /promotions à créer,P0,Forte,À vérifier avec Google Keyword Planner / Trends,Très élevé,Page Promotions + banner SEO,FR
+catalogue jeux vidéo,commerciale,"P-Mehdi; P-Yanis",/produits,P1,Moyenne,À vérifier avec Google Keyword Planner,Élevé,Catalogue filtrable + contenus catégories,FR
+jeu RPG PC,"commerciale; transactionnelle","P-Mehdi; P-Yanis",/produits?genre=RPG (facette indexable à créer),P1,Moyenne,À vérifier avec Google Keyword Planner,Élevé,Page catégorie Jeux RPG PC,FR
+jeu aventure monde ouvert,commerciale,"P-Yanis; P-Mehdi",/produits?tags=open-world,P1,Moyenne,À vérifier avec Google Keyword Planner,Élevé,Page catégorie + guide meilleurs mondes ouverts,FR
+jeu action PC,"commerciale; transactionnelle",P-Yanis,/produits?genre=Action,P1,Moyenne,À vérifier avec Google Keyword Planner,Élevé,Page catégorie,FR
+jeux en promo / jeux promotion PC,transactionnelle,P-Yanis,/promotions (à créer),P0,Moyenne,À vérifier avec Google Trends (soldes/Black Friday),Très élevé,Page promo + articles bons plans,FR
+jeux les plus populaires / jeux populaires 2026,commerciale,"P-Salma; P-Yanis",/ (featured) + /produits?tri=popularite,P1,Moyenne,À vérifier avec Google Trends,Élevé,Bloc Populaires + article top,FR
+nouveautés jeux vidéo,commerciale,P-Mehdi,/produits?tri=nouveautes,P1,Moyenne,À vérifier avec Google Keyword Planner,Élevé,Page Nouveautés triable,FR
+acheter cyberpunk 2077 PC pas cher,transactionnelle,P-Yanis,/produitDetails/:id (fiche Cyberpunk + slug SEO),P1,Faible-Moyenne,À vérifier avec Google Keyword Planner,Élevé,Fiche produit enrichie (avis trailer FAQ),FR
+acheter red dead redemption 2 PC au meilleur prix,transactionnelle,"P-Yanis; P-Mehdi",/produitDetails/:id (fiche RDR2),P1,Faible-Moyenne,À vérifier avec Google Keyword Planner,Élevé,Fiche produit + comparatif prix,FR
+jeu RPG futuriste monde ouvert PC,commerciale,P-Mehdi,/produits + guide,P1,Faible,À vérifier avec Google Keyword Planner,Élevé,Guide meilleurs RPG futuristes + maillage fiches,FR
+quel jeu offrir à un ado gamer,commerciale,P-Salma,/blog/quel-jeu-offrir-ado (à créer),P1,Faible,À vérifier avec Google Keyword Planner,Élevé,Article cadeaux + sélection wishlist,FR
+jeu pas cher petit budget étudiant,commerciale,P-Yanis,/blog/jeux-pas-chers-etudiants (à créer),P1,Faible,À vérifier avec Google Keyword Planner,Élevé,Sélection moins de 20 euros + filtres prix,FR
+top jeux RPG 2026,"informationnelle; commerciale","P-Mehdi; P-Yanis",/blog/top-jeux-rpg-2026,P1,Moyenne,À vérifier avec Google Trends,Élevé,Top + liens fiches produits,FR
+meilleurs jeux monde ouvert PC,"informationnelle; commerciale","P-Yanis; P-Mehdi",/blog/meilleurs-jeux-monde-ouvert-pc,P1,Moyenne,À vérifier avec Google Keyword Planner,Élevé,Guide comparatif,FR
+comment choisir un jeu vidéo PC,informationnelle,P-Salma,/blog/comment-choisir-jeu-video-pc,P1,Faible,À vérifier avec Google Keyword Planner,Élevé,Guide débutant (config genres PEGI),FR
+avis cyberpunk 2077 2026 vaut-il le coup,"informationnelle; commerciale","P-Yanis; P-Mehdi",fiche produit + article avis,P1,Faible,À vérifier avec Google Trends,Élevé,Test/avis + note + trailer,FR
+soldes jeux vidéo dates 2026,"informationnelle; commerciale",P-Yanis,/blog/soldes-jeux-video-2026,P1,Moyenne saisonnière,À vérifier avec Google Trends,Élevé en pics,Calendrier promos + alerte email,FR
+gamemart,navigationnelle,Tous,/,P0,Faible (marque),À vérifier avec Search Console après lancement,Élevé,Title + logo + profils sociaux cohérents,FR
+gamemart jeux,navigationnelle,Tous,/produits,P0,Faible,À vérifier avec Search Console,Élevé,Maillage interne + sitemap,FR
+gamemart avis,"navigationnelle; informationnelle","P-Salma; P-Yanis",page avis / Trustpilot futur,P1,Faible,À vérifier avec Search Console,Moyen,Page Avis clients + rich snippets Review,FR
+comparatif boutique jeux vidéo en ligne,commerciale,"P-Mehdi; P-Yanis",/blog/comparatif-boutiques-jeux-video,P1,Moyenne,À vérifier avec Semrush,Élevé,Comparatif honnête + forces GameMart,FR
+meilleur site pour acheter jeux PC,commerciale,"P-Yanis; P-Mehdi",/blog + /produits,P0,Forte,À vérifier avec Semrush,Très élevé,Page Pourquoi GameMart + preuves,FR
+acheter [titre du jeu] PC,transactionnelle,"P-Yanis; P-Mehdi",/produitDetails/:id (slug avec titre),P0,Moyenne par titre,À vérifier avec Keyword Planner par titre,Très élevé,Fiche produit prix stock trailer avis CTA,FR
+code promo gamemart / bon de réduction jeux,transactionnelle,P-Yanis,/promotions + newsletter,P1,Moyenne,À vérifier avec Google Trends,Élevé,Page promo + capture email,FR
+commander jeu vidéo en ligne livraison,transactionnelle,P-Salma,/checkout (non indexée) + /livraison-paiement à créer,P1,Moyenne,À vérifier avec Google Keyword Planner,Élevé,Page info livraison rassurante et indexable,FR
+Où acheter des jeux vidéo pas chers en ligne ?,"commerciale; transactionnelle",P-Yanis,/produits + FAQ,P0,Moyenne,À vérifier avec Keyword Planner / PAA,Élevé,FAQ + page promo,FR
+Quel jeu vidéo offrir en cadeau ?,commerciale,P-Salma,/blog/quel-jeu-offrir + FAQ,P1,Faible,À vérifier avec Keyword Planner / PAA,Élevé,Guide cadeaux + wishlist,FR
+Comment savoir si un jeu tourne sur mon PC ?,informationnelle,"P-Salma; P-Yanis",/blog/config-pc-jeux + fiche (config requise),P1,Faible,À vérifier avec Keyword Planner / PAA,Élevé,Guide + bloc configuration requise,FR
+Quels sont les meilleurs RPG sur PC en 2026 ?,"informationnelle; commerciale",P-Mehdi,/blog/top-jeux-rpg-2026,P1,Moyenne,À vérifier avec Keyword Planner / PAA,Élevé,Top + fiches,FR
+Comment fonctionne la livraison sur GameMart ?,"informationnelle; transactionnelle",P-Salma,/livraison-paiement (à créer) + FAQ,P1,Faible,À vérifier avec Search Console / PAA,Élevé,Page service + schema FAQ,FR
+game store online / buy video games online,transactionnelle,P-Mehdi,/produits (version EN future),P2,Forte,À vérifier avec Keyword Planner / Ahrefs,Moyen,Page EN dédiée si i18n,EN
+video game deals / cheap PC games,transactionnelle,"P-Yanis; P-Mehdi",/promotions (EN future),P2,Forte,À vérifier avec Ahrefs,Moyen,Page deals EN,EN
+best open world games PC 2026,"informationnelle; commerciale",P-Mehdi,/blog EN futur,P3,Moyenne,À vérifier avec Ahrefs,Moyen,Top EN,EN
+how to choose a video game as a gift,informationnelle,P-Salma,/blog EN futur,P3,Faible,À vérifier avec Ahrefs,Moyen,Guide cadeau EN,EN
+best place to buy PC games,commerciale,P-Mehdi,/blog EN futur,P3,Forte,À vérifier avec Ahrefs,Moyen,Comparatif EN,EN

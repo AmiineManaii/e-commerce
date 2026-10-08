@@ -1,0 +1,30 @@
+# robots.txt — GameMart (e-commerce jeux vidéo, Angular SPA)
+# Fichier à servir à la racine du domaine : https://www.EXEMPLE-DOMAINE.fr/robots.txt
+# Dans ce projet Angular, ce fichier est placé dans `public/` (servi à `/`)
+# et dupliqué à la racine du repo pour visibilité.
+# Remplacer EXEMPLE-DOMAINE par le domaine réel de production avant la mise en ligne.
+
+User-agent: *
+Allow: /
+Allow: /assets/
+
+# Pages privées / transactionnelles : pas d'intérêt SEO, éviter le crawl et l'indexation
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-confirmation/
+Disallow: /user/
+Disallow: /login
+Disallow: /register
+
+# Recherche interne : résultats dynamiques = contenu dupliqué / thin content
+Disallow: /search
+
+# API mock / backend (ne doit jamais être crawlé)
+Disallow: /api/
+
+# Ressources techniques (ne pas bloquer CSS/JS/images nécessaires au rendu Googlebot)
+# Aucun Disallow sur *.css, *.js, /assets : le rendu doit rester accessible.
+
+# Sitemap : à décommenter dès que le domaine de production est connu
+# et que le sitemap est généré (voir docs/seo-digital-marketing.md §11 et §14).
+# Sitemap: https://www.EXEMPLE-DOMAINE.fr/sitemap.xml
