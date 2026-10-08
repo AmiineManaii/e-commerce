@@ -298,10 +298,44 @@ Audit réalisé sur le code réel (`src/index.html`, routes `src/app/app.routes.
 
 | # | Constat | Impact SEO | Priorité | Recommandation | Action à réaliser |
 |---|---|---|---|---|---|
-| F-1 | Autorité de domaine nulle (pas de domaine prod, 0 backlink) | Classement impossible sur requêtes concurrentielles au J1 | Haute | Campagne lancement : annuaires qualité, presse gaming, partenariats | Roadmap M1-M6, suivi Ahrefs/Semrush |
+| F-1 | Autorité de domaine quasi nulle (domaine prod récent `https://gamemarttn.netlify.app`, 0 backlink — baseline MozBar PA/DA ≈ 1) | Classement impossible sur requêtes concurrentielles au J1 | Haute | Campagne lancement : annuaires qualité, presse gaming, partenariats | Roadmap M1-M6, suivi Ahrefs/Semrush |
 | F-2 | Aucun profil social/marques vérifiables | E-E-A-T et navigationnel faibles (« gamemart avis » vide) | Moyenne | Créer profils officiels homogènes + page presse/avis | Ticket P2 |
 | F-3 | Backlinks potentiels non exploités (YouTube trailers, blogs, Discord, étudiants/gaming) | Manque de jus SEO et de trafic référent | Moyenne | Guest posts tests/jeux, partenariats streamers/micro-influence, codes affiliés | 2-3 partenariats pilotes M3-M6 |
 | F-4 | Risque avis faux ou absence d'avis | Confiance et rich snippets Review impossibles | Moyenne | Collecte avis post-achat (tiers de confiance type Trustpilot/Avis Vérifiés) + schema Review | Ticket P2/P3 |
+
+### 10.4. Preuves d'audit — Screaming Frog SEO Spider 24.3 + navigateur (octobre 2026)
+
+Crawl de vérification réalisé sur le site déployé (`https://gamemarttn.netlify.app`) avec Screaming Frog
+24.3 **sans licence**, en **mode Liste** (les 42 URL du `sitemap.xml`, lecture HTML brut sans JavaScript),
+complété par un test navigateur (Edge). Captures et exports bruts : `docs/audit-screenshots/`
+(8 PNG + 5 CSV). Chaque figure confirme un problème identifié au §10.1-10.3.
+
+| Figure | Résultat outil | Problème confirmé |
+|---|---|---|
+| 01 — Titles dupliqués | 42/42 pages avec le Title « ECommerce » (Doublon 100 %, < 30 caractères 100 %) | O-1 |
+| 02 — Titles manquants = 0 | Aucun title vide : le problème est la duplication, pas l'absence | O-1 (nuance) |
+| 03 — Meta descriptions | 42/42 manquantes (100 %) | O-2 |
+| 04 — H1 | 42/42 H1 invisibles en HTML brut (les H1 existent après rendu JS) | T-1 / O-4 |
+| 05 — Images | 0 image détectée en HTML brut (visuels 100 % injectés par JS, hotlink externe) | T-8 / O-6 |
+| 06 — Codes de réponse | 43/43 en succès 2xx (42 pages + sitemap), 0 erreur, 0 blocage robots | Point positif (base du diagnostic T-5) |
+| 07 — Canonicals | 42/42 canonicals manquants, pages « Indexable » | T-6 |
+| 08 — Soft-404 navigateur | `/produitDetails/9999` (jeu inexistant) affiche « Produit non trouvé » en **HTTP 200** au lieu de 404 | T-5 |
+
+![01 — Titles dupliqués sur les 42 pages](audit-screenshots/01-titles-dupliques.png)
+
+![02 — Aucun title manquant : problème de duplication](audit-screenshots/02-titles-manquant-0.png)
+
+![03 — Meta descriptions manquantes à 100 %](audit-screenshots/03-meta-manquantes.png)
+
+![04 — H1 invisibles sans JavaScript](audit-screenshots/04-h1-manquants.png)
+
+![05 — Aucune image détectée sans JavaScript](audit-screenshots/05-images-aucune.png)
+
+![06 — 100 % de réponses 2xx](audit-screenshots/06-codes-reponse-2xx.png)
+
+![07 — Canonicals manquants à 100 %](audit-screenshots/07-canonical-manquants.png)
+
+![08 — Soft-404 : produit inexistant servi en HTTP 200](audit-screenshots/08-soft404-produit-9999.png)
 
 ## 11. SEO technique
 
