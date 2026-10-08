@@ -316,13 +316,10 @@ professionnels après mise en ligne complète.
 ## 9. Annexes
 
 - **Fichiers livrés dans le projet :** `robots.txt` + `public/robots.txt`, `sitemap.xml` +
-  `public/sitemap.xml` (42 URL), `docs/seo-digital-marketing.md` (étude complète, 21 sections),
+  `public/sitemap.xml` (42 URL), `docs/seo-digital-marketing.md` (étude complète),
   `docs/seo-keywords.md` + `docs/seo-keywords.csv` (38 mots-clés FR/EN), `docs/audit-screenshots/`
-  (8 captures + 5 exports CSV Screaming Frog).
+  (12 captures + 5 exports CSV : Screaming Frog, PageSpeed, MozBar, navigateur).
 - **Sources et outils :** code source du projet (`README.md`, routes, `api/db.json`), site déployé,
-  Screaming Frog SEO Spider 24.3, navigateur Edge ; données externes (volumes, difficultés, autorité)
-  à vérifier avec Google Keyword Planner / Trends / Search Console / Semrush / Ahrefs.
-
-> **Conversion en PDF :** ouvrir ce fichier dans VS Code avec l'extension « Markdown PDF »
-> (ou via Pandoc : `pandoc docs/devoir-seo-digital-marketing-manai-mohamed-amine.md -o devoir.pdf`),
-> les captures étant référencées en chemins relatifs, elles sont incluses automatiquement.
+  Screaming Frog SEO Spider 24.3, PageSpeed Insights, MozBar, navigateur Edge ; données externes
+  (volumes, difficultés, autorité) à vérifier avec Google Keyword Planner / Trends / Search Console /
+  Semrush / Ahrefs.
