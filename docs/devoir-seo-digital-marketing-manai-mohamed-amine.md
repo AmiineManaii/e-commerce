@@ -211,6 +211,45 @@ achat de liens, faux avis, spam.
 
 ![08 — Soft-404 : produit inexistant servi en HTTP 200](audit-screenshots/08-soft404-produit-9999.png)
 
+### 4.6. Preuves PageSpeed Insights (outil officiel Google, mobile, octobre 2026)
+
+| Métrique | Accueil `/` | Fiche `/produitDetails/1` | Cible Google | Problème confirmé |
+|---|---|---|---|---|
+| Performance | 76 (moyen) | **45** (faible) | ≥ 90 | T-7 / T-8 |
+| LCP (affichage du visuel principal) | 5,2 s | **15,6 s** | < 2,5 s | T-8 (images externes lourdes) |
+| CLS (stabilité visuelle) | 0 (bon) | **0,563** (mauvais) | < 0,1 | Images sans dimensions |
+| TBT / Speed Index | 0 ms / 3,5 s | 110 ms / 4,7 s | — | JS + payloads lourds |
+| Images à optimiser | −23 Mo | **−61 Mo** (payload total ~25 Mo) | — | T-8 |
+| SEO | 92 : **« Document does not have a meta description »** | 92 : idem | 100 | O-2 (confirmé par Google) |
+| Accessibilité | 96 (headings désordonnés) | 74 (boutons/formulaires sans labels, headings) | — | O-4 + quick wins |
+
+Lecture : la fiche produit — page la plus importante pour la vente — est la plus lourde (carrousel
+d'images externes + trailer YouTube, sans dimensions ni compression). Google lui-même signale la meta
+description absente : la preuve ne vient plus seulement de notre crawl, mais de l'outil de référence.
+
+![09 — PageSpeed accueil : Performance 76, LCP 5,2 s](audit-screenshots/09-pagespeed-accueil.png)
+
+![10 — PageSpeed fiche : Performance 45, LCP 15,6 s, CLS 0,563](audit-screenshots/10-pagespeed-fiche.png)
+
+### 4.7. Preuves MozBar (autorité et concurrence, octobre 2026)
+
+Mesures sur le site (compte gratuit) : **Domain Authority 93 / Page Authority 44 / Links to Page 0**.
+Nuance critique : le DA 93 est celui de l'hébergeur mutualisé `netlify.app`, pas celui de GameMart ;
+avec **0 lien entrant**, l'autorité propre du projet part de zéro et un futur domaine personnalisé
+démarrerait à DA ≈ 1 — d'où la priorité donnée au netlinking dans la roadmap (M1-M6).
+
+Relevé SERP « acheter jeux vidéo PC pas cher » (MozBar) : Reddit DA 92, G2A DA 85 (121 liens),
+Eneba DA 82, Instant Gaming DA 81, Rakuten DA 91 — contre 0 lien pour GameMart. Conclusion : affronter
+ces acteurs sur les requêtes génériques est illusoire ; la stratégie longue traîne (§3) est validée.
+Signaux positifs relevés sur la même SERP : `pcmasterrace.fr` (DA 5) classé en page 1 — un petit site
+peut ranker par le contenu ciblé ; un encadré IA Google cite déjà des concurrents (prérequis : contenu
+structuré + FAQ pour y figurer) ; un pack local de boutiques gaming à Tunis et un thread Reddit de
+recommandation ouvrent des pistes (SEO local, présence Reddit/Discord).
+
+![11 — MozBar sur GameMart : autorité héritée de l'hébergeur, 0 lien propre](audit-screenshots/11-mozbar-site.png)
+
+![12 — SERP concurrente : écart d'autorité DA 81-92 contre 0 lien](audit-screenshots/12-mozbar-serp.png)
+
 ---
 
 ## 5. Stratégie SEO à mettre en place

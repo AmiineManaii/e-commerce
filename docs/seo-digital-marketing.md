@@ -307,8 +307,9 @@ Audit réalisé sur le code réel (`src/index.html`, routes `src/app/app.routes.
 
 Crawl de vérification réalisé sur le site déployé (`https://gamemarttn.netlify.app`) avec Screaming Frog
 24.3 **sans licence**, en **mode Liste** (les 42 URL du `sitemap.xml`, lecture HTML brut sans JavaScript),
-complété par un test navigateur (Edge). Captures et exports bruts : `docs/audit-screenshots/`
-(8 PNG + 5 CSV). Chaque figure confirme un problème identifié au §10.1-10.3.
+complété par un test navigateur (Edge), des mesures **PageSpeed Insights** (outil officiel Google, mobile)
+et des relevés **MozBar** (compte gratuit). Captures et exports bruts : `docs/audit-screenshots/`
+(12 PNG + 5 CSV). Chaque figure confirme un problème identifié au §10.1-10.3.
 
 | Figure | Résultat outil | Problème confirmé |
 |---|---|---|
@@ -320,6 +321,10 @@ complété par un test navigateur (Edge). Captures et exports bruts : `docs/audi
 | 06 — Codes de réponse | 43/43 en succès 2xx (42 pages + sitemap), 0 erreur, 0 blocage robots | Point positif (base du diagnostic T-5) |
 | 07 — Canonicals | 42/42 canonicals manquants, pages « Indexable » | T-6 |
 | 08 — Soft-404 navigateur | `/produitDetails/9999` (jeu inexistant) affiche « Produit non trouvé » en **HTTP 200** au lieu de 404 | T-5 |
+| 09 — PageSpeed accueil | Performance 76, LCP 5,2 s, CLS 0 ; « Document does not have a meta description » ; −23 Mo d'images | T-8 / O-2 |
+| 10 — PageSpeed fiche | Performance **45**, LCP **15,6 s**, CLS **0,563** ; −61 Mo d'images ; accessibilité 74 | T-7 / T-8 / O-4 |
+| 11 — MozBar site | DA 93 (= hébergeur `netlify.app`, non transférable), PA 44, **Links to Page 0** | F-1 (autorité propre nulle) |
+| 12 — MozBar SERP | Concurrents DA 81-92 (Instant Gaming, Eneba, G2A, Reddit) ; `pcmasterrace.fr` (DA 5) en page 1 ; encadré IA + pack local Tunis | §9 (écart d'autorité, stratégie longue traîne validée) |
 
 ![01 — Titles dupliqués sur les 42 pages](audit-screenshots/01-titles-dupliques.png)
 
@@ -336,6 +341,14 @@ complété par un test navigateur (Edge). Captures et exports bruts : `docs/audi
 ![07 — Canonicals manquants à 100 %](audit-screenshots/07-canonical-manquants.png)
 
 ![08 — Soft-404 : produit inexistant servi en HTTP 200](audit-screenshots/08-soft404-produit-9999.png)
+
+![09 — PageSpeed accueil : Performance 76, LCP 5,2 s](audit-screenshots/09-pagespeed-accueil.png)
+
+![10 — PageSpeed fiche : Performance 45, LCP 15,6 s, CLS 0,563](audit-screenshots/10-pagespeed-fiche.png)
+
+![11 — MozBar sur GameMart : autorité héritée de l'hébergeur, 0 lien propre](audit-screenshots/11-mozbar-site.png)
+
+![12 — SERP concurrente : écart d'autorité DA 81-92 contre 0 lien](audit-screenshots/12-mozbar-serp.png)
 
 ## 11. SEO technique
 
