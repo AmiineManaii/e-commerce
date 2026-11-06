@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from "@angular/router";
+import { Component, signal, OnInit, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { AnalyticsService } from './services/analytics.service';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,11 @@ import { RouterOutlet } from "@angular/router";
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('e-commerce');
+  private analytics = inject(AnalyticsService);
+
+  ngOnInit(): void {
+    this.analytics.init();
+  }
 }

@@ -10,6 +10,7 @@ import { ReviewService } from '../../services/review.service';
 import { UserProfileService } from '../../services/user-profile.service';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { Game } from '../../Models/game.model';
 import { User } from '../../Models/user.model';
 import { Review } from '../../Models/review';
@@ -54,7 +55,8 @@ export class ProduitDetailsComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private userProfileService: UserProfileService,
     private authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private analytics: AnalyticsService
   ) { }
 
   ngOnInit(): void {
@@ -79,6 +81,11 @@ export class ProduitDetailsComponent implements OnInit {
 
   private handleProductLoad(game: Game): void {
     this.produit = game;
+    this.analytics.trackEvent('view_item', {
+      currency: 'TND',
+      value: game.price,
+      items: [{ item_id: game.id, item_name: game.title, price: game.price }]
+    });
     
     if (this.produit.images?.length) {
       this.startSlideshow();

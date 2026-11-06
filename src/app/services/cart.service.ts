@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, forkJoin, map, Observable, of, Subject, switchMap } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { CartItem, CartSummary } from '../Models/cart-item.model';
 import { Game } from '../Models/game.model';
 import { API_BASE_URL } from '../app.config';
 import { AuthService } from './auth.service';
 import { normalizeGame } from './game.service';
+import { AnalyticsService } from './analytics.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class CartService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private analytics: AnalyticsService
   ) {
     this.guestSessionId = this.getOrCreateGuestSessionId();
   }
@@ -101,6 +103,18 @@ export class CartService {
             return created as CartItem;
           })
         );
+      }),
+      tap(() => {
+        this.analytics.trackEvent('add_to_cart', {
+          currency: 'TND',
+          value: ((game as any).price || 0) * quantity,
+          items: [{
+            item_id: (game as any).id,
+            item_name: (game as any).title,
+            price: (game as any).price || 0,
+            quantity
+          }]
+        });
       }),
       catchError(err => {
         console.error('addToCart:', err);

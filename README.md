@@ -141,6 +141,10 @@ ng serve
 - Par défaut, l’application démarre sur `http://localhost:4200/`. En cas de port occupé, utilisez l’option `--port` (ex. `4400`).
 - Les données de l’application (panier, commandes, adresses, utilisateurs) sont stockées dans `api/db.json` par JSON Server.
 - ⚠️ Remarque importante : Il est recommandé d’installer une version stable de JSON Server, car certaines versions récentes présentent un bug sur les opérations GET by ID ou DELETE, nécessitant un redémarrage du serveur après chaque opération.
+## 📊 Tracking & SEO (Google)
+L'application intègre Google Analytics (GA4), Google Tag Manager et Google Search Console.
+Voir `docs/google-tracking-setup.md` pour la configuration des IDs (Measurement ID, Container ID, code de vérification).
+
 ## 🙌 Auteur & Contact
 
 Développement par [Mohamed Amine Manai].

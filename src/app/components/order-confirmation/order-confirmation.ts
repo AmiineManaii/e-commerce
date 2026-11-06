@@ -4,6 +4,7 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { UserProfileService } from '../../services/user-profile.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { Order } from '../../Models/user.model';
 
 @Component({
@@ -20,13 +21,13 @@ export class OrderConfirmationComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private userProfileService: UserProfileService
+    private userProfileService: UserProfileService,
+    private analytics: AnalyticsService
   ) {}
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
-    const id = idParam 
-    //console.log(!id);
+    const id = idParam
     if (!id) {
       console.log('Commande introuvable');
       this.error = 'Commande introuvable';
@@ -34,7 +35,15 @@ export class OrderConfirmationComponent implements OnInit {
       return;
     }
     this.userProfileService.getOrderDetails(id).subscribe({
-      next: (order) => { this.order = order; this.loading = false; },
+      next: (order) => {
+        this.order = order;
+        this.loading = false;
+        this.analytics.trackEvent('purchase', {
+          transaction_id: (order as any)?.id ?? id,
+          currency: 'TND',
+          value: (order as any)?.total ?? 0
+        });
+      },
       error: (err) => { this.error = 'Erreur lors du chargement de la commande'; console.error(err); this.loading = false; }
     });
   }
