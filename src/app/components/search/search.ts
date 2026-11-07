@@ -36,7 +36,12 @@ export class SearchComponent implements OnInit {
         if (this.searchTerm) {
           this.analytics.trackEvent('view_search_results', {
             search_term: this.searchTerm,
-            items: this.filteredGames.map(g => ({ item_id: g.id, item_name: g.title }))
+            items: this.filteredGames.map(g => ({
+              item_id: g.id,
+              item_name: g.title,
+              item_category: g.genre,
+              price: g.price
+            }))
           });
         }
       });
@@ -66,7 +71,12 @@ export class SearchComponent implements OnInit {
     if (game) {
       this.analytics.trackEvent('select_item', {
         item_list_name: 'Search results',
-        items: [{ item_id: game.id, item_name: game.title }]
+        items: [{
+          item_id: game.id,
+          item_name: game.title,
+          item_category: game.genre,
+          price: game.price
+        }]
       });
     }
     this.router.navigate(['/produitDetails', id]);

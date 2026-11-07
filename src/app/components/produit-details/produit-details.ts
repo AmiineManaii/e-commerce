@@ -84,7 +84,14 @@ export class ProduitDetailsComponent implements OnInit {
     this.analytics.trackEvent('view_item', {
       currency: 'TND',
       value: game.price,
-      items: [{ item_id: game.id, item_name: game.title, price: game.price }]
+      items: [{
+        item_id: game.id,
+        item_name: game.title,
+        item_category: game.genre,
+        item_brand: game.platform,
+        price: game.price,
+        quantity: 1
+      }]
     });
     
     if (this.produit.images?.length) {
@@ -349,7 +356,13 @@ export class ProduitDetailsComponent implements OnInit {
         this.analytics.trackEvent('add_to_wishlist', {
           currency: 'TND',
           value: this.produit!.price,
-          items: [{ item_id: this.produit!.id, item_name: this.produit!.title, price: this.produit!.price }]
+          items: [{
+            item_id: this.produit!.id,
+            item_name: this.produit!.title,
+            item_category: this.produit!.genre,
+            item_brand: this.produit!.platform,
+            price: this.produit!.price
+          }]
         });
         alert('Ajouté aux favoris !');
       },

@@ -67,7 +67,14 @@ export class CheckoutComponent implements OnInit {
         this.analytics.trackEvent('begin_checkout', {
           currency: 'TND',
           value: this.cartSummary.total,
-          items: items.map(ci => ({ item_id: ci.game.id, item_name: ci.game.title, price: ci.game.price, quantity: ci.quantity }))
+          items: items.map(ci => ({
+            item_id: ci.game.id,
+            item_name: ci.game.title,
+            item_category: ci.game.genre,
+            item_brand: ci.game.platform,
+            price: ci.game.price,
+            quantity: ci.quantity
+          }))
         });
         if (this.currentUser && this.currentUser.id) {
           this.loadAddresses(this.currentUser.id);
@@ -143,10 +150,31 @@ export class CheckoutComponent implements OnInit {
       currency: 'TND',
       value: this.cartSummary.total,
       payment_type: 'card',
-      items: this.cartItems.map(ci => ({ item_id: ci.game.id, item_name: ci.game.title, price: ci.game.price, quantity: ci.quantity }))
+      items: this.cartItems.map(ci => ({
+        item_id: ci.game.id,
+        item_name: ci.game.title,
+        item_category: ci.game.genre,
+        item_brand: ci.game.platform,
+        price: ci.game.price,
+        quantity: ci.quantity
+      }))
     });
     this.userProfileService.createOrder(order).subscribe({
       next: (created) => {
+        this.analytics.trackEvent('purchase', {
+          transaction_id: created.id,
+          currency: 'TND',
+          value: this.cartSummary.total,
+          shipping: this.cartSummary.shippingFee,
+          items: this.cartItems.map(ci => ({
+            item_id: ci.game.id,
+            item_name: ci.game.title,
+            item_category: ci.game.genre,
+            item_brand: ci.game.platform,
+            price: ci.game.price,
+            quantity: ci.quantity
+          }))
+        });
         this.cartService.clearCart().subscribe({
           next: () => {
             this.router.navigate(['/order-confirmation', created.id]);

@@ -111,6 +111,8 @@ export class CartService {
           items: [{
             item_id: (game as any).id,
             item_name: (game as any).title,
+            item_category: (game as any).genre,
+            item_brand: (game as any).platform,
             price: (game as any).price || 0,
             quantity
           }]

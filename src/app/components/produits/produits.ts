@@ -117,7 +117,13 @@ export class Produits implements OnInit {
     this.paginateProduits(filteredProduits);
     this.analytics.trackEvent('view_item_list', {
       item_list_name: this.selectedCategory || 'All products',
-      items: this.displayedProduits.map(p => ({ item_id: p.id, item_name: p.title, price: p.price }))
+      items: this.displayedProduits.map(p => ({
+        item_id: p.id,
+        item_name: p.title,
+        item_category: p.genre,
+        item_brand: p.platform,
+        price: p.price
+      }))
     });
   }
 
@@ -174,7 +180,13 @@ export class Produits implements OnInit {
     if (produit) {
       this.analytics.trackEvent('select_item', {
         item_list_name: this.selectedCategory || 'All products',
-        items: [{ item_id: produit.id, item_name: produit.title }]
+        items: [{
+          item_id: produit.id,
+          item_name: produit.title,
+          item_category: produit.genre,
+          item_brand: produit.platform,
+          price: produit.price
+        }]
       });
     }
     this.router.navigate(['/produitDetails', id]);
@@ -191,7 +203,13 @@ export class Produits implements OnInit {
         this.analytics.trackEvent('add_to_wishlist', {
           currency: 'TND',
           value: produit.price,
-          items: [{ item_id: produit.id, item_name: produit.title, price: produit.price }]
+          items: [{
+            item_id: produit.id,
+            item_name: produit.title,
+            item_category: produit.genre,
+            item_brand: produit.platform,
+            price: produit.price
+          }]
         });
         alert('Ajouté à la liste de souhaits: ' + produit.title);
       },

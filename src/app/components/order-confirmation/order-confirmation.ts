@@ -4,7 +4,6 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { UserProfileService } from '../../services/user-profile.service';
-import { AnalyticsService } from '../../services/analytics.service';
 import { Order } from '../../Models/user.model';
 
 @Component({
@@ -21,8 +20,7 @@ export class OrderConfirmationComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private userProfileService: UserProfileService,
-    private analytics: AnalyticsService
+    private userProfileService: UserProfileService
   ) {}
 
   ngOnInit(): void {
@@ -38,11 +36,6 @@ export class OrderConfirmationComponent implements OnInit {
       next: (order) => {
         this.order = order;
         this.loading = false;
-        this.analytics.trackEvent('purchase', {
-          transaction_id: (order as any)?.id ?? id,
-          currency: 'TND',
-          value: (order as any)?.total ?? 0
-        });
       },
       error: (err) => { this.error = 'Erreur lors du chargement de la commande'; console.error(err); this.loading = false; }
     });
