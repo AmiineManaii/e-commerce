@@ -345,7 +345,14 @@ export class ProduitDetailsComponent implements OnInit {
     if (!this.produit) return;
 
     this.userProfileService.addToWishlist(this.currentUser.id!!.toString(), this.produit.id!!.toString()).subscribe({
-      next: () => alert('Ajouté aux favoris !'),
+      next: () => {
+        this.analytics.trackEvent('add_to_wishlist', {
+          currency: 'TND',
+          value: this.produit!.price,
+          items: [{ item_id: this.produit!.id, item_name: this.produit!.title, price: this.produit!.price }]
+        });
+        alert('Ajouté aux favoris !');
+      },
       error: (err) => {
         console.error('Wishlist error:', err);
         alert('Erreur lors de l\'ajout aux favoris.');

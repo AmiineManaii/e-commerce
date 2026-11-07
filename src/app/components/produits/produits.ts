@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../../Models/user.model';
 import { AuthService } from '../../services/auth.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { GameImagePipe } from '../../pipes/game-image.pipe';
 import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
 
@@ -44,7 +45,8 @@ export class Produits implements OnInit {
     private route: ActivatedRoute,
     private cartService: CartService,
     private userProfileService: UserProfileService,
-    private authService:AuthService
+    private authService:AuthService,
+    private analytics: AnalyticsService
   ) { }
 
   ngOnInit(): void {
@@ -113,6 +115,10 @@ export class Produits implements OnInit {
     this.totalItems = filteredProduits.length;
     this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
     this.paginateProduits(filteredProduits);
+    this.analytics.trackEvent('view_item_list', {
+      item_list_name: this.selectedCategory || 'All products',
+      items: this.displayedProduits.map(p => ({ item_id: p.id, item_name: p.title, price: p.price }))
+    });
   }
 
   resetFilters(): void {
@@ -164,6 +170,13 @@ export class Produits implements OnInit {
   }
 
   viewProductDetails(id: number): void {
+    const produit = this.displayedProduits.find(p => p.id === id) || this.allProduits.find(p => p.id === id);
+    if (produit) {
+      this.analytics.trackEvent('select_item', {
+        item_list_name: this.selectedCategory || 'All products',
+        items: [{ item_id: produit.id, item_name: produit.title }]
+      });
+    }
     this.router.navigate(['/produitDetails', id]);
   }
 
@@ -175,7 +188,11 @@ export class Produits implements OnInit {
 
     this.userProfileService.addToWishlist(this.currentUser.id.toString(), produit.id.toString()).subscribe({
       next: () => {
-        
+        this.analytics.trackEvent('add_to_wishlist', {
+          currency: 'TND',
+          value: produit.price,
+          items: [{ item_id: produit.id, item_name: produit.title, price: produit.price }]
+        });
         alert('Ajouté à la liste de souhaits: ' + produit.title);
       },
       error: (error) => {

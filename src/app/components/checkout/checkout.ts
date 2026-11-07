@@ -7,6 +7,7 @@ import { Footer } from '../footer/footer';
 import { CartService } from '../../services/cart.service';
 import { UserProfileService } from '../../services/user-profile.service';
 import { AuthService } from '../../services/auth.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { CartItem, CartSummary } from '../../Models/cart-item.model';
 import { Address, Order, OrderItem, User } from '../../Models/user.model';
 import { GameImagePipe } from '../../pipes/game-image.pipe';
@@ -47,7 +48,8 @@ export class CheckoutComponent implements OnInit {
     private cartService: CartService,
     private userProfileService: UserProfileService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private analytics: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +64,11 @@ export class CheckoutComponent implements OnInit {
       next: (items) => {
         this.cartItems = items;
         this.updateSummary(items);
+        this.analytics.trackEvent('begin_checkout', {
+          currency: 'TND',
+          value: this.cartSummary.total,
+          items: items.map(ci => ({ item_id: ci.game.id, item_name: ci.game.title, price: ci.game.price, quantity: ci.quantity }))
+        });
         if (this.currentUser && this.currentUser.id) {
           this.loadAddresses(this.currentUser.id);
         }
@@ -132,6 +139,12 @@ export class CheckoutComponent implements OnInit {
     };
 
     this.placingOrder = true;
+    this.analytics.trackEvent('add_payment_info', {
+      currency: 'TND',
+      value: this.cartSummary.total,
+      payment_type: 'card',
+      items: this.cartItems.map(ci => ({ item_id: ci.game.id, item_name: ci.game.title, price: ci.game.price, quantity: ci.quantity }))
+    });
     this.userProfileService.createOrder(order).subscribe({
       next: (created) => {
         this.cartService.clearCart().subscribe({
