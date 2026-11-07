@@ -60,12 +60,30 @@ export class AnalyticsService {
   trackEvent(name: string, params?: Record<string, any>): void {
     if (typeof window === 'undefined') return;
 
+    const payload: Record<string, any> = { ...(params || {}) };
+
+    // GA4 n'affiche pas le tableau `items` dans l'aperçu temps réel.
+    // On ajoute donc aussi le nom/id du jeu en paramètres "plats" pour les voir directement.
+    const items = payload['items'];
+    if (Array.isArray(items) && items.length > 0) {
+      payload['item_name'] = this.truncate(
+        items.map((i: any) => i?.item_name).filter(Boolean).join(', ')
+      );
+      payload['item_id'] = this.truncate(
+        items.map((i: any) => i?.item_id).filter((v: any) => v !== undefined && v !== null).join(', ')
+      );
+    }
+
     if (this.gaId && typeof window.gtag === 'function') {
-      window.gtag('event', name, params || {});
+      window.gtag('event', name, payload);
     }
 
     if (this.gtmId) {
-      window.dataLayer.push({ event: name, ...(params || {}) });
+      window.dataLayer.push({ event: name, ...payload });
     }
+  }
+
+  private truncate(value: string, max = 100): string {
+    return value.length > max ? value.slice(0, max) : value;
   }
 }
