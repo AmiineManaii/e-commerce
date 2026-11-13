@@ -1,34 +1,48 @@
 # Captures du rapport SEO & Digital Marketing
 
-Ce dossier est destiné à recevoir les captures d'écran à insérer dans
-`rapport-seo-digital-marketing.md`.
+Ce dossier documente les captures utilisées dans `rapport-seo-digital-marketing.md`.
 
-Le rapport utilise volontairement des **emplacements réservés** (pas d'images
-intégrées) : chaque figure correspond à une capture à coller manuellement.
+Les images sont référencées en HTML (`<img src="docs/audit-screenshots/...">`) dans le
+rapport, afin de respecter la consigne « pas de markdown d'image `![alt](url)` » tout
+en affichant réellement les captures.
 
-## Correspondance Figure → fichier suggéré
+## Correspondance Figure → fichier
 
-| Figure | Sujet attendu | Nom de fichier suggéré |
+| Figure | Sujet | Fichier |
 |---|---|---|
-| 1 | Page d'accueil du site | `figure-01-accueil.png` |
-| 2 | Page catalogue avec filtres | `figure-02-catalogue.png` |
-| 3 | GTM — écran Versions | `figure-03-gtm-versions.png` |
-| 4 | GTM — liste des balises | `figure-04-gtm-balises.png` |
-| 5 | GTM — espace de travail | `figure-05-gtm-workspace.png` |
-| 6 | GTM — déclencheurs | `figure-06-gtm-declencheurs.png` |
-| 7 | GA4 — aperçu temps réel | `figure-07-ga4-realtime.png` |
-| 8 | GA4 — instantané des rapports | `figure-08-ga4-snapshot.png` |
-| 9 | GSC — vue d'ensemble | `figure-09-gsc-overview.png` |
-| 10 | GSC — sitemaps | `figure-10-gsc-sitemaps.png` |
-| 11 | GSC — inspection d'URL | `figure-11-gsc-inspection.png` |
-| 12 | Sitemap XML | `figure-12-sitemap.png` |
-| 13 | robots.txt | `figure-13-robots.png` |
-| 14 | Test robots.txt | `figure-14-robots-test.png` |
-| 15 | Synthèse GTM + GA4 + GSC | `figure-15-synthese.png` |
+| 1 | Page d'accueil en production | `docs/audit-screenshots/site-accueil.png` |
+| 2 | Page catalogue `/produits` | `docs/audit-screenshots/site-catalogue.png` |
+| 3 | Audit — H1 manquants (42 URL) | `docs/audit-screenshots/04-h1-manquants.png` |
+| 4 | Audit — titles dupliqués | `docs/audit-screenshots/01-titles-dupliques.png` |
+| 5 | SERP concurrentielle (Tunisie) | `docs/audit-screenshots/12-mozbar-serp.png` |
+| 6 | Profil de liens (Moz) | `docs/audit-screenshots/11-mozbar-site.png` |
+| 7 | GTM — Versions | `docs/audit-screenshots/gtm-01-versions.png` |
+| 8 | GTM — Balises | `docs/audit-screenshots/gtm-04-balises.png` |
+| 9 | GTM — Espace de travail | `docs/audit-screenshots/gtm-02-accueil.jpg` |
+| 10 | GTM — Déclencheurs | `docs/audit-screenshots/gtm-05-declencheurs.png` |
+| 11 | GTM — Variables | `docs/audit-screenshots/gtm-06-variables.jpg` |
+| 12 | GTM — Destinations | `docs/audit-screenshots/gtm-03-destinations.jpg` |
+| 13 | GA4 — Temps réel (événements) | `docs/audit-screenshots/ga4-02-temps-reel-evenements.jpg` |
+| 14 | GA4 — Instantané des rapports | `docs/audit-screenshots/ga4-01-rapports-vue-ensemble.jpg` |
+| 15 | GA4 — Pages en temps réel | `docs/audit-screenshots/ga4-03-temps-reel-pages.png` |
+| 16 | GSC — Vue d'ensemble | `docs/audit-screenshots/gsc-01-vue-ensemble.png` |
+| 17 | GSC — Sitemaps | `docs/audit-screenshots/gsc-05-sitemaps.png` |
+| 18 | GSC — Inspection d'URL | `docs/audit-screenshots/gsc-04-inspection-url.jpg` |
+| 19 | GSC — Performances | `docs/audit-screenshots/gsc-02-performances.png` |
+| 20 | GSC — Requêtes | `docs/audit-screenshots/gsc-03-requetes.jpg` |
+| 21 | Sitemap XML servi en production | `docs/audit-screenshots/sitemap-xml.png` |
+| 22 | robots.txt servi en production | `docs/audit-screenshots/robots-txt.png` |
+| 23 | Crawl — codes de réponse 2xx | `docs/audit-screenshots/06-codes-reponse-2xx.png` |
+| 24 | PageSpeed — accueil | `docs/audit-screenshots/09-pagespeed-accueil.png` |
+| 25 | PageSpeed — fiche produit | `docs/audit-screenshots/10-pagespeed-fiche.png` |
 
-## Comment procéder
+## Comment régénérer les captures du site
 
-1. Enregistrez vos captures dans ce dossier avec les noms ci-dessus (ou d'autres noms).
-2. Insérez-les dans le rapport aux emplacements `📸 Emplacement image X`.
-3. Si vous utilisez un traitement de texte (Word/PDF), glissez-déposez l'image
-   à l'endroit du bloc `[COLLER ICI - Capture X : ...]`.
+Les figures 1, 2, 21 et 22 ont été capturées automatiquement avec Edge en mode headless :
+
+```bash
+msedge --headless=new --disable-gpu --hide-scrollbars \
+  --window-size=1440,1400 --virtual-time-budget=4000 \
+  --screenshot="docs/audit-screenshots/site-accueil.png" \
+  "https://gamemarttn.netlify.app/"
+```
