@@ -12,6 +12,8 @@ export interface PageSeo {
   image?: string;
   /** Chemin canonique explicite (sinon l'URL courante est utilisée). */
   path?: string;
+  /** Type Open Graph : `website` (défaut) ou `product`. */
+  type?: 'website' | 'product';
 }
 
 /**
@@ -27,7 +29,7 @@ export class SeoService {
   private router = inject(Router);
 
   private readonly siteUrl = 'https://gamemarttn.netlify.app';
-  private readonly defaultImage = this.siteUrl + '/assets/categories/Action.jpg';
+  private readonly defaultImage = this.siteUrl + '/assets/og/gamemart-og.jpg';
   private readonly defaultDescription =
     "GameMart, votre boutique en ligne de jeux vidéo en Tunisie : jeux PC, PlayStation 5, Xbox et Nintendo Switch au meilleur prix.";
 
@@ -70,11 +72,23 @@ export class SeoService {
     this.setMeta('name', 'robots', this.robotsFor(path));
     this.setCanonical(canonical);
 
+    this.setMeta('property', 'og:type', seo.type ?? 'website');
     this.setMeta('property', 'og:title', this.doc.title);
     this.setMeta('property', 'og:description', description);
     this.setMeta('property', 'og:url', canonical);
     this.setMeta('property', 'og:image', image);
+    this.setMeta('property', 'og:image:alt', this.doc.title);
+    this.setMeta('property', 'og:locale', 'fr_FR');
 
+    if (image === this.defaultImage) {
+      this.setMeta('property', 'og:image:width', '1200');
+      this.setMeta('property', 'og:image:height', '630');
+    } else {
+      this.removeMeta('property', 'og:image:width');
+      this.removeMeta('property', 'og:image:height');
+    }
+
+    this.setMeta('name', 'twitter:card', 'summary_large_image');
     this.setMeta('name', 'twitter:title', this.doc.title);
     this.setMeta('name', 'twitter:description', description);
     this.setMeta('name', 'twitter:image', image);
@@ -172,6 +186,11 @@ export class SeoService {
     }
 
     tag.setAttribute('content', content);
+  }
+
+  private removeMeta(attribute: 'name' | 'property', key: string): void {
+    const tag = this.doc.head.querySelector(`meta[${attribute}="${key}"]`);
+    if (tag) tag.remove();
   }
 
   private setCanonical(url: string): void {

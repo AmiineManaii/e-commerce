@@ -89,7 +89,8 @@ export class ProduitDetailsComponent implements OnInit {
       title: `${game.title} — ${game.platform} | GameMart`,
       description: `${game.title} sur ${game.platform} à ${game.price} DT sur GameMart. ${game.description}`,
       image: game.coverImage,
-      path: `/produitDetails/${game.id}`
+      path: `/produitDetails/${game.id}`,
+      type: 'product'
     });
     this.seo.setProductJsonLd(game);
 
