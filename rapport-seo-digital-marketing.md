@@ -1538,6 +1538,8 @@ Sitemap: https://gamemarttn.netlify.app/sitemap.xml
 - [x] HTTPS actif sur le domaine (1 page HTTPS, 0 page non-HTTPS).
 - [x] Balise `h1` ajoutée sur la page d'accueil (correction du constat « 42 URL sans H1 »).
 - [x] Title unique et descriptif, meta description, canonical et Open Graph en place.
+- [x] Titles et meta descriptions **dynamiques par route** (accueil, catalogue, fiches produits, pages privées en `noindex`).
+- [x] JSON-LD `Product` généré sur chaque fiche produit (prix, devise, disponibilité).
 - [x] Données structurées JSON-LD `WebSite`, `Store` et `FAQPage` déployées.
 - [x] Contenu éditorial ajouté sur l'accueil (paragraphe de présentation, « Pourquoi GameMart », maillage par plateforme, FAQ).
 - [x] Variables d'environnement de tracking configurées pour la production.
@@ -1551,7 +1553,7 @@ Sitemap: https://gamemarttn.netlify.app/sitemap.xml
 | 41 pages non indexées | Moyen | Demander l'indexation des fiches produits prioritaires, renforcer le maillage interne |
 | 0 lien entrant | Élevé (autorité) | Netlinking : réseaux sociaux, annuaires tunisiens, partenariats, articles invités |
 | 0 conversion `purchase` | Élevé (business) | Analyser le tunnel, rassurer au checkout, proposer un paiement à la livraison |
-| Titles encore génériques sur les fiches produits | Moyen | Générer un title dynamique par produit (`[Nom du jeu] — [Plateforme] | GameMart`) |
+| Titles encore génériques sur les fiches produits | ✅ Corrigé | Titles et meta descriptions générés dynamiquement par route (`[Nom du jeu] — [Plateforme] | GameMart`), avec canonical et JSON-LD `Product` |
 
 > 📸 **Image 24** : PageSpeed Insights — page d'accueil : Performance 76, FCP 2,5 s, LCP 5,2 s, TBT 0 ms, CLS 0, Accessibilité 96, Bonnes pratiques 100, SEO 92.
 >
