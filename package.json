@@ -6,7 +6,8 @@
     "start": "ng serve",
     "inject:env": "node scripts/inject-env.js",
     "sitemap": "node scripts/generate-sitemap.js",
-    "build": "node scripts/inject-env.js && node scripts/generate-sitemap.js && ng build",
+    "static-pages": "node scripts/generate-static-pages.js",
+    "build": "node scripts/inject-env.js && node scripts/generate-sitemap.js && ng build && node scripts/generate-static-pages.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

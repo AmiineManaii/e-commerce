@@ -172,9 +172,28 @@ Les URL suivent une logique lisible et stable :
 - **Recherche** : `/search?q=terme`
 - **Espace utilisateur** : `/user/profile`, `/user/orders`, etc.
 
-> 💡 **Note** : les anciennes URL numériques `/produitDetails/:id` restent accessibles mais redirigent automatiquement vers `/produits/:slug`. Elles sont exclues du sitemap et bloquées dans `robots.txt` pour éviter le contenu dupliqué.
+> 💡 **Note** : les anciennes URL numériques `/produitDetails/:id` répondent désormais par une **redirection HTTP 301** (servie par Netlify via `public/_redirects`, généré automatiquement) vers `/produits/:slug`. Elles sont exclues du sitemap mais **volontairement laissées crawlables** dans `robots.txt` : un `Disallow` empêcherait Google de voir et de traiter la redirection.
 
-## 1.12 Technologies utilisées
+## 1.12 Rendu statique des pages publiques
+
+GameMart est une application Angular (SPA) : sans traitement particulier, le serveur renvoie le même `index.html` pour toutes les URL. Le titre, la description et l'image de partage vus par Google et par les réseaux sociaux étaient donc **identiques sur les 59 pages**.
+
+Le script `scripts/generate-static-pages.js`, exécuté après `ng build`, génère un fichier HTML par page publique avec :
+
+- le `<title>`, la `meta description` et les `meta keywords` propres à la page ;
+- le `link rel="canonical"` vers l'URL propre ;
+- les balises **Open Graph** et **Twitter Card** (titre, description, image de couverture du jeu) pour des aperçus corrects sur Facebook, WhatsApp et X ;
+- le **JSON-LD** `Product` et `BreadcrumbList` (prix en TND, stock, note moyenne, avis).
+
+Ces fichiers sont servis par des règles de réécriture `200` déclarées dans `_redirects` : l'URL reste propre (`/produits/gta_v`), mais le HTML envoyé contient déjà les bonnes balises, sans attendre l'exécution du JavaScript. L'application reprend ensuite la main normalement, le rendu est identique pour l'utilisateur.
+
+| Point | Avant | Après |
+|---|---|---|
+| Titre lu sans JavaScript | « GameMart — Boutique de jeux vidéo en Tunisie » partout | Titre unique par page |
+| Aperçu de partage social | Image générique | Image de couverture du jeu |
+| Données structurées | Injectées uniquement par JS | Présentes dans le HTML servi |
+
+## 1.13 Technologies utilisées
 
 | Couche | Technologie |
 |---|---|
@@ -187,7 +206,7 @@ Les URL suivent une logique lisible et stable :
 | SEO | sitemap.xml, robots.txt, Google Search Console |
 | Gestion de version | Git / GitHub |
 
-## 1.13 Environnements de développement et de production
+## 1.14 Environnements de développement et de production
 
 Le projet distingue deux environnements :
 
@@ -196,7 +215,7 @@ Le projet distingue deux environnements :
 
 La configuration est gérée via les fichiers `environment.ts` et `environment.prod.ts`, avec substitution automatique au moment du build de production. Un script d'injection de variables d'environnement permet également de renseigner les identifiants de tracking depuis le tableau de bord Netlify.
 
-## 1.14 Objectifs SMART
+## 1.15 Objectifs SMART
 
 | Objectif | Spécifique | Mesurable | Atteignable | Réaliste | Temporel |
 |---|---|---|---|---|---|
@@ -205,7 +224,7 @@ La configuration est gérée via les fichiers `environment.ts` et `environment.p
 | Conversion | Suivre le tunnel d'achat | Taux de conversion panier → achat | Oui, via GA4 e-commerce | Oui | 90 jours |
 | Visibilité | Améliorer la position moyenne | Position moyenne dans GSC | Oui, via optimisation on-page | Oui | 3 à 6 mois |
 
-## 1.15 Tableau des KPI suivis
+## 1.16 Tableau des KPI suivis
 
 | KPI | Outil | Définition |
 |---|---|---|
@@ -222,7 +241,7 @@ La configuration est gérée via les fichiers `environment.ts` et `environment.p
 | CTR | GSC | Clics / impressions |
 | Position moyenne | GSC | Position moyenne dans les résultats |
 
-## 1.16 Audit SEO initial et corrections apportées
+## 1.17 Audit SEO initial et corrections apportées
 
 Avant toute optimisation, un **crawl complet** du site a été réalisé avec Screaming Frog SEO Spider (42 URL publiques) et un **audit de performance** a été lancé avec PageSpeed Insights. Cet état des lieux a servi de base de travail : chaque constat a été traduit en correction concrète.
 

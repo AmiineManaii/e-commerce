@@ -9,36 +9,14 @@
  */
 const fs = require('fs');
 const path = require('path');
-
-const ROOT = path.resolve(__dirname, '..');
-const DB_PATH = path.join(ROOT, 'api', 'db.json');
-const SITE_URL = 'https://gamemarttn.netlify.app';
-
-const SLUG_OVERRIDES = {
-  'grand-theft-auto-v': 'gta_v',
-  'grand-theft-auto-5': 'gta_v'
-};
-
-function slugify(value) {
-  return String(value ?? '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/['’`]/g, '')
-    .replace(/&/g, ' et ')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-function gameSlug(game) {
-  const explicit = slugify(game.slug);
-  if (explicit) return explicit;
-
-  const byTitle = SLUG_OVERRIDES[slugify(game.title)];
-  if (byTitle) return byTitle;
-
-  return slugify(game.title) || slugify(game.id);
-}
+const {
+  ROOT,
+  SITE_URL,
+  slugify,
+  gameSlug,
+  uniqueBySlug,
+  readDatabase
+} = require('./lib/catalog');
 
 function escapeXml(value) {
   return String(value)
@@ -58,29 +36,6 @@ function urlEntry(loc, lastmod, changefreq, priority) {
     `    <priority>${priority}</priority>`,
     '  </url>'
   ].join('\n');
-}
-
-function uniqueBySlug(items, keyFn) {
-  const seen = new Set();
-  const result = [];
-
-  for (const item of items) {
-    const key = keyFn(item);
-    if (!key || seen.has(key)) continue;
-    seen.add(key);
-    result.push(item);
-  }
-
-  return result;
-}
-
-function readDatabase() {
-  if (!fs.existsSync(DB_PATH)) {
-    console.warn(`[sitemap] api/db.json introuvable : ${DB_PATH}`);
-    return { games: [] };
-  }
-
-  return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
 }
 
 function buildSitemap() {
