@@ -91,6 +91,32 @@ Noms alternatifs acceptés : `GOOGLE_ANALYTICS_ID`, `GOOGLE_TAG_MANAGER_ID`,
 
 Si les variables ne sont pas définies, les placeholders restent (utile en local).
 
+## 5. Configuration validée en production (18/11/2026)
+
+Configuration réellement en place sur `https://gamemarttn.netlify.app`, vérifiée dans GA4
+Temps réel, Tag Manager, Netlify et via `curl`.
+
+| Élément | Valeur en production | État |
+|---|---|---|
+| Source unique GA4 | `gtag.js` direct dans `index.html` (`G-ZJG88C90B2`) | ✅ actif |
+| `gtag('config')` | `send_page_view: false` | ✅ pas de page_view automatique |
+| `page_view` | envoyé par `AnalyticsService` à chaque navigation | ✅ +1 par page, aucun doublon |
+| Balises GA4 dans GTM | `Balise Google` et `Google Analytics 1` | ⏸️ **en pause** (évite le double comptage) |
+| Espace de travail GTM | 0 modification en attente | ✅ version publiée |
+| Sitemap | 59 URL, généré par `scripts/generate-sitemap.js` | ✅ accepté dans Search Console |
+| Anciennes URL `/produitDetails/:id` | 301 serveur via `public/_redirects` | ✅ `Location: /produits/<slug>` |
+| `robots.txt` | ne bloque plus `/produitDetails/` | ✅ la 301 est crawlable |
+
+### Règles à ne pas casser
+- **Ne pas réactiver** les balises GA4 dans GTM tant que le bloc `gtag.js` reste dans `index.html` :
+  cela produirait 2 `page_view` par page.
+- Si un jour Google Ads est utilisé, réactiver la « Balise Google » **et** retirer le bloc
+  `gtag.js` de `index.html`, en gardant `AnalyticsService` comme seul émetteur d'événements.
+- La « mesure améliorée » GA4 doit garder désactivée l'option
+  *« Changements de page basés sur les événements d'historique du navigateur »* : Angular gère
+  déjà les changements de page, sinon chaque navigation interne est comptée deux fois.
+- Les anciennes URL doivent rester **crawlables** (pas de `Disallow`) pour que Google traite la 301.
+
 ## Fichiers modifiés
 - `src/index.html`
 - `src/environments/environment.ts`
