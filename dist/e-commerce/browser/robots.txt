@@ -1,0 +1,36 @@
+# robots.txt — GameMart (e-commerce jeux vidéo, Angular SPA)
+# Servi à la racine du domaine : https://gamemarttn.netlify.app/robots.txt
+# Dans ce projet Angular, ce fichier est placé dans `public/` (servi à `/`)
+# et dupliqué à la racine du repo pour visibilité.
+
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /produits
+Allow: /categorie/
+Allow: /plateforme/
+Allow: /promotions
+
+# Anciennes URLs produits numériques : redirigées vers /produits/<slug>.
+# On les bloque pour éviter de crawler des redirections obsolètes.
+Disallow: /produitDetails/
+
+# Pages privées / transactionnelles : pas d'intérêt SEO, éviter le crawl et l'indexation
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-confirmation/
+Disallow: /user/
+Disallow: /login
+Disallow: /register
+
+# Recherche interne : résultats dynamiques = contenu dupliqué / thin content
+Disallow: /search
+
+# API mock / backend (ne doit jamais être crawlé)
+Disallow: /api/
+
+# Ressources techniques (ne pas bloquer CSS/JS/images nécessaires au rendu Googlebot)
+# Aucun Disallow sur *.css, *.js, /assets : le rendu doit rester accessible.
+
+# Sitemap (voir docs/google-tracking-setup.md et docs/seo-digital-marketing.md).
+Sitemap: https://gamemarttn.netlify.app/sitemap.xml

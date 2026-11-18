@@ -14,7 +14,34 @@ import { OrdersComponent } from './components/user-profile/orders/orders';
 import { WishlistComponent } from './components/user-profile/wishlist/wishlist';
 import { CheckoutComponent } from './components/checkout/checkout';
 import { OrderConfirmationComponent } from './components/order-confirmation/order-confirmation';
+import { LegacyProductRedirectComponent } from './components/legacy-product-redirect/legacy-product-redirect';
 
+const KEYWORDS_HOME = [
+  'jeux vidéo Tunisie',
+  'boutique jeux vidéo en ligne',
+  'acheter jeux vidéo pas cher',
+  'jeux PC Tunisie',
+  'jeux PS5 Tunisie',
+  'jeux Xbox Tunisie',
+  'jeux Nintendo Switch Tunisie',
+  'promotions jeux vidéo',
+  'clés d’activation gaming',
+  'cartes cadeaux jeux vidéo',
+  'GameMart Tunisie'
+];
+
+const KEYWORDS_CATALOG = [
+  'catalogue jeux vidéo',
+  'acheter jeux vidéo en ligne',
+  'jeux vidéo pas cher',
+  'jeux PC',
+  'jeux PlayStation 5',
+  'jeux Xbox',
+  'jeux Nintendo Switch',
+  'promotions jeux vidéo',
+  'meilleurs jeux 2026',
+  'boutique gaming Tunisie'
+];
 
 export const routes: Routes = [
   {
@@ -23,7 +50,8 @@ export const routes: Routes = [
     data: {
       title: 'GameMart — Boutique de jeux vidéo en Tunisie | PC, PS5, Xbox, Switch',
       description:
-        "GameMart, boutique de jeux vidéo en Tunisie : jeux PC, PS5, Xbox et Nintendo Switch au meilleur prix. Promotions, clés d'activation et livraison rapide."
+        "GameMart, boutique de jeux vidéo en Tunisie : jeux PC, PS5, Xbox et Nintendo Switch au meilleur prix. Promotions, clés d'activation et livraison rapide.",
+      keywords: KEYWORDS_HOME
     }
   },
   {
@@ -32,24 +60,80 @@ export const routes: Routes = [
     data: {
       title: 'Catalogue de jeux vidéo — PC, PS5, Xbox, Switch | GameMart',
       description:
-        'Parcourez le catalogue GameMart : tous les jeux vidéo PC, PlayStation 5, Xbox et Nintendo Switch, filtrables par catégorie, prix et note. Promotions mises à jour régulièrement.'
+        'Parcourez le catalogue GameMart : tous les jeux vidéo PC, PlayStation 5, Xbox et Nintendo Switch, filtrables par catégorie, prix et note. Promotions mises à jour régulièrement.',
+      keywords: KEYWORDS_CATALOG,
+      catalogMode: 'all'
     }
   },
   {
-    path: 'produitDetails/:id',
+    // URL SEO : /produits/gta_v, /produits/cyberpunk-2077...
+    path: 'produits/:slug',
     component: ProduitDetailsComponent,
     data: {
       title: 'Fiche produit — Jeu vidéo | GameMart',
       description:
-        "Fiche détaillée d'un jeu vidéo GameMart : description, plateforme, genre, note des joueurs, disponibilité et prix en dinars tunisiens."
+        "Fiche détaillée d'un jeu vidéo GameMart : description, plateforme, genre, note des joueurs, disponibilité et prix en dinars tunisiens.",
+      keywords: [
+        'acheter jeu vidéo',
+        'fiche produit jeu vidéo',
+        'jeu vidéo pas cher Tunisie',
+        'prix jeu vidéo TND'
+      ]
     }
+  },
+  {
+    path: 'categorie/:genre',
+    component: Produits,
+    data: {
+      title: 'Jeux par catégorie | GameMart',
+      description:
+        'Tous les jeux vidéo de la catégorie sélectionnée : prix en dinars tunisiens, plateformes, notes des joueurs et promotions en cours sur GameMart.',
+      keywords: KEYWORDS_CATALOG,
+      catalogMode: 'genre'
+    }
+  },
+  {
+    path: 'plateforme/:platform',
+    component: Produits,
+    data: {
+      title: 'Jeux par plateforme — PC, PS5, Xbox, Switch | GameMart',
+      description:
+        'Choisissez votre plateforme et découvrez les jeux disponibles sur PC, PlayStation 5, Xbox ou Nintendo Switch, avec prix, stock et promotions GameMart.',
+      keywords: KEYWORDS_CATALOG,
+      catalogMode: 'platform'
+    }
+  },
+  {
+    path: 'promotions',
+    component: Produits,
+    data: {
+      title: 'Promotions jeux vidéo — Bons plans en Tunisie | GameMart',
+      description:
+        'Toutes les promotions jeux vidéo GameMart : réductions sur PC, PS5, Xbox et Nintendo Switch. Profitez des meilleurs prix avant la fin du stock.',
+      keywords: [
+        'promotions jeux vidéo',
+        'jeux vidéo en promo',
+        'jeux pas cher Tunisie',
+        'bon plan gaming',
+        'réduction jeu PC',
+        'réduction jeu PS5',
+        'GameMart promotions'
+      ],
+      catalogMode: 'promo'
+    }
+  },
+  {
+    // Ancienne URL numérique conservée en redirection vers /produits/<slug>
+    path: 'produitDetails/:id',
+    component: LegacyProductRedirectComponent
   },
   {
     path: 'search',
     component: SearchComponent,
     data: {
       title: 'Recherche de jeux vidéo | GameMart',
-      description: 'Recherchez un jeu vidéo par titre, plateforme ou genre dans le catalogue GameMart.'
+      description: 'Recherchez un jeu vidéo par titre, plateforme ou genre dans le catalogue GameMart.',
+      keywords: ['recherche jeu vidéo', 'trouver un jeu', 'catalogue GameMart']
     }
   },
   {
@@ -139,5 +223,7 @@ export const routes: Routes = [
         }
       }
     ]
-  }
+  },
+  // Toute URL inconnue revient au catalogue (évite une page blanche).
+  { path: '**', redirectTo: 'produits' }
 ];

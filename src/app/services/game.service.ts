@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { Game } from '../Models/game.model';
 import { API_BASE_URL } from '../app.config';
+import { matchesGameSlug, normalizeSlug } from '../utils/game-slug';
 
 export const GAME_PLACEHOLDER = 'assets/games/cover/cyberpunk.jpg';
 
@@ -77,6 +78,34 @@ export class GameService {
   getGameById(id: string): Observable<Game> {
     return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
       map(res => this.unwrapOne(res))
+    );
+  }
+
+  /**
+   * Récupère un jeu à partir de son slug d'URL (`/produits/gta_v`).
+   *
+   * Compatibilité ascendante : un identifiant numérique reste accepté
+   * (anciennes URLs `/produitDetails/1`).
+   */
+  getGameBySlug(slug: string): Observable<Game> {
+    const value = normalizeSlug(slug);
+
+    if (!value) {
+      return throwError(() => new Error('Slug produit manquant'));
+    }
+
+    if (/^\d+$/.test(value)) {
+      return this.getGameById(value);
+    }
+
+    return this.getAllGames().pipe(
+      map(games => {
+        const game = (games || []).find(item => matchesGameSlug(item, value));
+        if (!game) {
+          throw new Error(`Produit introuvable pour le slug « ${slug} »`);
+        }
+        return game;
+      })
     );
   }
 

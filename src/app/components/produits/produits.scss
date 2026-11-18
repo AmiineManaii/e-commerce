@@ -756,3 +756,55 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     justify-content: center;
   }
 }
+
+/* ================= Maillage interne & liens SEO ================= */
+
+.seo-links {
+  max-width: 1200px;
+  margin: 0 auto 22px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .seo-link-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    font-size: 0.88rem;
+  }
+
+  .seo-link-label {
+    color: #a0a0a0;
+    font-weight: 600;
+  }
+
+  a {
+    color: #82aaff;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.produit-card {
+  .card-image-wrapper {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .produit-title a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: #82aaff;
+    }
+  }
+}

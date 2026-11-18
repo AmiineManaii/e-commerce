@@ -146,9 +146,17 @@ export class CartService {
   }
 
   removeFromCart(itemId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${itemId}`).pipe(
-      map(() => {
-        this.cartChanged.next();
+    return this.http.get<any>(`${this.apiUrl}/${itemId}`).pipe(
+      // L'article peut déjà avoir été supprimé : on continue alors la suppression.
+      catchError(() => of(null)),
+      switchMap(res => {
+        const item = res ? this.unwrap<any>(res) : null;
+        return this.http.delete<void>(`${this.apiUrl}/${itemId}`).pipe(
+          tap(() => {
+            this.cartChanged.next();
+            if (item) this.trackRemoveFromCart([item]);
+          })
+        );
       })
     );
   }
@@ -160,12 +168,14 @@ export class CartService {
           this.cartChanged.next();
           return of(void 0);
         }
+        const removedItems = [...items];
         const deletes = items.map(item =>
           this.http.delete<void>(`${this.apiUrl}/${item.id}`).pipe(catchError(() => of(void 0)))
         );
         return forkJoin(deletes).pipe(
           map(() => {
             this.cartChanged.next();
+            this.trackRemoveFromCart(removedItems);
           })
         );
       }),
@@ -237,7 +247,8 @@ export class CartService {
       map(items => {
         const list = items || [];
         const subtotal = list.reduce((sum, item) => sum + (item?.subtotal ?? 0), 0);
-        const shippingFee = subtotal > 100 ? 15 : 0;
+        // Livraison offerte à partir de 100 DT, sinon 15 DT.
+        const shippingFee = subtotal >= 100 ? 0 : (subtotal > 0 ? 15 : 0);
         const total = subtotal + shippingFee;
         const itemCount = list.reduce((sum, item) => sum + (item?.quantity ?? 0), 0);
         return { subtotal, shippingFee, total, itemCount };
@@ -254,5 +265,35 @@ export class CartService {
   clearGuestSession(): void {
     this.guestSessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
     try { localStorage.setItem('guestSessionId', this.guestSessionId); } catch { /* ignore */ }
+  }
+
+  /** Événement GA4/GTM `remove_from_cart` (suppression d'un ou plusieurs articles). */
+  private trackRemoveFromCart(items: any[]): void {
+    const analyticsItems = (items || [])
+      .filter(Boolean)
+      .map(item => this.toAnalyticsItem(item));
+
+    if (analyticsItems.length === 0) return;
+
+    this.analytics.trackEvent('remove_from_cart', {
+      currency: 'TND',
+      value: analyticsItems.reduce(
+        (sum, item) => sum + (Number(item['price']) || 0) * (Number(item['quantity']) || 1),
+        0
+      ),
+      items: analyticsItems
+    });
+  }
+
+  private toAnalyticsItem(item: any): Record<string, any> {
+    const game = item?.game || item?.product || {};
+    return {
+      item_id: game.id ?? item?.gameId,
+      item_name: game.title || item?.title || 'Jeu vidéo',
+      item_category: game.genre ?? item?.genre,
+      item_brand: game.platform ?? item?.platform,
+      price: Number(game.price ?? item?.price) || 0,
+      quantity: Number(item?.quantity) || 1
+    };
   }
 }

@@ -301,3 +301,76 @@
     font-size: 1.75rem;
   }
 }
+/* ================= Résultats, suggestions et liens SEO ================= */
+
+.search-count {
+  color: #a0a0a0;
+  margin-bottom: 18px;
+}
+
+.search-results-grid .game-card {
+  .card-image-wrapper {
+    display: block;
+    text-decoration: none;
+
+    .card-img-top {
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: #82aaff;
+    }
+  }
+
+  .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0;
+    font-size: 0.8rem;
+
+    .badge-platform,
+    .badge-genre {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 3px 10px;
+    }
+  }
+
+  .btn-view-details {
+    text-decoration: none;
+  }
+}
+
+.search-suggestions {
+  margin: 40px auto 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+
+  h2 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+
+  .suggestion-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+
+    a {
+      color: #82aaff;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

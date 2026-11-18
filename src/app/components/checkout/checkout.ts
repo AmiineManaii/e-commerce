@@ -67,14 +67,7 @@ export class CheckoutComponent implements OnInit {
         this.analytics.trackEvent('begin_checkout', {
           currency: 'TND',
           value: this.cartSummary.total,
-          items: items.map(ci => ({
-            item_id: ci.game.id,
-            item_name: ci.game.title,
-            item_category: ci.game.genre,
-            item_brand: ci.game.platform,
-            price: ci.game.price,
-            quantity: ci.quantity
-          }))
+          items: this.analyticsItems()
         });
         if (this.currentUser && this.currentUser.id) {
           this.loadAddresses(this.currentUser.id);
@@ -90,7 +83,10 @@ export class CheckoutComponent implements OnInit {
 
   updateSummary(items: CartItem[]): void {
     const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-    const shippingFee = subtotal > 0 ? (this.selectedShippingId === 'express' ? 20 : 15) : 0;
+    const standardFee = subtotal >= 100 ? 0 : (subtotal > 0 ? 15 : 0);
+    const shippingFee = subtotal > 0
+      ? standardFee + (this.selectedShippingId === 'express' ? 20 : 0)
+      : 0;
     const total = subtotal + shippingFee;
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
     this.cartSummary = { subtotal, shippingFee, total, itemCount };
@@ -113,9 +109,30 @@ export class CheckoutComponent implements OnInit {
 
   onShippingChange(): void {
     this.updateSummary(this.cartItems);
+
+    // Événement GA4/GTM : choix du mode de livraison.
+    this.analytics.trackEvent('add_shipping_info', {
+      currency: 'TND',
+      value: this.cartSummary.total,
+      shipping_tier: this.selectedShippingId,
+      shipping: this.cartSummary.shippingFee,
+      items: this.analyticsItems()
+    });
+  }
+
+  private analyticsItems(): Array<Record<string, any>> {
+    return this.cartItems.map(ci => ({
+      item_id: ci.game.id,
+      item_name: ci.game.title,
+      item_category: ci.game.genre,
+      item_brand: ci.game.platform,
+      price: ci.game.price,
+      quantity: ci.quantity
+    }));
   }
 
   confirmOrder(): void {
+    if (this.placingOrder) { return; }
     if (!this.currentUser || !this.currentUser.id) { return; }
     if (this.cartItems.length === 0) {
       alert('Votre panier est vide');
@@ -150,30 +167,16 @@ export class CheckoutComponent implements OnInit {
       currency: 'TND',
       value: this.cartSummary.total,
       payment_type: 'card',
-      items: this.cartItems.map(ci => ({
-        item_id: ci.game.id,
-        item_name: ci.game.title,
-        item_category: ci.game.genre,
-        item_brand: ci.game.platform,
-        price: ci.game.price,
-        quantity: ci.quantity
-      }))
+      items: this.analyticsItems()
     });
     this.userProfileService.createOrder(order).subscribe({
       next: (created) => {
         this.analytics.trackEvent('purchase', {
-          transaction_id: created.id,
+          transaction_id: String(created.id),
           currency: 'TND',
           value: this.cartSummary.total,
           shipping: this.cartSummary.shippingFee,
-          items: this.cartItems.map(ci => ({
-            item_id: ci.game.id,
-            item_name: ci.game.title,
-            item_category: ci.game.genre,
-            item_brand: ci.game.platform,
-            price: ci.game.price,
-            quantity: ci.quantity
-          }))
+          items: this.analyticsItems()
         });
         this.cartService.clearCart().subscribe({
           next: () => {

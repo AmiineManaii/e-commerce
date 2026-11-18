@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
-import { Genre } from '../../Models/game.model';
+import { categoryPath } from '../../utils/game-slug';
 
 @Component({
   selector: 'app-category-list',
@@ -36,7 +36,7 @@ export class CategoryList implements OnInit {
   }
 
   onCategoryClick(category: string): void {
-    // Navigate to the products page with the selected category as a query parameter
-    this.router.navigate(['/produits'], { queryParams: { category } });
+    // Pages catégorie indexables : /categorie/action, /categorie/rpg...
+    this.router.navigateByUrl(categoryPath(category));
   }
 }

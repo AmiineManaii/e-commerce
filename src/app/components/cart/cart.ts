@@ -8,6 +8,8 @@ import { Footer } from '../footer/footer';
 import { BehaviorSubject } from 'rxjs';
 import { GameImagePipe } from '../../pipes/game-image.pipe';
 import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
+import { gamePath } from '../../utils/game-slug';
+import { Game } from '../../Models/game.model';
 
 @Component({
   selector: 'app-cart',
@@ -45,7 +47,8 @@ export class CartComponent implements OnInit {
 
   updateSummary(items: CartItem[]): void {
     const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-    const shippingFee = subtotal > 0 ? 15 : 0;
+    // Même règle que le service panier et le checkout : offerte dès 100 DT.
+    const shippingFee = subtotal >= 100 ? 0 : (subtotal > 0 ? 15 : 0);
     const total = subtotal + shippingFee;
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -118,5 +121,9 @@ export class CartComponent implements OnInit {
 
   getTotalItems(): number {
     return this.cartSummary.itemCount;
+  }
+
+  productPath(game: Game): string {
+    return gamePath(game);
   }
 }

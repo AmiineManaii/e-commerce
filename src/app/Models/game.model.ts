@@ -16,6 +16,8 @@ export interface Game {
   popular?: boolean;
   tags?: string[];
   url_trailer: string;
+  /** Slug SEO optionnel (sinon dérivé du titre par `game-slug.ts`). */
+  slug?: string;
 }
 
 

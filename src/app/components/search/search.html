@@ -1,27 +1,47 @@
 <app-header></app-header>
 <div class="search-results-container">
   <div class="container mt-4">
- 
 
-    <h2 class="search-title">Résultats de recherche pour "{{ searchTerm }}"</h2>
+    <h1 class="search-title">
+      @if (searchTerm) {
+        Résultats de recherche pour "{{ searchTerm }}"
+      } @else {
+        Rechercher un jeu vidéo
+      }
+    </h1>
+
+    @if (searchTerm) {
+      <p class="search-count">
+        {{ filteredGames.length }} jeu{{ filteredGames.length > 1 ? 'x' : '' }} trouvé{{ filteredGames.length > 1 ? 's' : '' }}
+        chez GameMart.
+      </p>
+    }
 
     @if (filteredGames.length > 0) {
       <div class="search-results-grid">
         @for (game of filteredGames; track game.id) {
           <div class="game-card">
-            <div class="card-image-wrapper" (click)="viewGameDetails(game.id)">
-              <img [src]="game.coverImage | gameImage" appImgFallback class="card-img-top" [alt]="game.title">
+            <a class="card-image-wrapper" [routerLink]="productPath(game)" (click)="viewGameDetails(game)"
+              [attr.aria-label]="'Voir la fiche de ' + game.title">
+              <img [src]="game.coverImage | gameImage" appImgFallback class="card-img-top"
+                [alt]="game.title + ' - jeu ' + game.platform" loading="lazy">
               <div class="image-overlay"></div>
-            </div>
+            </a>
             <div class="card-body">
-              <h5 class="card-title" (click)="viewGameDetails(game.id)">{{ game.title }}</h5>
+              <h2 class="card-title">
+                <a [routerLink]="productPath(game)" (click)="viewGameDetails(game)">{{ game.title }}</a>
+              </h2>
               <p class="card-text">{{ game.description }}</p>
+              <div class="card-meta">
+                <span class="badge-platform">{{ game.platform }}</span>
+                <span class="badge-genre">{{ game.genre }}</span>
+              </div>
               <div class="card-footer">
                 <span class="card-price">{{ game.price }} DT</span>
-                <button class="btn-view-details" (click)="viewGameDetails(game.id)">
+                <a class="btn-view-details" [routerLink]="productPath(game)" (click)="viewGameDetails(game)">
                   <i class="fas fa-eye"></i>
                   Voir détails
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -32,13 +52,25 @@
         <div class="empty-icon">
           <i class="fas fa-search"></i>
         </div>
-        <h3>Aucun résultat trouvé</h3>
-        <p>Aucun résultat trouvé pour "{{ searchTerm }}".</p>
-        <button class="btn-secondary" (click)="goHome()">
+        <h2>Aucun résultat trouvé pour "{{ searchTerm }}"</h2>
+        <p>Essayez avec un autre titre, une plateforme (PC, PS5, Xbox, Switch) ou un genre (RPG, action, sport...).</p>
+        <button class="btn-secondary" type="button" (click)="goHome()">
           <i class="fas fa-home"></i>
           Retour à l'accueil
         </button>
       </div>
+    }
+
+    @if (categories.length > 0) {
+      <nav class="search-suggestions" aria-label="Recherches populaires">
+        <h2>Recherches populaires</h2>
+        <div class="suggestion-links">
+          <a routerLink="/produits">Tous les jeux vidéo</a>
+          @for (category of categories; track category.path) {
+            <a [routerLink]="category.path">Jeux {{ category.label }}</a>
+          }
+        </div>
+      </nav>
     }
   </div>
 </div>

@@ -3,9 +3,24 @@
 
 <div class="produits-container">
     <div class="page-header">
-        <h1 class="page-title">Tous les Produits</h1>
-        <p class="page-subtitle">Découvrez notre sélection complète de jeux vidéo</p>
+        <h1 class="page-title">{{ pageTitle }}</h1>
+        <p class="page-subtitle">{{ pageSubtitle }}</p>
     </div>
+
+    <nav class="seo-links" aria-label="Parcourir le catalogue par catégorie et plateforme">
+        <div class="seo-link-row">
+            <span class="seo-link-label">Catégories :</span>
+            @for (link of genreLinks; track link.path) {
+                <a [routerLink]="link.path">{{ link.label }}</a>
+            }
+        </div>
+        <div class="seo-link-row">
+            <span class="seo-link-label">Plateformes :</span>
+            @for (link of platformLinks; track link.path) {
+                <a [routerLink]="link.path">{{ link.label }}</a>
+            }
+        </div>
+    </nav>
 
     <div class="filters-section">
         <div class="filters-container">
@@ -14,7 +29,7 @@
                     <i class="fas fa-filter"></i>
                     Catégorie
                 </label>
-                <select id="category-filter" [(ngModel)]="selectedCategory" (change)="applyFilters()" #categoryModel="ngModel">
+                <select id="category-filter" [(ngModel)]="selectedCategory" (change)="applyFilters()" [disabled]="catalogMode === 'genre'" #categoryModel="ngModel">
                     <option value="">Toutes les catégories</option>
                     @for (category of categories; track category) {
                     <option [value]="category">{{ category }}</option>
@@ -84,8 +99,11 @@
     <div class="produits-grid">
         @for (produit of displayedProduits; track produit.id) {
         <div class="produit-card">
-            <div class="card-image-wrapper" (click)="viewProductDetails(produit.id)">
-                <img [src]="produit.coverImage | gameImage" appImgFallback [alt]="produit.title" class="produit-image">
+            <a class="card-image-wrapper" [routerLink]="productPath(produit)" (click)="trackSelectItem(produit)"
+                [attr.aria-label]="'Voir la fiche de ' + produit.title">
+                <img [src]="produit.coverImage | gameImage" appImgFallback
+                    [alt]="produit.title + ' - jeu ' + produit.platform + ' chez GameMart'"
+                    class="produit-image" loading="lazy">
                 <div class="image-overlay"></div>
                 <div class="card-badge">
                     <span class="badge-platform">
@@ -93,11 +111,13 @@
                         {{ produit.platform }}
                     </span>
                 </div>
-            </div>
+            </a>
 
             <div class="produit-info">
                 <div class="info-header">
-                    <h3 class="produit-title" (click)="viewProductDetails(produit.id)">{{ produit.title }}</h3>
+                    <h3 class="produit-title">
+                        <a [routerLink]="productPath(produit)" (click)="trackSelectItem(produit)">{{ produit.title }}</a>
+                    </h3>
                     <span class="badge-genre">{{ produit.genre }}</span>
                 </div>
 

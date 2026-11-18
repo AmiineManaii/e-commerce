@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { GameImagePipe } from '../../pipes/game-image.pipe';
 import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
+import { gamePath } from '../../utils/game-slug';
 
 
 @Component({
@@ -39,6 +40,10 @@ export class FeaturedGamesComponent implements OnInit {
         console.error('Error loading featured games:', err);
       },
     });
+  }
+
+  productPath(game: Game): string {
+    return gamePath(game);
   }
   
 }

@@ -46,10 +46,10 @@
                     <i class="fas fa-shopping-cart"></i>
                     Ajouter au panier
                   </button>
-                  <button class="btn-secondary" [routerLink]="['/produitDetails', game.id]">
+                  <a class="btn-secondary" [routerLink]="productPath(game)">
                     <i class="fas fa-info-circle"></i>
                     Voir détails
-                  </button>
+                  </a>
                 </div>
               </div>
               @if (promoGames.length > 1) {

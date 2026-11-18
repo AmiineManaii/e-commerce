@@ -947,3 +947,139 @@ $border-radius: 12px;
     }
   }
 }
+/* ================= Fil d'Ariane & contenu éditorial SEO ================= */
+
+.breadcrumbs {
+  max-width: 1200px;
+  margin: 0 auto 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: $text-muted;
+
+  a {
+    color: $primary-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  span[aria-current='page'] {
+    color: $text-secondary;
+    font-weight: 600;
+  }
+}
+
+.product-seo {
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 50px 20px;
+  margin: 40px 0;
+
+  .seo-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    color: $primary-color;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    color: $text-primary;
+    font-size: 1.3rem;
+    margin: 28px 0 12px;
+  }
+
+  p {
+    color: $text-secondary;
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  a {
+    color: $primary-color;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .product-highlights {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 8px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: $bg-light;
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: $text-secondary;
+
+      i {
+        color: $success-color;
+        margin-top: 3px;
+      }
+    }
+  }
+
+  .seo-block {
+    margin-bottom: 8px;
+  }
+
+  .product-faq {
+    margin-top: 32px;
+
+    details {
+      background: $bg-light;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+
+      summary {
+        cursor: pointer;
+        color: $text-primary;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 12px 0 0;
+      }
+    }
+  }
+
+  .seo-cta {
+    margin-top: 26px;
+    font-size: 1rem;
+  }
+}
+
+.similar-products .product-card {
+  .card-content h3 a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .product-seo .product-highlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

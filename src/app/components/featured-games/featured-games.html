@@ -16,7 +16,7 @@
           @if (game) {
             <div class="col">
               <div class="card h-100 shadow-sm game-card">
-                <img [src]="game.coverImage | gameImage" appImgFallback class="card-img-top" [alt]="game.title">
+                <img [src]="game.coverImage | gameImage" appImgFallback class="card-img-top" [alt]="game.title + ' - jeu ' + game.platform" loading="lazy">
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">{{ game.title }}</h5>
                   <p class="card-text text-muted">{{ game.genre }} - {{ game.platform }}</p>
@@ -30,10 +30,10 @@
 
                   <div class="d-flex justify-content-between align-items-center mt-auto">
                     <span class="price text-primary fw-bold">{{ game.price}}DT</span>
-                    <button class="btn btn-sm btn-outline-primary" [routerLink]="['/produitDetails', game.id]">
+                    <a class="btn btn-sm btn-outline-primary" [routerLink]="productPath(game)">
                       <i class="fas fa-info-circle me-1"></i>
                       Voir Détails
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>

@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../Models/user.model';
 import { GameImagePipe } from '../../../pipes/game-image.pipe';
 import { ImgFallbackDirective } from '../../../directives/img-fallback.directive';
+import { gamePath } from '../../../utils/game-slug';
 
 @Component({
   selector: 'app-wishlist',
@@ -114,5 +115,9 @@ export class WishlistComponent implements OnInit {
         console.error('Erreur lors de la suppression du jeu de la liste de souhaits:', err);
       }
     });
+  }
+
+  productPath(game: Game): string {
+    return gamePath(game);
   }
 }

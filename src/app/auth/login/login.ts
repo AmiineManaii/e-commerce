@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private cartService: CartService,
+    private analytics: AnalyticsService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -48,6 +50,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(email, password).subscribe({
       next: () => {
+        this.analytics.trackEvent('login', { method: 'email' });
         // Fusionne le panier invité avec le panier de l'utilisateur, puis navigue
         this.cartService.mergeGuestCartOnLogin().subscribe({
           next: () => this.router.navigateByUrl(this.returnUrl),

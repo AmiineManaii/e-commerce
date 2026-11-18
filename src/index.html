@@ -6,10 +6,13 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="GameMart, boutique de jeux vidéo en Tunisie : jeux PC, PS5, Xbox et Nintendo Switch au meilleur prix. Promotions, clés d'activation et livraison rapide.">
-  <meta name="keywords" content="jeux vidéo Tunisie, boutique jeux vidéo, acheter jeu PC, jeu PS5, jeu Xbox, jeu Nintendo Switch, promotions jeux vidéo, clés d'activation, cartes cadeaux gaming">
+  <meta name="keywords" content="jeux vidéo Tunisie, boutique jeux vidéo en ligne, acheter jeu vidéo pas cher, jeu PC Tunisie, jeu PS5 Tunisie, jeu Xbox Tunisie, jeu Nintendo Switch Tunisie, jeux en promotion, bon plan gaming, clés d'activation, cartes cadeaux gaming, GameMart Tunisie">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="author" content="GameMart">
+  <meta name="theme-color" content="#1e1e1e">
   <link rel="canonical" href="https://gamemarttn.netlify.app/">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://www.google-analytics.com">
 
   <!-- Open Graph (partage réseaux sociaux) -->
   <meta property="og:type" content="website">
@@ -77,47 +80,8 @@
   }
   </script>
 
-  <!-- Données structurées : FAQ (reprend exactement la FAQ visible sur l'accueil) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Où acheter des jeux vidéo pas chers en Tunisie ?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Sur GameMart, le catalogue en ligne regroupe les jeux du moment et les classiques à prix réduit. Les promotions sont mises en avant directement sur la page d'accueil et dans la section « Jeux en promotions »."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Quelles plateformes sont disponibles ?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "GameMart propose des jeux pour PC, PlayStation 5, Xbox Series X|S et Nintendo Switch. La plateforme est indiquée sur chaque fiche produit."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Comment suivre ma commande ?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Une fois la commande validée, connectez-vous à votre espace personnel puis ouvrez « Mes commandes » pour consulter son statut et son historique."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Puis-je offrir un jeu vidéo ?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Oui. Les jeux vidéo, les clés d'activation et les cartes cadeaux constituent d'excellentes idées de cadeau pour un joueur, quel que soit son âge ou sa plateforme."
-        }
-      }
-    ]
-  }
-  </script>
+  <!-- Données structurées : FAQ de l'accueil — injectée dynamiquement par Home
+       (SeoService.setFaqJsonLd) pour ne pas rester présente sur les autres pages. -->
 
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -133,7 +97,9 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-ZJG88C90B2');
+    // `send_page_view: false` : les page_view sont envoyés par AnalyticsService
+    // à chaque navigation SPA (évite le double comptage du premier écran).
+    gtag('config', 'G-ZJG88C90B2', { send_page_view: false });
   </script>
   <!-- End Google Analytics -->
 </head>

@@ -136,13 +136,17 @@ L'arborescence fonctionnelle du site se présente comme suit :
 ```text
 /
 ├── /produits                      → catalogue complet (filtres, tri, pagination)
-├── /produitDetails/:id            → fiche produit (carrousel, trailer, avis)
-├── /search?q=...                  → résultats de recherche interne
+├── /produits/:slug                → fiche produit (ex. /produits/gta_v)
+├── /categorie/:genre              → jeux d'une catégorie (ex. /categorie/rpg)
+├── /plateforme/:plateforme        → jeux d'une plateforme (ex. /plateforme/pc)
+├── /promotions                    → jeux en promotion
+├── /search?q=...                  → résultats de recherche interne (noindex)
 ├── /cart                          → panier
 ├── /checkout                      → paiement (protégé par authentification)
 ├── /order-confirmation/:id        → confirmation de commande (protégée)
 ├── /login                         → connexion
 ├── /register                      → inscription
+├── /produitDetails/:id            → ancienne URL, redirigée vers /produits/:slug
 └── /user                          → espace utilisateur (protégé)
     ├── /user/profile              → profil
     ├── /user/orders               → historique des commandes
@@ -152,8 +156,8 @@ L'arborescence fonctionnelle du site se présente comme suit :
 
 Cette arborescence sépare clairement :
 
-- Les **pages publiques indexables** (`/`, `/produits`, `/produitDetails/:id`).
-- Les **pages transactionnelles ou privées** (`/cart`, `/checkout`, `/user`, `/login`, `/register`) qui sont volontairement exclues de l'indexation via `robots.txt` et les balises appropriées.
+- Les **pages publiques indexables** (`/`, `/produits`, `/produits/:slug`, `/categorie/:genre`, `/plateforme/:plateforme`, `/promotions`).
+- Les **pages transactionnelles ou privées** (`/cart`, `/checkout`, `/user`, `/login`, `/register`, `/search`) qui sont volontairement exclues de l'indexation via `robots.txt` et les balises appropriées.
 
 ## 1.11 Structure des URL
 
@@ -161,11 +165,14 @@ Les URL suivent une logique lisible et stable :
 
 - **Accueil** : `/`
 - **Catalogue** : `/produits`
-- **Fiche produit** : `/produitDetails/:id` (identifiant numérique du jeu)
+- **Fiche produit** : `/produits/:slug` (slug dérivé du titre, ex. `/produits/gta_v`, `/produits/cyberpunk-2077`)
+- **Catégorie** : `/categorie/:genre` (ex. `/categorie/action`)
+- **Plateforme** : `/plateforme/:plateforme` (ex. `/plateforme/playstation-5`)
+- **Promotions** : `/promotions`
 - **Recherche** : `/search?q=terme`
 - **Espace utilisateur** : `/user/profile`, `/user/orders`, etc.
 
-> 💡 **Recommandation** : pour un site en production, des URL plus descriptives du type `/jeux/[slug]` ou `/produit/[slug]` seraient préférables pour le SEO. La structure actuelle reflète l'implémentation Angular du projet ; elle est stable, ce qui permet à Google de crawler et d'indexer correctement les pages.
+> 💡 **Note** : les anciennes URL numériques `/produitDetails/:id` restent accessibles mais redirigent automatiquement vers `/produits/:slug`. Elles sont exclues du sitemap et bloquées dans `robots.txt` pour éviter le contenu dupliqué.
 
 ## 1.12 Technologies utilisées
 
@@ -998,9 +1005,17 @@ Un sitemap respecte le schéma suivant :
     <priority>0.9</priority>
   </url>
 
-  <!-- Fiche produit : priorité moyenne, mise à jour hebdomadaire -->
+  <!-- Fiche produit : URL lisible dérivée du titre -->
   <url>
-    <loc>https://[VOTRE-DOMAINE]/produitDetails/1</loc>
+    <loc>https://[VOTRE-DOMAINE]/produits/gta_v</loc>
+    <lastmod>[DATE]</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Catégorie / plateforme : pages de maillage et de mots-clés -->
+  <url>
+    <loc>https://[VOTRE-DOMAINE]/categorie/rpg</loc>
     <lastmod>[DATE]</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1063,7 +1078,7 @@ Cette structure est utile pour un catalogue volumineux : un sitemap pour les pag
 
 ## 5.8 Contenu réel du sitemap du projet
 
-> ✅ **Contenu vérifié** : voici le fichier `sitemap.xml` exactement tel qu'il est servi en production sur `https://gamemarttn.netlify.app/sitemap.xml`. Il contient 42 URL : l'accueil, le catalogue et les 40 fiches produits issues de `api/db.json`.
+> ✅ **Contenu vérifié** : ce bloc correspond à la **version initiale** du fichier `sitemap.xml` (42 URL : accueil, catalogue et 40 fiches produits numériques). Il est conservé comme trace de l'audit initial. Depuis la refonte SEO, le sitemap est **généré automatiquement** par `scripts/generate-sitemap.js` (voir la mise à jour ci-dessous).
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1332,6 +1347,39 @@ Cette structure est utile pour un catalogue volumineux : un sitemap pour les pag
 > <img src="docs/audit-screenshots/sitemap-xml.png" alt="Figure 21 — sitemap XML du projet — liste des URL publiques soumises à l'indexation." width="900" loading="lazy" />
 >
 > *Figure 21 : sitemap XML du projet — liste des URL publiques soumises à l'indexation.*
+
+### 5.9 Mise à jour SEO : sitemap généré avec les URL lisibles
+
+Depuis la refonte, `sitemap.xml` (et sa copie `public/sitemap.xml`) est généré par
+`scripts/generate-sitemap.js` à partir de `api/db.json`. Le script s'exécute à chaque
+`npm run build` : le sitemap reste donc synchronisé avec le catalogue.
+
+Il contient désormais **59 URL** :
+
+- l'accueil `/`, le catalogue `/produits` et les promotions `/promotions` ;
+- les 12 catégories `/categorie/<genre>` (ex. `/categorie/rpg`) ;
+- les 4 plateformes `/plateforme/<plateforme>` (ex. `/plateforme/playstation-5`) ;
+- les 40 fiches produits `/produits/<slug>` (ex. `/produits/gta_v`, `/produits/cyberpunk-2077`).
+
+Extrait :
+
+```xml
+<url>
+  <loc>https://gamemarttn.netlify.app/produits/gta_v</loc>
+  <lastmod>2026-11-18</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+<url>
+  <loc>https://gamemarttn.netlify.app/categorie/rpg</loc>
+  <lastmod>2026-11-18</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.8</priority>
+</url>
+```
+
+Les anciennes URL `/produitDetails/:id` ont disparu du sitemap : elles redirigent vers
+`/produits/<slug>` et sont bloquées dans `robots.txt`.
 
 ---
 

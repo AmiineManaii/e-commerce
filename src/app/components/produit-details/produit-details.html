@@ -2,14 +2,25 @@
 
 <div class="product-detail-container">
   @if (produit) {
+    <nav class="breadcrumbs" aria-label="Fil d'Ariane">
+      <a routerLink="/">Accueil</a>
+      <span aria-hidden="true">›</span>
+      <a routerLink="/produits">Catalogue</a>
+      <span aria-hidden="true">›</span>
+      <a [routerLink]="categoryLink">{{ produit.genre }}</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">{{ produit.title }}</span>
+    </nav>
+
     <div class="product-main">
 
       <div class="product-gallery">
         @if (trailerUrl) {
           <div class="trailer-section">
-            <h3>Bande-annonce</h3>
+            <h2>Bande-annonce de {{ produit.title }}</h2>
             <div class="trailer-container">
-              <iframe [src]="trailerUrl" frameborder="0" allowfullscreen></iframe>
+              <iframe [src]="trailerUrl" [title]="'Bande-annonce de ' + produit.title"
+                loading="lazy" allowfullscreen></iframe>
             </div>
           </div>
         }
@@ -17,21 +28,27 @@
         @if (produit.images.length) {
           <div class="image-gallery">
             <div class="main-image">
-              <img [src]="(produit.images[currentImageIndex] || produit.coverImage) | gameImage" appImgFallback [alt]="produit.title" class="gallery-image">
-              <button class="nav-button prev" (click)="changeImage(-1)">
+              <img [src]="(produit.images[currentImageIndex] || produit.coverImage) | gameImage" appImgFallback
+                [alt]="'Visuel ' + (currentImageIndex + 1) + ' du jeu ' + produit.title"
+                class="gallery-image" loading="eager">
+              <button class="nav-button prev" type="button" (click)="changeImage(-1)"
+                aria-label="Image précédente">
                 <i class="fas fa-chevron-left"></i>
               </button>
-              <button class="nav-button next" (click)="changeImage(1)">
+              <button class="nav-button next" type="button" (click)="changeImage(1)"
+                aria-label="Image suivante">
                 <i class="fas fa-chevron-right"></i>
               </button>
             </div>
-            
+
             @if (produit.images.length > 1) {
               <div class="image-thumbnails">
                 @for (image of produit.images; track image; let i = $index) {
-                  <div class="thumbnail-item" [class.active]="i === currentImageIndex" (click)="currentImageIndex = i">
-                    <img [src]="image | gameImage" appImgFallback [alt]="'Thumbnail ' + (i + 1)">
-                  </div>
+                  <button type="button" class="thumbnail-item" [class.active]="i === currentImageIndex"
+                    (click)="selectImage(i)" [attr.aria-label]="'Afficher le visuel ' + (i + 1)">
+                    <img [src]="image | gameImage" appImgFallback
+                      [alt]="'Vignette ' + (i + 1) + ' du jeu ' + produit.title" loading="lazy">
+                  </button>
                 }
               </div>
             }
@@ -42,7 +59,7 @@
 
       <div class="product-info">
         <div class="product-header">
-          <h1>{{ produit.title }}</h1>
+          <h1>{{ produit.title }} — {{ produit.platform }}</h1>
           <div class="product-meta">
             <span class="genre">{{ produit.genre }}</span>
             <span class="platform">
@@ -53,7 +70,7 @@
         </div>
 
         <div class="description-section">
-          <h3>Description</h3>
+          <h2>Description de {{ produit.title }}</h2>
           <p class="description">{{ produit.description }}</p>
         </div>
 
@@ -105,13 +122,16 @@
 
           @if (produit.stock > 0) {
             <div class="quantity">
-              <label>Quantité:</label>
+              <label for="quantity-input">Quantité:</label>
               <div class="quantity-controls">
-                <button (click)="decreaseQuantity()" [disabled]="quantity <= 1">
+                <button type="button" (click)="decreaseQuantity()" [disabled]="quantity <= 1"
+                  aria-label="Diminuer la quantité">
                   <i class="fas fa-minus"></i>
                 </button>
-                <input type="number" [(ngModel)]="quantity" min="1" [max]="produit.stock" (change)="validateQuantity()">
-                <button (click)="increaseQuantity()" [disabled]="quantity >= produit.stock">
+                <input id="quantity-input" type="number" [(ngModel)]="quantity" min="1" [max]="produit.stock"
+                  (change)="validateQuantity()">
+                <button type="button" (click)="increaseQuantity()" [disabled]="quantity >= produit.stock"
+                  aria-label="Augmenter la quantité">
                   <i class="fas fa-plus"></i>
                 </button>
               </div>
@@ -120,17 +140,18 @@
 
           <div class="actions">
             @if (produit.stock > 0) {
-              <button class="btn-primary" (click)="addToCart()">
+              <button class="btn-primary" type="button" (click)="addToCart()">
                 <i class="fas fa-shopping-cart"></i>
                 Ajouter au panier
               </button>
             } @else {
-              <button class="btn-primary" disabled>
+              <button class="btn-primary" type="button" disabled>
                 <i class="fas fa-times-circle"></i>
                 Rupture de stock
               </button>
             }
-            <button class="btn-secondary" (click)="addToWishlist()">
+            <button class="btn-secondary" type="button" (click)="addToWishlist()"
+              aria-label="Ajouter à la liste de souhaits">
               <i class="fas fa-heart"></i>
             </button>
           </div>
@@ -140,9 +161,9 @@
   } @else if (error) {
     <div class="error">
       <i class="fas fa-exclamation-triangle"></i>
-      <h3>Produit non trouvé</h3>
+      <h1>Produit non trouvé</h1>
       <p>{{ error }}</p>
-      <button class="btn-primary" routerLink="/">Retour à l'accueil</button>
+      <button class="btn-primary" type="button" routerLink="/">Retour à l'accueil</button>
     </div>
   } @else {
     <div class="loading">
@@ -152,22 +173,71 @@
   }
 </div>
 
+<!-- ================= CONTENU ÉDITORIAL SEO (unique par jeu) ================= -->
+@if (produit && content) {
+  <section class="product-seo" aria-labelledby="game-seo-title">
+    <div class="seo-container">
+      <h2 id="game-seo-title">Tout savoir sur {{ produit.title }} sur {{ produit.platform }}</h2>
+
+      @for (paragraph of content.introParagraphs; track $index) {
+        <p>{{ paragraph }}</p>
+      }
+
+      <h3>Les points forts de {{ produit.title }}</h3>
+      <ul class="product-highlights">
+        @for (highlight of content.highlights; track $index) {
+          <li>
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+            <span>{{ highlight }}</span>
+          </li>
+        }
+      </ul>
+
+      @for (block of content.blocks; track block.heading) {
+        <article class="seo-block">
+          <h3>{{ block.heading }}</h3>
+          @for (paragraph of block.paragraphs; track $index) {
+            <p>{{ paragraph }}</p>
+          }
+        </article>
+      }
+
+      <section class="product-faq" id="faq" aria-labelledby="game-faq-title">
+        <h3 id="game-faq-title">Questions fréquentes sur {{ produit.title }}</h3>
+        @for (item of content.faq; track item.question) {
+          <details>
+            <summary>{{ item.question }}</summary>
+            <p>{{ item.answer }}</p>
+          </details>
+        }
+      </section>
+
+      <p class="seo-cta">
+        Envie de comparer ? Parcourez les
+        <a [routerLink]="categoryLink">jeux {{ produit.genre }}</a> ou tout le
+        <a routerLink="/produits">catalogue de jeux vidéo GameMart</a>.
+      </p>
+    </div>
+  </section>
+}
+
 
 @if (produit && similarProducts.length) {
   <div class="similar-products">
     <div class="section-header">
-      <h2>Produits similaires</h2>
+      <h2>Produits similaires à {{ produit.title }}</h2>
     </div>
-    
+
     <div class="products-scroll-container">
       <div class="products-scroll">
         <div class="products-grid">
           @for (product of similarProducts; track product.id) {
             <div class="product-card">
               <div class="card-image">
-                <img [src]="product.coverImage | gameImage" appImgFallback [alt]="product.title">
+                <img [src]="product.coverImage | gameImage" appImgFallback [alt]="product.title"
+                  loading="lazy">
                 <div class="card-overlay">
-                  <a [routerLink]="['/produitDetails', product.id]">
+                  <a [routerLink]="productPath(product)" [attr.aria-label]="'Voir la fiche de ' + product.title">
                     <i class="fas fa-eye"></i>
                   </a>
                 </div>
@@ -176,7 +246,9 @@
                 }
               </div>
               <div class="card-content">
-                <h3>{{ product.title }}</h3>
+                <h3>
+                  <a [routerLink]="productPath(product)">{{ product.title }}</a>
+                </h3>
                 <div class="card-meta">
                   <span class="platform">
                     <i [class]="getPlatformIcon(product.platform)"></i>
@@ -186,7 +258,8 @@
                 </div>
                 <div class="card-footer">
                   <span class="price">{{ product.price }} DT</span>
-                  <button (click)="addToCart(product)" [disabled]="product.stock === 0">
+                  <button type="button" (click)="addToCart(product)" [disabled]="product.stock === 0"
+                    [attr.aria-label]="'Ajouter ' + product.title + ' au panier'">
                     <i class="fas" [class]="product.stock > 0 ? 'fa-plus' : 'fa-times'"></i>
                   </button>
                 </div>
@@ -202,7 +275,7 @@
 @if (produit) {
   <div class="reviews-section">
     <div class="section-header">
-      <h2>Avis des joueurs</h2>
+      <h2>Avis des joueurs sur {{ produit.title }}</h2>
       <div class="reviews-stats">
         <div class="average-rating">
           <span class="rating-value">{{ averageRating }}/5</span>
@@ -234,7 +307,7 @@
               </div>
               <span class="review-date">{{ formatDate(review.date) }}</span>
             </div>
-            
+
             <div class="review-rating">
               <div class="stars">
                 @for (star of [1,2,3,4,5]; track star) {
@@ -243,7 +316,7 @@
                 <span>{{ review.note || 0 }}/5</span>
               </div>
             </div>
-            
+
             <p class="review-text">{{ review.msg || 'Aucun message' }}</p>
           </div>
         }
@@ -258,8 +331,8 @@
 
 
     <div class="add-review">
-      <h3>Donnez votre avis</h3>
-      
+      <h3>Donnez votre avis sur {{ produit.title }}</h3>
+
       @if (currentUser) {
 
         <form (ngSubmit)="submitReview(reviewForm)" #reviewForm="ngForm">
@@ -267,7 +340,8 @@
             <label>Votre note</label>
             <div class="rating-input">
               @for (star of [1,2,3,4,5]; track star) {
-                <button type="button" (click)="setRating(star)" [class.active]="star <= newReview.note">
+                <button type="button" (click)="setRating(star)" [class.active]="star <= newReview.note"
+                  [attr.aria-label]="'Donner ' + star + ' étoile' + (star > 1 ? 's' : '')">
                   <i class="fas fa-star"></i>
                 </button>
               }
@@ -276,8 +350,9 @@
           </div>
 
           <div class="form-group">
-            <label>Votre message</label>
-            <textarea 
+            <label for="review-message">Votre message</label>
+            <textarea
+              id="review-message"
               [(ngModel)]="newReview.msg"
               name="reviewMessage"
               placeholder="Partagez votre expérience..."
@@ -302,7 +377,7 @@
         <div class="login-required">
           <i class="fas fa-user-lock"></i>
           <p>Connectez-vous pour donner votre avis</p>
-          <button class="btn-secondary" routerLink="/login">Se connecter</button>
+          <button class="btn-secondary" type="button" routerLink="/login">Se connecter</button>
         </div>
       }
     </div>

@@ -3,7 +3,7 @@
   <div class="category-list-container">
     @for (category of categories; track category) {
       <div class="category-card" (click)="onCategoryClick(category)">
-        <img [src]="'./assets/categories/'+category+'.jpg'" [alt]="category" class="category-image">
+        <img [src]="'./assets/categories/'+category+'.jpg'" [alt]="'Jeux ' + category + ' - GameMart'" class="category-image" loading="lazy">
         <div class="category-name">{{ category }}</div>
       </div>
     }

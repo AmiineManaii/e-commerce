@@ -6,6 +6,7 @@ import { GameService } from '../../services/game.service';
 import { CartService } from '../../services/cart.service';
 import { GameImagePipe } from '../../pipes/game-image.pipe';
 import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
+import { gamePath } from '../../utils/game-slug';
 
 @Component({
   selector: 'app-banner',
@@ -77,5 +78,9 @@ export class Banner implements OnInit {
         alert('Erreur lors de l\'ajout au panier. Veuillez réessayer.');
       }
     });
+  }
+
+  productPath(game: Game): string {
+    return gamePath(game);
   }
 }

@@ -10,13 +10,31 @@
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" aria-current="page">
             <i class="fas fa-home me-1"></i>
-            <span class="nav-text">Home</span>
+            <span class="nav-text">Accueil</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/produits']" routerLinkActive="active">
             <i class="fas fa-box me-1"></i>
-            <span class="nav-text">Products</span>
+            <span class="nav-text">Catalogue</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/promotions']" routerLinkActive="active">
+            <i class="fas fa-tags me-1"></i>
+            <span class="nav-text">Promotions</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/plateforme/pc']" routerLinkActive="active">
+            <i class="fas fa-desktop me-1"></i>
+            <span class="nav-text">Jeux PC</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/plateforme/playstation-5']" routerLinkActive="active">
+            <i class="fab fa-playstation me-1"></i>
+            <span class="nav-text">Jeux PS5</span>
           </a>
         </li>
       </ul>
@@ -51,7 +69,7 @@
                 <hr class="dropdown-divider">
               </li>
               <li>
-                <a class="dropdown-item logout-item" href="#" (click)="logout()">
+                <a class="dropdown-item logout-item" href="#" (click)="logout(); $event.preventDefault()">
                   <i class="fas fa-sign-out-alt me-2"></i>
                   <span>Déconnexion</span>
                 </a>

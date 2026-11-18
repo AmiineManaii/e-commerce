@@ -34,7 +34,7 @@
       <div class="wishlist-items">
         @for (game of wishlistItems; track game.id) {
           <div class="game-card">
-            <div class="game-image-wrapper" [routerLink]="['/produitDetails', game.id]">
+            <div class="game-image-wrapper" [routerLink]="productPath(game)">
               @if (game.coverImage) {
                 <img [src]="game.coverImage | gameImage" appImgFallback [alt]="game.title" class="game-image">
               } @else {
@@ -47,7 +47,7 @@
             </div>
             
             <div class="game-info">
-              <h3 class="game-title" [routerLink]="['/produitDetails', game.id]">{{ game.title }}</h3>
+              <h3 class="game-title" [routerLink]="productPath(game)">{{ game.title }}</h3>
               
               <div class="game-meta">
                 @if (game.genre) {
@@ -77,7 +77,7 @@
               </div>
               
               <div class="game-actions">
-                <a [routerLink]="['/produitDetails', game.id]" class="btn btn-info">
+                <a [routerLink]="productPath(game)" class="btn btn-info">
                   <i class="fas fa-eye"></i>
                   Voir détails
                 </a>

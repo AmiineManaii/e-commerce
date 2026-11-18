@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -12,11 +12,13 @@ import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { SeoService } from '../../services/seo.service';
+import { ProductContent, ProductContentService } from '../../services/product-content.service';
 import { Game } from '../../Models/game.model';
 import { User } from '../../Models/user.model';
 import { Review } from '../../Models/review';
 import { GameImagePipe } from '../../pipes/game-image.pipe';
 import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
+import { gamePath, slugify } from '../../utils/game-slug';
 
 @Component({
   selector: 'app-produit-details',
@@ -25,8 +27,9 @@ import { ImgFallbackDirective } from '../../directives/img-fallback.directive';
   templateUrl: './produit-details.html',
   styleUrl: './produit-details.scss'
 })
-export class ProduitDetailsComponent implements OnInit {
+export class ProduitDetailsComponent implements OnInit, OnDestroy {
   produit?: Game;
+  content?: ProductContent;
   currentUser: User | null = null;
   similarProducts: Game[] = [];
   reviews: Review[] = [];
@@ -58,7 +61,8 @@ export class ProduitDetailsComponent implements OnInit {
     private authService: AuthService,
     private cartService: CartService,
     private analytics: AnalyticsService,
-    private seo: SeoService
+    private seo: SeoService,
+    private productContent: ProductContentService
   ) { }
 
   ngOnInit(): void {
@@ -66,37 +70,52 @@ export class ProduitDetailsComponent implements OnInit {
     this.loadProduct();
   }
 
+  ngOnDestroy(): void {
+    this.stopSlideshow();
+  }
+
+  /** La fiche répond à `/produits/:slug` (ex. `/produits/gta_v`). */
   private loadProduct(): void {
     this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      if (!id) {
-        this.error = 'ID du produit non fourni.';
+      const slug = params.get('slug') || params.get('id');
+      if (!slug) {
+        this.error = 'Référence du produit non fournie.';
         return;
       }
 
-      this.gameService.getGameById(id.toString()).subscribe({
+      this.resetProductState();
+
+      this.gameService.getGameBySlug(slug).subscribe({
         next: (game) => this.handleProductLoad(game),
         error: (err) => this.handleProductError(err)
       });
     });
   }
 
+  private resetProductState(): void {
+    this.stopSlideshow();
+    this.produit = undefined;
+    this.content = undefined;
+    this.similarProducts = [];
+    this.reviews = [];
+    this.userNames.clear();
+    this.averageRating = 0;
+    this.currentImageIndex = 0;
+    this.quantity = 1;
+    this.trailerUrl = undefined;
+    this.error = '';
+  }
+
   private handleProductLoad(game: Game): void {
     this.produit = game;
+    this.content = this.productContent.build(game);
 
-    // SEO : title, meta description, canonical et JSON-LD propres à ce jeu
-    this.seo.setPage({
-      title: `${game.title} — ${game.platform} | GameMart`,
-      description: `${game.title} sur ${game.platform} à ${game.price} DT sur GameMart. ${game.description}`,
-      image: game.coverImage,
-      path: `/produitDetails/${game.id}`,
-      type: 'product'
-    });
-    this.seo.setProductJsonLd(game);
+    this.applySeo();
 
     this.analytics.trackEvent('view_item', {
       currency: 'TND',
       value: game.price,
+      item_list_name: 'Fiche produit',
       items: [{
         item_id: game.id,
         item_name: game.title,
@@ -106,17 +125,66 @@ export class ProduitDetailsComponent implements OnInit {
         quantity: 1
       }]
     });
-    
+
     if (this.produit.images?.length) {
       this.startSlideshow();
     }
-    
+
     if (this.produit.url_trailer) {
-      this.trailerUrl = this.getYouTubeEmbedUrl(this.produit.url_trailer);
+      const trailer = this.getYouTubeEmbedUrl(this.produit.url_trailer);
+      if (trailer) this.trailerUrl = trailer;
     }
-    
+
     this.loadSimilarProducts();
     this.loadReviews();
+  }
+
+  /** Title, meta description, canonical, keywords et JSON-LD de la fiche. */
+  private applySeo(): void {
+    if (!this.produit || !this.content) return;
+
+    const path = gamePath(this.produit);
+
+    this.seo.setPage({
+      title: `${this.produit.title} ${this.produit.platform} — Acheter en Tunisie | GameMart`,
+      description: this.content.metaDescription,
+      keywords: this.content.keywords,
+      image: this.produit.coverImage,
+      path,
+      type: 'product'
+    });
+
+    this.seo.setBreadcrumbJsonLd([
+      { name: 'Accueil', path: '/' },
+      { name: 'Catalogue', path: '/produits' },
+      { name: this.produit.genre || 'Jeux', path: `/categorie/${slugify(this.produit.genre)}` },
+      { name: this.produit.title, path }
+    ]);
+
+    this.seo.setFaqJsonLd(this.content.faq);
+    this.updateProductJsonLd();
+  }
+
+  /** Met à jour le JSON-LD avec la note et les avis réellement disponibles. */
+  private updateProductJsonLd(): void {
+    if (!this.produit) return;
+
+    const reviews = (this.reviews || []).map((review) => ({
+      note: Number(review?.note) || 0,
+      msg: review?.msg || '',
+      date: review?.date,
+      authorName: this.authorNameForReview(review)
+    }));
+
+    this.seo.setProductJsonLd(this.produit, {
+      description: this.content
+        ? `${this.content.introParagraphs.join(' ')} ${this.produit.description || ''}`
+        : this.produit.description,
+      url: gamePath(this.produit),
+      reviews,
+      averageRating: this.averageRating,
+      reviewCount: reviews.length
+    });
   }
 
   private handleProductError(err: any): void {
@@ -132,16 +200,40 @@ export class ProduitDetailsComponent implements OnInit {
         this.reviews = Array.isArray(reviews) ? reviews : [];
         this.calculateAverageRating();
         this.loadUserNames();
+        this.refreshRichContent();
       },
       error: (err) => {
         console.error('Error loading reviews:', err);
         this.reviews = [];
+        this.calculateAverageRating();
+        this.updateProductJsonLd();
       }
     });
   }
 
+  /** Reconstruit le contenu long avec la note moyenne réelle. */
+  private refreshRichContent(): void {
+    if (!this.produit) return;
 
+    this.content = this.productContent.build(this.produit, {
+      averageRating: this.averageRating,
+      reviewCount: this.reviews.length
+    });
 
+    if (this.content) {
+      this.seo.setFaqJsonLd(this.content.faq);
+      this.seo.setPage({
+        title: `${this.produit.title} ${this.produit.platform} — Acheter en Tunisie | GameMart`,
+        description: this.content.metaDescription,
+        keywords: this.content.keywords,
+        image: this.produit.coverImage,
+        path: gamePath(this.produit),
+        type: 'product'
+      });
+    }
+
+    this.updateProductJsonLd();
+  }
 
   private loadUserNames(): void {
     const uniqueUserIds = [...new Set(
@@ -158,8 +250,12 @@ export class ProduitDetailsComponent implements OnInit {
         next: (user) => {
           const label = `${user?.prenom ?? ''} ${user?.nom ?? ''}`.trim() || 'Utilisateur';
           this.userNames.set(userId, label);
+          this.updateProductJsonLd();
         },
-        error: () => this.userNames.set(userId, 'Utilisateur inconnu')
+        error: () => {
+          this.userNames.set(userId, 'Utilisateur inconnu');
+          this.updateProductJsonLd();
+        }
       });
     });
   }
@@ -174,8 +270,11 @@ export class ProduitDetailsComponent implements OnInit {
     return this.userNames.get(userId) || 'Chargement...';
   }
 
-
-
+  private authorNameForReview(review: any): string {
+    const userId = this.getReviewUserId(review);
+    const name = this.userNames.get(userId);
+    return name && name !== 'Chargement...' ? name : 'Joueur GameMart';
+  }
 
   private calculateAverageRating(): void {
     if (!this.reviews?.length) {
@@ -187,11 +286,6 @@ export class ProduitDetailsComponent implements OnInit {
     this.averageRating = Math.round((total / this.reviews.length) * 10) / 10;
   }
 
-
-
-
-
-
   submitReview(form: NgForm): void {
     if (!this.currentUser?.id || !this.produit || this.isSubmitting) {
       if (!this.currentUser?.id) {
@@ -201,13 +295,14 @@ export class ProduitDetailsComponent implements OnInit {
     }
 
     this.isSubmitting = true;
+    const note = this.newReview.note;
     const reviewData: any = {
       gameId: this.produit.id.toString(),
       game: this.produit,
       userId: this.currentUser.id.toString(),
       user: this.currentUser,
       msg: this.newReview.msg,
-      note: this.newReview.note,
+      note,
       date: new Date().toISOString(),
       verified: true
     };
@@ -218,6 +313,23 @@ export class ProduitDetailsComponent implements OnInit {
         this.calculateAverageRating();
         const uid = newReview?.user?.id?.toString() ?? newReview?.userId?.toString() ?? this.currentUser!.id!.toString();
         this.userNames.set(uid, `${this.currentUser!.prenom} ${this.currentUser!.nom}`);
+
+        // Événement personnalisé envoyé à GA4 / GTM (avis client).
+        this.analytics.trackEvent('add_review', {
+          currency: 'TND',
+          value: this.produit!.price,
+          review_rating: note,
+          review_length: (this.newReview.msg || '').length,
+          items: [{
+            item_id: this.produit!.id,
+            item_name: this.produit!.title,
+            item_category: this.produit!.genre,
+            item_brand: this.produit!.platform,
+            price: this.produit!.price
+          }]
+        });
+
+        this.refreshRichContent();
         this.newReview = { note: 5, msg: '' };
         form.resetForm();
         this.isSubmitting = false;
@@ -229,9 +341,6 @@ export class ProduitDetailsComponent implements OnInit {
       }
     });
   }
-
-
-
 
   private loadSimilarProducts(): void {
     if (!this.produit) return;
@@ -246,24 +355,16 @@ export class ProduitDetailsComponent implements OnInit {
     });
   }
 
-
-
-
   private isSimilarGame(game: Game): boolean {
-    return game.id !== this.produit!.id && 
-          (game.genre === this.produit!.genre || 
-           this.hasCommonTags(game));
+    return game.id !== this.produit!.id &&
+      (game.genre === this.produit!.genre ||
+        this.hasCommonTags(game));
   }
-
-
-
 
   private hasCommonTags(game: Game): boolean {
-    return !!(game.tags && this.produit!.tags && 
-             game.tags.some(tag => this.produit!.tags!.includes(tag)));
+    return !!(game.tags && this.produit!.tags &&
+      game.tags.some(tag => this.produit!.tags!.includes(tag)));
   }
-
-
 
   changeImage(direction: number): void {
     if (!this.produit?.images?.length) return;
@@ -272,8 +373,10 @@ export class ProduitDetailsComponent implements OnInit {
     this.restartSlideshow();
   }
 
-
-
+  selectImage(index: number): void {
+    this.currentImageIndex = index;
+    this.restartSlideshow();
+  }
 
   private startSlideshow(): void {
     this.stopSlideshow();
@@ -282,38 +385,27 @@ export class ProduitDetailsComponent implements OnInit {
     }
   }
 
-
-
   private restartSlideshow(): void {
     this.stopSlideshow();
     this.startSlideshow();
   }
 
-
-
-
   private stopSlideshow(): void {
     if (this.slideshowInterval) {
       clearInterval(this.slideshowInterval);
+      this.slideshowInterval = undefined;
     }
   }
 
-
-
-
-  private getYouTubeEmbedUrl(url: string): SafeResourceUrl {
-    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+  private getYouTubeEmbedUrl(url: string): SafeResourceUrl | null {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/);
     const videoId = match?.[1];
-    
-    if (!videoId) return this.sanitizer.bypassSecurityTrustResourceUrl('');
-    
+
+    if (!videoId) return null;
+
     const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`;
     return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
   }
-
-
-
-
 
   increaseQuantity(): void {
     if (this.produit && this.quantity < this.produit.stock) {
@@ -321,15 +413,11 @@ export class ProduitDetailsComponent implements OnInit {
     }
   }
 
-
-
   decreaseQuantity(): void {
     if (this.quantity > 1) {
       this.quantity--;
     }
   }
-
-
 
   validateQuantity(): void {
     if (!this.produit) return;
@@ -338,14 +426,13 @@ export class ProduitDetailsComponent implements OnInit {
     if (this.quantity > this.produit.stock) this.quantity = this.produit.stock;
   }
 
-
-
-
   addToCart(product?: Game): void {
     const targetProduct = product || this.produit;
     if (!targetProduct) return;
 
-    this.cartService.addToCart(targetProduct, this.quantity).subscribe({
+    const quantity = product ? 1 : this.quantity;
+
+    this.cartService.addToCart(targetProduct, quantity).subscribe({
       next: () => alert('Produit ajouté au panier !'),
       error: (error) => {
         console.error('Cart error:', error);
@@ -354,14 +441,12 @@ export class ProduitDetailsComponent implements OnInit {
     });
   }
 
-
-
   addToWishlist(): void {
     if (!this.currentUser?.id) {
       alert('Connectez-vous pour ajouter aux favoris');
       return;
     }
-    
+
     if (!this.produit) return;
 
     this.userProfileService.addToWishlist(this.currentUser.id!!.toString(), this.produit.id!!.toString()).subscribe({
@@ -386,14 +471,22 @@ export class ProduitDetailsComponent implements OnInit {
     });
   }
 
+  /** Lien vers la catégorie du jeu (maillage interne + SEO). */
+  get categoryLink(): string {
+    return this.produit?.genre ? `/categorie/${slugify(this.produit.genre)}` : '/produits';
+  }
 
-  
+  get productLink(): string {
+    return this.produit ? gamePath(this.produit) : '/produits';
+  }
 
+  productPath(product: Game): string {
+    return gamePath(product);
+  }
 
   setRating(rating: number): void {
     this.newReview.note = rating;
   }
-
 
   formatDate(dateString: string): string {
     if (!dateString) return '';
@@ -406,15 +499,12 @@ export class ProduitDetailsComponent implements OnInit {
     });
   }
 
-
-
   getStarClass(starIndex: number, rating: number): string {
     if (starIndex <= Math.floor(rating)) return 'fa-star';
     if (starIndex === Math.ceil(rating) && rating % 1 >= 0.5) return 'fa-star-half-alt';
     return 'far fa-star';
   }
 
-  
   getPlatformIcon(platform: string): string {
     return this.platformIcons[platform] || 'fas fa-gamepad';
   }
