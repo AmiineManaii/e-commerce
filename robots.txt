@@ -11,9 +11,10 @@ Allow: /categorie/
 Allow: /plateforme/
 Allow: /promotions
 
-# Anciennes URLs produits numériques : redirigées vers /produits/<slug>.
-# On les bloque pour éviter de crawler des redirections obsolètes.
-Disallow: /produitDetails/
+# Anciennes URLs produits numériques : elles répondent désormais par une
+# redirection HTTP 301 vers /produits/<slug> (public/_redirects). On les laisse
+# donc crawlables pour que Google traite la redirection et transfère le SEO.
+# (Ne pas ajouter de Disallow ici : cela empêcherait le traitement de la 301.)
 
 # Pages privées / transactionnelles : pas d'intérêt SEO, éviter le crawl et l'indexation
 Disallow: /cart

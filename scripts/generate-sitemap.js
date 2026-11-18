@@ -125,10 +125,39 @@ function buildSitemap() {
     fs.writeFileSync(target, xml, 'utf8');
   }
 
+  buildRedirects(products);
+
   console.log(
     `[sitemap] ${entries.length} URLs générées (${products.length} produits, ` +
       `${genres.length} catégories, ${platforms.length} plateformes).`
   );
+}
+
+/**
+ * Génère `public/_redirects` (Netlify) avec de vraies redirections HTTP 301
+ * pour les anciennes URL numériques. Contrairement à une redirection Angular
+ * côté client, la 301 est vue immédiatement par Googlebot : les anciennes URL
+ * déjà connues transmettent leur popularité aux nouvelles URL en slug.
+ */
+function buildRedirects(products) {
+  const lines = [
+    '# Redirections SEO générées par scripts/generate-sitemap.js',
+    '# Anciennes fiches produits numériques -> nouvelles URL en slug (301 permanent)',
+    ...products.flatMap((game) => [
+      `/produitDetails/${game.id}  /produits/${gameSlug(game)}  301`,
+      `/produitDetails/${game.id}/  /produits/${gameSlug(game)}  301`
+    ]),
+    '',
+    '# Identifiant obsolète inconnu : retour au catalogue',
+    '/produitDetails/*  /produits  301',
+    '',
+    '# Application Angular (SPA) : toutes les autres routes servent index.html',
+    '/*  /index.html  200',
+    ''
+  ];
+
+  const target = path.join(ROOT, 'public', '_redirects');
+  fs.writeFileSync(target, lines.join('\n'), 'utf8');
 }
 
 buildSitemap();

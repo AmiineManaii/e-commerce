@@ -111,6 +111,8 @@ export class ProduitDetailsComponent implements OnInit, OnDestroy {
     this.content = this.productContent.build(game);
 
     this.applySeo();
+    // Page view avec le vrai titre du produit (le SEO vient d'être appliqué).
+    this.analytics.trackPageView(gamePath(game));
 
     this.analytics.trackEvent('view_item', {
       currency: 'TND',

@@ -369,6 +369,8 @@ export class Produits implements OnInit {
     }
 
     this.seo.setPage({ title, description, keywords, path });
+    // Le title vient d'être mis à jour : on envoie le page_view avec le bon titre.
+    this.analytics.trackPageView(path);
   }
 
   private labelFromSlug(slugValue: string): string {

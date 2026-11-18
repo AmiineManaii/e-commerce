@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
@@ -39,6 +39,7 @@ export class AnalyticsService {
   private gtmId = environment.googleTagManagerId;
   private started = false;
   private currentPagePath = '';
+  private pageViewTimer: ReturnType<typeof setTimeout> | undefined;
 
   init(): void {
     if (typeof window === 'undefined' || this.started) return;
@@ -55,15 +56,52 @@ export class AnalyticsService {
 
     // Le premier page_view est envoyé par l'événement NavigationEnd de la
     // navigation initiale (évite un page_view "/" erroné sur les liens profonds).
-    // Page views suivants (navigation SPA)
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationStart))
+      .subscribe(() => this.clearPageViewTimer());
+
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe((e: NavigationEnd) => {
+        const url = (e.urlAfterRedirects || '/').split('?')[0].split('#')[0];
+
         // Ancienne URL produit : redirigée immédiatement vers /produits/<slug>,
         // inutile de compter une vue sur une URL obsolète.
-        if (e.urlAfterRedirects.startsWith('/produitDetails')) return;
-        this.trackPageView(e.urlAfterRedirects);
+        if (url.startsWith('/produitDetails')) return;
+
+        // Pages dont le title est défini après chargement des données (produit,
+        // catégorie, plateforme, promotions) : le composant envoie lui-même le
+        // page_view avec le vrai titre. Un délai de secours garantit qu'une vue
+        // est comptée même si l'API est lente.
+        if (this.isDynamicPage(url)) {
+          this.schedulePageView(url, 1200);
+          return;
+        }
+
+        this.trackPageView(url);
       });
+  }
+
+  /** Routes dont le SEO (et donc le titre) dépend de données chargées en async. */
+  private isDynamicPage(url: string): boolean {
+    return (
+      /^\/produits\/[^/]+/.test(url) ||
+      url.startsWith('/categorie/') ||
+      url.startsWith('/plateforme/') ||
+      url === '/promotions'
+    );
+  }
+
+  private schedulePageView(path: string, delay: number): void {
+    this.clearPageViewTimer();
+    this.pageViewTimer = setTimeout(() => this.trackPageView(path), delay);
+  }
+
+  private clearPageViewTimer(): void {
+    if (this.pageViewTimer !== undefined) {
+      clearTimeout(this.pageViewTimer);
+      this.pageViewTimer = undefined;
+    }
   }
 
   trackPageView(path: string): void {
@@ -71,6 +109,8 @@ export class AnalyticsService {
 
     const pagePath = path || '/';
     if (pagePath === this.currentPagePath) return;
+
+    this.clearPageViewTimer();
     this.currentPagePath = pagePath;
 
     const payload = {
